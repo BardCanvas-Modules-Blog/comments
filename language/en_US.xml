@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language>
+    
+    <display_name>Comments subsystem</display_name>
+    <icon>fa-comments-o</icon>
+    <description>
+        Comments for posts
+    </description>
+    
+    <leave_a_comment>Leave a comment</leave_a_comment>
+    
+    <form>
+        <fields>
+            <name>
+                <caption>Your name (required)</caption>
+            </name>
+            <email>
+                <caption>Your email (required)</caption>
+            </email>
+            <author_url>
+                <caption>Your website URL (optional):</caption>
+            </author_url>
+            <save>
+                <caption>Save your details in cookies (only on this browser)</caption>
+            </save>
+        </fields>
+    </form>
+    
+    <list>
+        <title>{$amount} comments</title>
+        <post_comment>Send a comment</post_comment>
+        <reply_comment>Reply comment</reply_comment>
+    </list>
+    
+    <messages>
+        <empty_post_id>No post id has been specified</empty_post_id>
+        <post_not_found>The post you're trying to comment doesn't exist</post_not_found>
+        <post_unavailable>The post you're trying to comment isn't available</post_unavailable>
+        <unable_to_comment>You can't send comments to this post</unable_to_comment>
+        <empty_message>Please type a comment</empty_message>
+        <empty_name>Please type your name/alias</empty_name>
+        <invalid_email>Please type a valid email</invalid_email>
+        <invalid_captcha>Invalid captcha input. Please try again.</invalid_captcha>
+        <already_sent>You already sent that comment within the last minutes.</already_sent>
+        <sending_too_fast>You're sending comments too fast. Please wait {$time}.</sending_too_fast>
+    </messages>
+    
+    <settings_data>
+        <title>Comments</title>
+        <specs key="flag_for_review_on_link_amount">
+            <title>Flag for review on link amount</title>
+            <description><![CDATA[
+                When the message has the specified amount of links (or more), the message is flagged for review.<br>
+                Defaults to <code>2</code>.
+            ]]></description>
+            <type>number</type>
+        </specs>
+        <specs key="repeated_interval">
+            <title>Repeated comment check interval</title>
+            <description><![CDATA[
+                When a comment is submitted, check within the specified amount of minutes for a message
+                with the same content from the same user to avoid repeated messages.<br>
+                Defaults to <code>1</code>. Specify <code>0</code> to disable this check (not recommended).
+            ]]></description>
+            <type>number</type>
+        </specs>
+        <specs key="sending_interval">
+            <title>Sending speed check</title>
+            <description><![CDATA[
+                Minimum amount of seconds to wait before a user can send a new comment.<br>
+                Defaults to <code>30</code>. Specify <code>0</code> to disable this check (not recommended).
+            ]]></description>
+            <type>number</type>
+        </specs>
+    </settings_data>
+    
+</language>

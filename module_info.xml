@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+
+    <version>0.1 beta</version>
+    <group>BardCanvas</group>
+    
+    <working_flags>
+        <install>true</install>
+        <uninstall>true</uninstall>
+        <enable>true</enable>
+        <disable>true</disable>
+    </working_flags>
+    
+    <!--
+    <php_includes>
+        <bootstrap></bootstrap>
+    </php_includes>
+    -->
+    
+    <template_includes>
+        <!--<pre_rendering></pre_rendering>-->
+        <html_head>html_head.inc</html_head>
+        <!--<pre_header></pre_header>-->
+        <!--<header_top></header_top>-->
+        <!--<header_menu></header_menu>-->
+        <!--<header_bottom></header_bottom>-->
+        <!--<content_top></content_top>-->
+        <!--<home_content></home_content>-->
+        <!--<content_bottom></content_bottom>-->
+        <!--<post_footer>global_post_footer.inc</post_footer>-->
+        <!--<footer_top></footer_top>-->
+        <!--<footer_bottom></footer_bottom>-->
+        <!--<post_footer></post_footer>-->
+        <!--<pre_eof></pre_eof>-->
+        <!--<post_rendering></post_rendering>-->
+    </template_includes>
+    
+    <extends_to>
+        <posts>
+            <front>
+                <single_post_after_contents>extenders/single_post_after_contents.inc</single_post_after_contents>
+                <indexes_after_excerpt>extenders/indexes_after_excerpt.inc</indexes_after_excerpt>
+            </front>
+        </posts>
+    </extends_to>
+    
+</module>
