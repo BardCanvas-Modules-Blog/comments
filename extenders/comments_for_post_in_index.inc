@@ -2,6 +2,7 @@
 /**
  * Posts extender: contents to add after post excerpt on indexes
  * Called within a function, so no globals behind
+ * IMPORTANT: requires "post_comments" template variable to be prebuilt!
  *
  * @package    BardCanvas
  * @subpackage comments
@@ -16,18 +17,17 @@
  */
 
 use hng2_base\module;
-use hng2_modules\comments\comments_repository;
+use hng2_modules\comments\comment_record;
 use hng2_modules\posts\post_record;
 
 global $post, $template, $language, $settings, $account;
 
 if( $settings->get("modules:comments.show_in_indexes") != "true" ) return;
 
-$repository  = new comments_repository();
-$find_params = $repository->build_find_params_for_post($post->id_post);
-$comments    = $repository->find($find_params->where, $find_params->limit, $find_params->offset, $find_params->order);
+/** @var comment_record[] $comments */
+$comments = $template->get("comments_for_listed_post[{$post->id_post}]");
 
 if( count($comments) == 0 ) return;
 
 $comments = array_reverse($comments);
-include "{$template->abspath}/segments/comments_for_index_post.inc";
+include "{$template->abspath}/segments/comments_for_post_in_index.inc";

@@ -3,6 +3,7 @@ namespace hng2_modules\comments;
 
 use hng2_base\config;
 use hng2_base\repository\abstract_repository;
+use hng2_base\repository\accounts_repository;
 
 class comments_repository extends abstract_repository
 {
@@ -117,34 +118,6 @@ class comments_repository extends abstract_repository
     }
     
     /**
-     * @param $id_post
-     *
-     * @return object {where:array, limit:int, offset:int, order:string}
-     */
-    public function build_find_params_for_post_in_index($id_post)
-    {
-        global $settings;
-        
-        $where = array(
-            "id_post = '$id_post'",
-            "status = 'published'"
-        );
-        
-        $limit  = $settings->get("modules:comments.items_per_page");
-        $offset = (int) $_GET["offset"];
-        $order  = "creation_date desc";
-        
-        if( empty($limit) ) $limit = 30;
-        
-        return (object) array(
-            "where"  => $where,
-            "limit"  => $limit,
-            "offset" => $offset,
-            "order"  => $order
-        );
-    }
-    
-    /**
      * @param array $where
      *
      * @return object {where:array, limit:int, offset:int, order:string}
@@ -177,7 +150,64 @@ class comments_repository extends abstract_repository
             "where"  => $where,
             "limit"  => $limit,
             "offset" => $offset,
-            "order"  => $order
+            "order"  => $order,
         );
+    }
+    
+    /**
+     * @param array $post_ids
+     * 
+     * @return array two dimensions: id_post, id_comment
+     */
+    public function get_for_multiple_posts(array $post_ids)
+    {
+        global $settings, $database;
+        
+        if( empty($post_ids) ) return array();
+        
+        $return     = array();
+        $queries    = array();
+        $author_ids = array();
+        
+        $limit  = $settings->get("modules:comments.items_per_page");
+        if( empty($limit) ) $limit = 30;
+        
+        foreach($post_ids as $post_id)
+            $queries[] = "(
+                select * from {$this->table_name} where status = 'published' and id_post = '$post_id'
+                order by creation_date desc limit $limit
+            )";
+        
+        $query = implode("\nunion\n", $queries);
+        $res   = $database->query($query);
+        
+        if( $database->num_rows($res) == 0 ) return array();
+        
+        # Integration
+        while($row = $database->fetch_object($res) )
+        {
+            $instance = new comment_record($row);
+            $return[$row->id_post][$row->id_comment] = $instance;
+            
+            if( ! empty($instance->id_author) )
+                $author_ids[] = $instance->id_author;
+        }
+        
+        # Author additions
+        if( ! empty($author_ids) )
+        {
+            $author_ids = array_unique($author_ids);
+            
+            $authors_repository = new accounts_repository();
+            $authors            = $authors_repository->get_multiple($author_ids);
+            
+            /** @var comment_record[][] $return */
+            foreach($return as $post_id => $comments)
+                foreach($comments as $comment_id => $comment)
+                    if( isset($authors[$comment->id_author]) )
+                        $return[$post_id][$comment_id]->set_author($authors[$comment->id_author]);
+        }
+        
+        return $return;
     }
 }

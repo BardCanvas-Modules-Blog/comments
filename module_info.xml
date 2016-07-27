@@ -39,8 +39,11 @@
         <posts>
             <front>
                 <single_post_after_contents>extenders/single_post_after_contents.inc</single_post_after_contents>
-                <indexes_after_excerpt>extenders/indexes_after_excerpt.inc</indexes_after_excerpt>
+                <indexes_after_excerpt>extenders/comments_for_post_in_index.inc</indexes_after_excerpt>
             </front>
+            <index_builders>
+                <home>extenders/prebuild_comments_for_home_posts.inc</home>
+            </index_builders>
         </posts>
     </extends_to>
     

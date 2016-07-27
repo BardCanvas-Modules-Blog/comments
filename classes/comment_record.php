@@ -26,9 +26,26 @@ class comment_record extends abstract_record
     public $karma              ; # int not null default 0,
     public $last_update        ; # datetime default null,
     
+    # TODO:                                                                                                        :
+    # TODO:  IMPORTANT! All dinamically generated members below should be undefined in get_for_database_insertion! :
+    # TODO:                                                                                                        :
+    
+    private $_author_account;
+    
     public function set_new_id()
     {
         $this->id_comment = uniqid();
+    }
+    
+    /**
+     * @param null|account $prefetched_author_record
+     */
+    public function set_author($prefetched_author_record = null)
+    {
+        if( ! is_null($prefetched_author_record) )
+            $this->_author_account = $prefetched_author_record;
+        else
+            $this->_author_account = new account($this->id_author);
     }
     
     /**
@@ -38,6 +55,24 @@ class comment_record extends abstract_record
     {
         // TODO: Implement accounts repository for caching
         
+        if( is_object($this->_author_account) ) return $this->_author_account;
+        
         return new account($this->id_author);
+    }
+    
+    /**
+     * @return object
+     */
+    public function get_for_database_insertion()
+    {
+        $return = (array) $this;
+        
+        unset(
+            $return["_author_account"]
+        );
+        
+        foreach( $return as $key => &$val ) $val = addslashes($val);
+        
+        return (object) $return;
     }
 }
