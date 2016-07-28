@@ -37,13 +37,18 @@
     
     <extends_to>
         <posts>
+            <index_builders>
+                <!-- These are called from the repository -->
+                <home>extenders/prebuild_comments_for_posts_in_indexes.inc</home>
+                <author_index>extenders/prebuild_comments_for_posts_in_indexes.inc</author_index>
+                <category_index>extenders/prebuild_comments_for_posts_in_indexes.inc</category_index>
+                <date_archive>extenders/prebuild_comments_for_posts_in_indexes.inc</date_archive>
+            </index_builders>
             <front>
+                <!-- These are called after building collections in the repository -->
                 <single_post_after_contents>extenders/single_post_after_contents.inc</single_post_after_contents>
                 <indexes_after_excerpt>extenders/comments_for_post_in_index.inc</indexes_after_excerpt>
             </front>
-            <index_builders>
-                <home>extenders/prebuild_comments_for_home_posts.inc</home>
-            </index_builders>
         </posts>
     </extends_to>
     
