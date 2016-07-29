@@ -22,7 +22,7 @@
         <html_head>html_head.inc</html_head>
         <!--<pre_header></pre_header>-->
         <!--<header_top></header_top>-->
-        <!--<header_menu></header_menu>-->
+        <header_menu>header_buttons.inc</header_menu>
         <!--<header_bottom></header_bottom>-->
         <!--<content_top></content_top>-->
         <!--<home_content></home_content>-->

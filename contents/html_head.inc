@@ -6,10 +6,12 @@
  * @subpackage comments
  * @author     Alejandro Caballero - lava.caballero@gmail.com
  *
+ * @var config   $config
  * @var module   $this_module
  * @var template $template;
  */
 
+use hng2_base\config;
 use hng2_base\module;
 use hng2_base\template;
 
