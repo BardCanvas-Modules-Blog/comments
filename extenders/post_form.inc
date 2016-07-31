@@ -31,10 +31,11 @@ if( ! function_exists("recaptcha_get_html") ) include_once ABSPATH . "/lib/recap
     <input type="hidden" name="id_post" value="<?= $post->id_post ?>">
     <input type="hidden" name="parent_comment" value="">
     
-    <textarea name="content" class="tinymce_comments"></textarea>
-    
-    <div class="field tinymce_addons_bar">
-        <? render_tinymce_addons_bar(); ?>
+    <div class="tinymce_container">
+        <textarea name="content" class="tinymce_comments"></textarea>
+        <div class="tinymce_addons_bar">
+            <? render_tinymce_addons_bar(); ?>
+        </div>
     </div>
     
     <? if( ! $account->_exists ): ?>
