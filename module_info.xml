@@ -11,11 +11,10 @@
         <disable>true</disable>
     </working_flags>
     
-    <!--
     <php_includes>
-        <bootstrap></bootstrap>
+        <!--<bootstrap></bootstrap>-->
+        <rss_feed_generator handle_pattern="^comments$">extenders/rss_feed_generator.inc</rss_feed_generator>
     </php_includes>
-    -->
     
     <template_includes>
         <!--<pre_rendering></pre_rendering>-->
