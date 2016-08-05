@@ -108,8 +108,12 @@ $(document).ready(function()
 {
     tinymce_comments_defaults = $.extend({}, tinymce_defaults);
     
-    tinymce_comments_defaults.toolbar  = 'bold italic strikethrough forecolor fontsizeselect removeformat | outdent indent | link | fullscreen';
+    tinymce_comments_defaults.toolbar  = 'bold italic strikethrough forecolor fontsizeselect removeformat | outdent indent | link';
     tinymce_comments_defaults.selector = '.tinymce_comments';
+    
+    if( tinymce_custom_toolbar_buttons.length > 0 )
+        tinymce_comments_defaults.toolbar = tinymce_comments_defaults.toolbar + ' ' + tinymce_custom_toolbar_buttons.join(' ');
+    tinymce_comments_defaults.toolbar = tinymce_comments_defaults.toolbar  + ' | fullscreen';
     
     if( $_CURRENT_USER_IS_ADMIN )
         tinymce_comments_defaults.toolbar = tinymce_comments_defaults.toolbar + ' | code';
