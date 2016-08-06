@@ -9,6 +9,7 @@
  *
  * Imported globals:
  * @var post_record $post
+ * @var config      $config
  *
  * Trailing vars:
  * @var module $this_module    self (comments)
@@ -17,6 +18,7 @@
  * @var bool   $ajax_calling
  */
 
+use hng2_base\config;
 use hng2_base\module;
 use hng2_modules\posts\post_record;
 
@@ -33,9 +35,6 @@ if( ! function_exists("recaptcha_get_html") ) include_once ABSPATH . "/lib/recap
     
     <div class="tinymce_container">
         <textarea name="content" class="tinymce_comments"></textarea>
-        <div class="tinymce_addons_bar">
-            <? render_tinymce_addons_bar(); ?>
-        </div>
     </div>
     
     <? if( ! $account->_exists ): ?>
