@@ -5,11 +5,13 @@
  * @package    BardCanvas
  * @subpackage categories
  * @author     Alejandro Caballero - lava.caballero@gmail.com
- *             
+ * 
+ * @var account           $account
  * @var settings          $settings
  * @var \SimpleXMLElement $language
  */
 
+use hng2_base\account;
 use hng2_base\config;
 use hng2_base\settings;
 use hng2_modules\comments\comment_record;
@@ -48,6 +50,11 @@ $repository = new comments_repository();
 
 $comment = new comment_record();
 $comment->set_from_post();
+
+$parent = $repository->get($comment->parent_comment);
+if( ! empty($comment->parent_comment) && is_null($parent) )
+    die($current_module->language->messages->parent_not_found);
+$comment->indent_level = $parent->indent_level + 1;
 
 if( $account->_exists )
 {

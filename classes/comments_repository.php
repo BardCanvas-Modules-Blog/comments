@@ -4,6 +4,7 @@ namespace hng2_modules\comments;
 use hng2_base\config;
 use hng2_base\repository\abstract_repository;
 use hng2_base\repository\accounts_repository;
+use hng2_tools\record_browser;
 
 class comments_repository extends abstract_repository
 {
@@ -53,6 +54,7 @@ class comments_repository extends abstract_repository
                 id_post             ,
                 id_comment          ,
                 parent_comment      ,
+                indent_level        ,
                 
                 id_author           ,
                 author_display_name ,
@@ -72,6 +74,7 @@ class comments_repository extends abstract_repository
                 '{$obj->id_post             }',
                 '{$obj->id_comment          }',
                 '{$obj->parent_comment      }',
+                '{$obj->indent_level        }',
                 
                 '{$obj->id_author           }',
                 '{$obj->author_display_name }',
@@ -206,6 +209,73 @@ class comments_repository extends abstract_repository
                 foreach($comments as $comment_id => $comment)
                     if( isset($authors[$comment->id_author]) )
                         $return[$post_id][$comment_id]->set_author($authors[$comment->id_author]);
+        }
+        
+        return $return;
+    }
+    
+    /**
+     * Returns a flattened array of comment records for rendering in a single post
+     * 
+     * @param $id_post
+     *
+     * @return array
+     */
+    public function get_for_single_post($id_post)
+    {
+        $browser        = new record_browser("");
+        $find_params    = $this->build_find_params_for_post($id_post);
+        $comments_count = $this->get_record_count($find_params->where);
+        $comments       = $this->find($find_params->where, $find_params->limit, $find_params->offset, $find_params->order);
+        $pagination     = $browser->build_pagination($comments_count, $find_params->limit, $find_params->offset);
+        
+        if( count($comments) ) $comments = array_reverse($comments);
+        
+        $tree  = $this->build_tree($comments);
+        $final = $this->flatten_tree($tree);
+        
+        return array($find_params, $comments_count, $final, $pagination);
+    }
+    
+    /**
+     * @param comment_record[] $elements
+     * @param string            $parent_id
+     * @param                   $path
+     *
+     * @return array
+     */
+    private function build_tree(array $elements, $parent_id = "", $path = "")
+    {
+        $branch = array();
+        
+        foreach( $elements as $element )
+        {
+            if( $element->parent_comment == $parent_id )
+            {
+                $children = $this->build_tree($elements, $element->id_comment, "{$path}/{$element->id_comment}");
+                if( $children ) $element->children = $children;
+                $branch["{$path}/{$element->id_comment}"] = $element;
+            }
+        }
+        
+        return $branch;
+    }
+    
+    private function flatten_tree(array $elements)
+    {
+        $return = array();
+        
+        foreach($elements as $id_path => $element)
+        {
+            $clone = clone $element;
+            unset( $clone->children );
+            $return[$id_path] = $clone;
+            
+            if( $element->children )
+            {
+                $element_children = $this->flatten_tree( $element->children );
+                $return = array_merge($return, $element_children);
+            }
         }
         
         return $return;

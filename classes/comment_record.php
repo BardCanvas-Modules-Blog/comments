@@ -9,6 +9,7 @@ class comment_record extends abstract_record
     public $id_post            ; # varchar(32) not null default '',
     public $id_comment         ; # varchar(32) not null default '',
     public $parent_comment     ; # varchar(32) not null default '',
+    public $indent_level       ; # tinyint unsigned not null default 0,
     
     public $id_author          ; # varchar(32) not null default '',
     public $author_display_name; # varchar(100) not null default '',

@@ -90,14 +90,17 @@ function process_comment_submission(response, status, xhr, $form)
     var comment_id = parts[1];
     var href       = location.href;
     
+    href = href.replace(/\?wasuuup=\d+@/g, '');
+    href = href.replace(/&wasuuup=\d+@/g, '');
+    
     if( href.indexOf('#') >= 0 )
     {
         parts = href.split('#');
         href  = parts[0];
     }
     
-    if( href.indexOf('?') < 0 ) href = href + '?wasuuup=' + parseInt(Math.random() * 1000000000000000);
-    else                        href = href + '&wasuuup=' + parseInt(Math.random() * 1000000000000000);
+    if( href.indexOf('?') < 0 ) href = href + '?wasuuup=' + parseInt(Math.random() * 1000000000000000) + '@';
+    else                        href = href + '&wasuuup=' + parseInt(Math.random() * 1000000000000000) + '@';
     
     href = href + '#comment_' + comment_id;
     

@@ -80,7 +80,7 @@
         <invalid_captcha>Invalid captcha input. Please try again.</invalid_captcha>
         <already_sent>You already sent that comment within the last minutes.</already_sent>
         <sending_too_fast>You're sending comments too fast. Please wait {$time}.</sending_too_fast>
-        <parent_deleted>The parent comment can't be found. It should have been deleted.</parent_deleted>
+        <parent_not_found>The parent comment can't be found. It should have been deleted.</parent_not_found>
     </messages>
     
     <settings_data>
@@ -107,6 +107,15 @@
             <description><![CDATA[
                 Minimum amount of seconds to wait before a user can send a new comment.<br>
                 Defaults to <code>30</code>. Specify <code>0</code> to disable this check (not recommended).
+            ]]></description>
+            <type>number</type>
+        </specs>
+        <specs key="max_indent_level">
+            <title>Maximum indent level</title>
+            <description><![CDATA[
+                When rendering the comments tree, all children above this level will be kept in the
+                specified value.
+                Defaults to <code>5</code>.
             ]]></description>
             <type>number</type>
         </specs>

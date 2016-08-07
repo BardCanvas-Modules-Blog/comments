@@ -23,6 +23,7 @@ $tables = array(
             id_post             varchar(32) not null default '',
             id_comment          varchar(32) not null default '',
             parent_comment      varchar(32) not null default '',
+            indent_level        tinyint unsigned not null default 0,
             
             id_author           varchar(32) not null default '',
             author_display_name varchar(100) not null default '',

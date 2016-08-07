@@ -226,7 +226,7 @@ $records = $repository->find($where, $limit, $offset, $sqlorder);
                     {
                         $parent = $repository->get($row->parent_comment);
                         if( is_null($parent) )
-                            echo $current_module->language->messages->parent_deleted;
+                            echo $current_module->language->messages->parent_not_found;
                         else
                             echo make_excerpt_of($parent->content, 100);
                     }
