@@ -121,4 +121,9 @@
         </specs>
     </settings_data>
     
+    <rss_feed_generator>
+        <title>{$website_name} comments feed</title>
+        <description>Latest comments on all posts published on {$website_name}</description>
+    </rss_feed_generator>
+    
 </language>

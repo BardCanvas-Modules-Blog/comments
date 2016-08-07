@@ -20,17 +20,38 @@
 
 use hng2_base\module;
 use hng2_base\template;
+use hng2_modules\comments\comments_repository;
 use hng2_rss\channel;
 use hng2_rss\item;
 
-$channel->title       = "Título del canal";
-$channel->description = "Descripción del canal";
-$channel->link        = "http://www.google.com";
+$channel->title       = $this_module->language->rss_feed_generator->title;
+$channel->description = $this_module->language->rss_feed_generator->description;
+$channel->link        = "{$config->full_root_url}/" . ($handle == "_none_" ? "" : "{$handle}/") . "feed";
 
-$item              = new item();
-$item->title       = "El título";
-$item->link        = "http://www.google.com";
-$item->description = "Descripción";
-$item->guid        = "http://www.google.com";
+$channel->title = replace_escaped_vars(
+    $channel->title,
+    array('{$website_name}'),
+    array($settings->get("engine.website_name"))
+);
 
-$channel->items[] = $item;
+$channel->description = replace_escaped_vars(
+    $channel->description,
+    array('{$website_name}'),
+    array($settings->get("engine.website_name"))
+);
+
+$repository = new comments_repository();
+$records    = $repository->lookup(array(), 0, 0, "");
+
+if( count($records) == 0 ) return;
+
+foreach($records as $row)
+{
+    $item              = new item();
+    $item->title       = make_excerpt_of(html_entity_decode($row->content, null, "UTF-8"));
+    $item->link        = "{$config->full_root_url}/{$row->id_post}#comment_{$row->id_comment}";
+    $item->description = strip_tags(html_entity_decode($row->content, null, "UTF-8"));
+    $item->guid        = "{$config->full_root_url}/{$row->id_post}#comment_{$row->id_comment}";
+    
+    $channel->items[] = $item;
+}
