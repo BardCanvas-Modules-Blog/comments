@@ -12,6 +12,7 @@ function prepare_comment_reply(trigger)
     var form_id   = 'comment_reply_' + parseInt(Math.random() * 1000000000000000);
     
     var params = {
+        parent_id: parent_id,
         wasuuup: parseInt(Math.random() * 1000000000000000)
     };
     

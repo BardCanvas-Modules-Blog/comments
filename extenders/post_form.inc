@@ -34,7 +34,7 @@ if( ! function_exists("recaptcha_get_html") ) include_once ABSPATH . "/lib/recap
     <input type="hidden" name="parent_comment" value="">
     
     <div class="tinymce_container">
-        <textarea name="content" class="tinymce_comments"></textarea>
+        <textarea name="content" class="tinymce_comments"><?= $template->get("prefilled_comment_content") ?></textarea>
     </div>
     
     <? if( ! $account->_exists ): ?>
@@ -68,7 +68,7 @@ if( ! function_exists("recaptcha_get_html") ) include_once ABSPATH . "/lib/recap
         
         <div class="field recaptcha_target" id="recaptcha_<?= uniqid() ?>"
               data-public-key="<?= $settings->get("engine.recaptcha_public_key") ?>">
-            <? if( ! $ajax_calling ) echo recaptcha_get_html($settings->get("engine.recaptcha_public_key")); ?>
+            <? if( ! $template->get("ajax_calling") ) echo recaptcha_get_html($settings->get("engine.recaptcha_public_key")); ?>
         </div>
     
     <? endif; ?>
@@ -79,7 +79,7 @@ if( ! function_exists("recaptcha_get_html") ) include_once ABSPATH . "/lib/recap
             <?= $language->submit ?>
         </button>
         
-        <? if($ajax_calling): ?>
+        <? if($template->get("ajax_calling")): ?>
             <button onclick="discard_comment_reply(this); return false">
                 <span class="fa fa-ban"></span>
                 <?= $language->cancel ?>
