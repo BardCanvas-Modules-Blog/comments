@@ -49,7 +49,7 @@ class comments_repository extends abstract_repository
     
         $obj->last_update = date("Y-m-d H:i:s");
     
-        return $database->exec("
+        $res = $database->exec("
             insert into {$this->table_name} (
                 id_post             ,
                 id_comment          ,
@@ -95,6 +95,9 @@ class comments_repository extends abstract_repository
                 status      = '{$obj->status              }',
                 last_update = '{$obj->last_update         }'
         ");
+        
+        $this->last_query = $database->get_last_query();
+        return $res;
     }
     
     /**
@@ -128,7 +131,7 @@ class comments_repository extends abstract_repository
     protected function build_find_params($where = array())
     {
         global $account, $settings;
-    
+        
         if( $account->level < config::MODERATOR_USER_LEVEL )
         {
             if( ! $account->_exists )
@@ -182,6 +185,7 @@ class comments_repository extends abstract_repository
             )";
         
         $query = implode("\nunion\n", $queries);
+        $this->last_query = $query;
         $res   = $database->query($query);
         
         if( $database->num_rows($res) == 0 ) return array();
@@ -235,6 +239,30 @@ class comments_repository extends abstract_repository
         $final = $this->flatten_tree($tree);
         
         return array($find_params, $comments_count, $final, $pagination);
+    }
+    
+    /**
+     * Standard way to build the posts collection
+     *
+     * @param array  $where
+     * @param int    $limit
+     * @param int    $offset
+     * @param string $order
+     *
+     * @return comment_record[]
+     */
+    public function lookup($where, $limit = 0, $offset = 0, $order = "")
+    {
+        $params = $this->build_find_params();
+        
+        if( empty($where)  ) $where  = array();
+        if( empty($limit)  ) $limit  = $params->limit;
+        if( empty($offset) ) $offset = $params->offset;
+        if( empty($order)  ) $order  = $params->order;
+        
+        $where = array_merge($where, $params->where);
+        
+        return parent::find($where, $limit, $offset, $order);
     }
     
     /**
