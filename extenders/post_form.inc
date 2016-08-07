@@ -34,7 +34,7 @@ if( ! function_exists("recaptcha_get_html") ) include_once ABSPATH . "/lib/recap
     <input type="hidden" name="parent_comment" value="">
     
     <div class="tinymce_container">
-        <textarea name="content" class="tinymce_comments"><?= $template->get("prefilled_comment_content") ?></textarea>
+        <textarea name="content" class="tinymce"><?= $template->get("prefilled_comment_content") ?></textarea>
     </div>
     
     <? if( ! $account->_exists ): ?>

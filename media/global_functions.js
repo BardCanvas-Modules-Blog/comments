@@ -1,7 +1,4 @@
 
-// Important: these need to be redefined once the document is ready.
-var tinymce_comments_defaults = {};
-
 function prepare_comment_reply(trigger)
 {
     var $trigger  = $(trigger).closest('.trigger');
@@ -30,7 +27,7 @@ function prepare_comment_reply(trigger)
         
         Recaptcha.create(public_key, recaptcha_id);
         
-        tinymce.init(tinymce_comments_defaults);
+        tinymce.init(tinymce_defaults);
         
         $trigger.hide();
         $('#post_new_comment_form').hide();
@@ -110,23 +107,6 @@ function process_comment_submission(response, status, xhr, $form)
 
 $(document).ready(function()
 {
-    tinymce_comments_defaults = $.extend({}, tinymce_defaults);
-    
-    tinymce_comments_defaults.toolbar  = tinymce_standard_toolbar;
-    tinymce_comments_defaults.selector = '.tinymce_comments';
-    
-    if( tinymce_custom_toolbar_buttons.length > 0 )
-        tinymce_comments_defaults.toolbar = tinymce_comments_defaults.toolbar + ' | ' + tinymce_custom_toolbar_buttons.join(' ');
-    tinymce_comments_defaults.toolbar = tinymce_comments_defaults.toolbar  + ' | fullscreen';
-    
-    if( $_CURRENT_USER_IS_ADMIN )
-        tinymce_comments_defaults.toolbar = tinymce_comments_defaults.toolbar + ' | code';
-    
-    if( $_CURRENT_USER_LANGUAGE != "en" && $_CURRENT_USER_LANGUAGE != "en_US" )
-        tinymce_comments_defaults.language = $_CURRENT_USER_LANGUAGE;
-    
-    tinymce.init(tinymce_comments_defaults);
-    
     $('#post_comment').ajaxForm({
         target:          '#post_comment_target',
         beforeSerialize: prepare_comment_form_serialization,
