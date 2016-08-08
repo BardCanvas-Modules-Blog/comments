@@ -76,4 +76,12 @@ class comment_record extends abstract_record
         
         return (object) $return;
     }
+    
+    public function get_processed_content()
+    {
+        $contents = $this->content;
+        $contents = convert_emojis($contents);
+    
+        return $contents;
+    }
 }
