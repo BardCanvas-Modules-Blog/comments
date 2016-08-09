@@ -2,8 +2,8 @@
 namespace hng2_modules\comments;
 
 use hng2_base\config;
-use hng2_base\repository\abstract_repository;
-use hng2_base\repository\accounts_repository;
+use hng2_repository\abstract_repository;
+use hng2_base\accounts_repository;
 use hng2_tools\record_browser;
 
 class comments_repository extends abstract_repository
