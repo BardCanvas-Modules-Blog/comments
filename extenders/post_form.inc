@@ -33,7 +33,7 @@ if( ! function_exists("recaptcha_get_html") ) include_once ABSPATH . "/lib/recap
     <input type="hidden" name="id_post" value="<?= $post->id_post ?>">
     <input type="hidden" name="parent_comment" value="">
     
-    <div class="tinymce_container">
+    <div class="field tinymce_container">
         <textarea name="content" class="tinymce"><?= $template->get("prefilled_comment_content") ?></textarea>
     </div>
     
