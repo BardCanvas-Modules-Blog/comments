@@ -308,4 +308,126 @@ class comments_repository extends abstract_repository
         
         return $return;
     }
+    
+    /**
+     * @param $id_comment
+     *
+     * @return comment_tag[]
+     *
+     * @throws \Exception
+     */
+    public function get_tags($id_comment)
+    {
+        global $database;
+        
+        $res = $database->query("select * from comment_tags where id_comment = '$id_comment'");
+        $this->last_query = $database->get_last_query();
+        
+        if( $database->num_rows($res) == 0 ) return array();
+        
+        $rows = array();
+        while($row = $database->fetch_object($res))
+            $rows[$row->tag] = new comment_tag($row);
+        
+        return $rows;
+    }
+    
+    public function set_tags(array $list, $id_comment)
+    {
+        global $database;
+        
+        $actual_tags = $this->get_tags($id_comment);
+        
+        if( empty($actual_tags) && empty($list) ) return;
+        
+        $date = date("Y-m-d H:i:s");
+        $inserts = array();
+        $index   = 1;
+        foreach($list as $tag)
+        {
+            if( ! isset($actual_tags[$tag]) ) $inserts[] = "('$id_comment', '$tag', '$date', '$index')";
+            unset($actual_tags[$tag]);
+            $index++;
+        }
+        
+        if( ! empty($inserts) )
+        {
+            $database->exec(
+                "insert into comment_tags (id_comment, tag, date_attached, order_attached) values "
+                . implode(", ", $inserts)
+            );
+            $this->last_query = $database->get_last_query();
+        }
+        
+        if( ! empty($actual_tags) )
+        {
+            $deletes = array();
+            foreach($actual_tags as $tag => $object) $deletes[] = "'$tag'";
+            $database->exec(
+                "delete from comment_tags where id_comment = '$id_comment' and tag in (" . implode(", ", $deletes) . ")"
+            );
+            $this->last_query = $database->get_last_query();
+        }
+    }
+    
+    /**
+     * @param $id_comment
+     *
+     * @return comment_media_item[]
+     *
+     * @throws \Exception
+     */
+    public function get_media_items($id_comment)
+    {
+        global $database;
+        
+        $res = $database->query("select * from comment_media where id_comment = '$id_comment' order by date_attached, order_attached");
+        $this->last_query = $database->get_last_query();
+        
+        if( $database->num_rows($res) == 0 ) return array();
+        
+        $rows = array();
+        while($row = $database->fetch_object($res))
+            $rows[$row->id_media] = new comment_media_item($row);
+        
+        return $rows;
+    }
+    
+    public function set_media_items(array $list, $id_comment)
+    {
+        global $database;
+        
+        $actual_items = $this->get_media_items($id_comment);
+        
+        if( empty($actual_items) && empty($list) ) return;
+        
+        $date    = date("Y-m-d H:i:s");
+        $inserts = array();
+        $index   = 1;
+        foreach($list as $id)
+        {
+            if( ! isset($actual_items[$id]) ) $inserts[] = "('$id_comment', '$id', '$date', '$index')";
+            unset($actual_items[$id]);
+            $index++;
+        }
+        
+        if( ! empty($inserts) )
+        {
+            $database->exec(
+                "insert into comment_media (id_comment, id_media, date_attached, order_attached) values "
+                . implode(", ", $inserts)
+            );
+            $this->last_query = $database->get_last_query();
+        }
+        
+        if( ! empty($actual_items) )
+        {
+            $deletes = array();
+            foreach($actual_items as $id => $object) $deletes[] = "'$id'";
+            $database->exec(
+                "delete from comment_media where id_comment = '$id_comment' and id_media in (" . implode(", ", $deletes) . ")"
+            );
+            $this->last_query = $database->get_last_query();
+        }
+    }
 }

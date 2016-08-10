@@ -138,5 +138,19 @@ $comment->creation_ip       = get_user_ip();
 $comment->creation_host     = gethostbyaddr($comment->creation_ip);
 $comment->creation_location = forge_geoip_location($comment->creation_ip);
 $comment->creation_date     = date("Y-m-d H:i:s");
+
+$tags = extract_hash_tags($comment->content);
+$media_items = array();
+if( function_exists("extract_media_items") )
+{
+    $images = extract_media_items("image", $comment->content);
+    $videos = extract_media_items("video", $comment->content);
+    $media_items = array_merge($images, $videos);
+    
+    if( count($media_items) )
+        $repository->set_media_items($media_items, $comment->id_comment);
+}
+if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
+
 $repository->save($comment);
 echo "OK:{$comment->id_comment}";
