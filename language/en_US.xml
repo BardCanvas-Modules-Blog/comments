@@ -26,6 +26,12 @@
         </fields>
     </form>
     
+    <extenders>
+        <search_by_tag_builder>
+            <collection_heading>Comments</collection_heading>
+        </search_by_tag_builder>
+    </extenders>
+    
     <list>
         <title>{$amount} comments</title>
         <post_comment>Send a comment</post_comment>

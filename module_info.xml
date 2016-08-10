@@ -53,6 +53,9 @@
             <tags_cloud_widget>
                 <add_to_tag_counts>extenders/add_to_search_tags_cloud.inc</add_to_tag_counts>
             </tags_cloud_widget>
+            <search_by_tag>
+                <collection_builder>extenders/search_by_tag_builder.inc</collection_builder>
+            </search_by_tag>
         </search>
     </extends_to>
     
