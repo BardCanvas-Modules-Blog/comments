@@ -430,4 +430,37 @@ class comments_repository extends abstract_repository
             $this->last_query = $database->get_last_query();
         }
     }
+    
+    public function get_grouped_tag_counts($since = "", $min_hits = 10)
+    {
+        global $database;
+        
+        $min_hits = empty($min_hits) ? 10 : $min_hits;
+        $having   = $min_hits == 1   ? "" : "having `count` >= '$min_hits'";
+        
+        if( empty($since) )
+            $query = "
+                select tag, count(tag) as `count` from comment_tags
+                group by tag
+                $having
+                order by `count` desc
+            ";
+        else
+            $query = "
+                select tag, count(tag) as `count` from comment_tags
+                where date_attached >= '{$since}'
+                group by tag
+                $having
+                order by `count` desc
+            ";
+        
+        $res = $database->query($query);
+        if( $database->num_rows($res) == 0 ) return array();
+        
+        $return = array();
+        while( $row = $database->fetch_object($res) )
+            $return[$row->tag] = $row->count;
+        
+        return $return;
+    }
 }

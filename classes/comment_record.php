@@ -79,9 +79,12 @@ class comment_record extends abstract_record
     
     public function get_processed_content()
     {
+        global $config;
+        
         $contents = $this->content;
         $contents = convert_emojis($contents);
-    
+        $contents = autolink_hash_tags($contents, "{$config->full_root_path}/tag/", "/comments");
+        
         return $contents;
     }
 }

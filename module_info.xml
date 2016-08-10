@@ -49,6 +49,11 @@
                 <indexes_after_excerpt>extenders/comments_for_post_in_index.inc</indexes_after_excerpt>
             </front>
         </posts>
+        <search>
+            <tags_cloud_widget>
+                <add_to_tag_counts>extenders/add_to_search_tags_cloud.inc</add_to_tag_counts>
+            </tags_cloud_widget>
+        </search>
     </extends_to>
     
 </module>
