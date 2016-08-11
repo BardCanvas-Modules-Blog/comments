@@ -1,7 +1,8 @@
 <?php
 namespace hng2_modules\comments;
 
-use hng2_base\account;
+use hng2_base\account_record;
+use hng2_base\accounts_repository;
 use hng2_repository\abstract_record;
 
 class comment_record extends abstract_record
@@ -33,32 +34,45 @@ class comment_record extends abstract_record
     
     private $_author_account;
     
+    /**
+     * @var accounts_repository|null
+     */
+    private static $accounts_repository = null;
+    
+    public function __construct($object_or_array)
+    {
+        parent::__construct($object_or_array);
+        
+        if( is_null(self::$accounts_repository) )
+            self::$accounts_repository = new accounts_repository();
+    }
+    
     public function set_new_id()
     {
         $this->id_comment = uniqid();
     }
     
     /**
-     * @param null|account $prefetched_author_record
+     * @param null|account_record $prefetched_author_record
      */
     public function set_author($prefetched_author_record = null)
     {
         if( ! is_null($prefetched_author_record) )
             $this->_author_account = $prefetched_author_record;
         else
-            $this->_author_account = new account($this->id_author);
+            $this->_author_account = self::$accounts_repository->get($this->id_author);
     }
     
     /**
-     * @return account
+     * @return account_record
      */
     public function get_author()
     {
-        // TODO: Implement accounts repository for caching
-        
         if( is_object($this->_author_account) ) return $this->_author_account;
         
-        return new account($this->id_author);
+        $this->_author_account = self::$accounts_repository->get($this->id_author);
+        
+        return $this->_author_account;
     }
     
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace hng2_modules\comments;
 
+use hng2_base\account_record;
 use hng2_base\config;
 use hng2_repository\abstract_repository;
 use hng2_base\accounts_repository;
@@ -11,6 +12,11 @@ class comments_repository extends abstract_repository
     protected $row_class                = "\\hng2_modules\\comments\\comment_record";
     protected $table_name               = "comments";
     protected $key_column_name          = "id_comment";
+    
+    /**
+     * @var accounts_repository|null
+     */
+    protected static $accounts_repository = null;
     
     /**
      * @param $id
@@ -46,9 +52,9 @@ class comments_repository extends abstract_repository
     
         $this->validate_record($record);
         $obj = $record->get_for_database_insertion();
-    
+        
         $obj->last_update = date("Y-m-d H:i:s");
-    
+        
         $res = $database->exec("
             insert into {$this->table_name} (
                 id_post             ,
@@ -462,5 +468,23 @@ class comments_repository extends abstract_repository
             $return[$row->tag] = $row->count;
         
         return $return;
+    }
+    
+    /**
+     * @param comment_record[] $records
+     *
+     * @return account_record[]
+     */
+    public function get_all_authors(array $records)
+    {
+        $author_ids = array();
+        foreach($records as $record)
+            if( ! empty($record->id_author))
+                $author_ids[] = $record->id_author;
+        $author_ids = array_unique($author_ids);
+        
+        if( is_null(self::$accounts_repository) ) self::$accounts_repository = new accounts_repository();
+        
+        return self::$accounts_repository->get_multiple($author_ids);
     }
 }

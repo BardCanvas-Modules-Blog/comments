@@ -93,6 +93,7 @@ switch( $order )
 }
 
 $records = $repository->find($where, $limit, $offset, $sqlorder);
+$authors = $repository->get_all_authors($records);
 #endregion
 ?>
 
@@ -174,7 +175,7 @@ $records = $repository->find($where, $limit, $offset, $sqlorder);
         <tbody>
         <? foreach( $records as $row ): ?>
             <?
-            $author = $row->get_author();
+            $author       = $authors[$row->id_author];
             $author_name  = empty($author->id_account) ? $row->author_display_name : convert_emojis($author->display_name);
             $author_email = empty($author->id_account) ? $row->author_email        : $author->email;
             ?>
