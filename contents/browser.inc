@@ -249,9 +249,17 @@ $authors = $repository->get_all_authors($records);
                 </td>
                 <td data-for="in_reply_to">
                     <?
+                    $post       = $row->get_post();
+                    $post_url   = $post->get_permalink();
+                    $post_title = $post->get_processed_title(false);
+                    $post_link  = "<a href='$post_url' target='_blank'>
+                                       <span class='fa fa-newspaper-o'></span>
+                                       $post_title
+                                   </a>";
+                    
                     if( empty($row->parent_comment) )
                     {
-                        echo "&mdash;";
+                        echo $post_link;
                     }
                     else
                     {
@@ -259,7 +267,11 @@ $authors = $repository->get_all_authors($records);
                         if( is_null($parent) )
                             echo $current_module->language->messages->parent_not_found;
                         else
-                            echo make_excerpt_of($parent->content, 100);
+                            echo  "{$post_link}<br>"
+                                . "<a href='$post_url#comment_{$parent->id_comment}' target='_blank'>" 
+                                . "<span class='fa fa-comment-o'></span> " 
+                                . make_excerpt_of($parent->content, 100) 
+                                . "</a>";
                     }
                     ?>
                 </td>
