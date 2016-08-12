@@ -42,11 +42,20 @@
         <title>Comments</title>
     </index>
     
+    <statuses>
+        <published>Published</published>
+        <reviewing>On review</reviewing>
+        <rejected>Rejected</rejected>
+        <spam>Flagged as Spam</spam>
+        <hidden>Hidden</hidden>
+        <trashed>Deleted</trashed>
+    </statuses>
+    
     <record_nav>
         <menu_caption>Comments</menu_caption>
         <columns>
             <sent_date>
-                <caption>Sent on</caption>
+                <caption>Sent</caption>
                 <order_asc  id="1">Order by sent date ascending</order_asc>
                 <order_desc id="2">Order by sent date descending</order_desc>
             </sent_date>
@@ -55,8 +64,12 @@
                 <order_asc  id="3">Order by author name ascending</order_asc>
                 <order_desc id="4">Order by author name descending</order_desc>
             </sent_by>
+            <status>
+                <caption>Status</caption>
+            </status>
             <details>
                 <caption>Details</caption>
+                <replies>{$replies} replies</replies>
             </details>
             <in_reply_to>
                 <caption>In reply to</caption>
@@ -87,10 +100,53 @@
         <already_sent>You already sent that comment within the last minutes.</already_sent>
         <sending_too_fast>You're sending comments too fast. Please wait {$time}.</sending_too_fast>
         <parent_not_found>The parent comment can't be found. It should have been deleted.</parent_not_found>
+        <missing_comment_id>You didn't specify a comment id</missing_comment_id>
+        <comment_not_found>The comment you specified wasn't found</comment_not_found>
+        <toolbox>
+            <invalid_action>The provided action is invalid</invalid_action>
+            <invalid_status>The status flag you provided is invalid</invalid_status>
+            <action_not_allowed>Sorry, but your privileges aren't enough to carry on this action</action_not_allowed>
+            <published_ok><![CDATA[
+                Comment #{$id} by {$author} has been published. A notification has been sent to them.<br>
+                <a href="{$link}">Click here to check it.</a>
+            ]]></published_ok>
+            <rejected_ok><![CDATA[
+                Comment #{$id} by {$author} has been rejected. A notification has been sent to them.<br>
+                <a href="{$link}">Click here to check it.</a>
+            ]]></rejected_ok>
+            <deleted_from_others><![CDATA[
+                Comment #{$id} by {$author} has been sent to the trash can. A notification has been sent to them.
+            ]]></deleted_from_others>
+        </toolbox>
     </messages>
+    
+    <notifications>
+        <published_ok><![CDATA[
+            Your comment on "{$post_title}" has been released by {$user} and it is now published.<br>
+            <a href="{$link}">Click here to check it.</a>
+        ]]></published_ok>
+        <rejected_ok><![CDATA[
+            Sorry, but your comment on "{$post_title}" has been rejected by {$user}.<br>
+            <a href="{$link}">Click here to check it.</a>
+        ]]></rejected_ok>
+        <deleted_by_others><![CDATA[
+            Your comment #{$id} on "{$post_title}" has been deleted by {$user}.
+        ]]></deleted_by_others>
+        <deleted_by_self><![CDATA[
+            {$author}'s comment #{$id} on "{$post_title}" has been deleted by {$user}.
+        ]]></deleted_by_self>
+    </notifications>
     
     <settings_data>
         <title>Comments</title>
+        <specs key="disable_new_after">
+            <title>Disable posting new comments after:</title>
+            <description><![CDATA[
+                Specify the age in days a post should have so comment submissions/replies are blocked.<br>
+                Set to <code>0</code> to disable this feature.
+            ]]></description>
+            <type>number</type>
+        </specs>
         <specs key="flag_for_review_on_link_amount">
             <title>Flag for review on link amount</title>
             <description><![CDATA[
@@ -122,6 +178,14 @@
                 When rendering the comments tree, all children above this level will be kept in the
                 specified value.
                 Defaults to <code>5</code>.
+            ]]></description>
+            <type>number</type>
+        </specs>
+        <specs key="time_allowed_for_editing_after_submission">
+            <title>Time allowed for editing after submission</title>
+            <description><![CDATA[
+                Amount of minutes a user has to edit a comment once submitted.<br>
+                Set to <code>0</code> to disable comment edition.
             ]]></description>
             <type>number</type>
         </specs>

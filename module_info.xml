@@ -12,7 +12,7 @@
     </working_flags>
     
     <php_includes>
-        <!--<bootstrap></bootstrap>-->
+        <bootstrap>functions.inc</bootstrap>
         <rss_feed_generator handle_pattern="^comments$">extenders/rss_feed_generator.inc</rss_feed_generator>
     </php_includes>
     

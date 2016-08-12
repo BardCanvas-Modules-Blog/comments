@@ -12,11 +12,40 @@ class comments_repository extends abstract_repository
     protected $row_class                = "\\hng2_modules\\comments\\comment_record";
     protected $table_name               = "comments";
     protected $key_column_name          = "id_comment";
+    protected $additional_select_fields = array(
+        "(select count(id_comment) from comments c2 where c2.parent_comment = comments.id_comment) as _replies_count"
+    );
     
     /**
      * @var accounts_repository|null
      */
     protected static $accounts_repository = null;
+    
+    public function __construct()
+    {
+        global $settings;
+        
+        $days = (int) $settings->get("modules:comments.disable_new_after");
+        
+        $now            = date("Y-m-d H:i:s");
+        $date_add       = "date_add((select publishing_date from posts where posts.id_post = comments.id_post), interval $days day)";
+        $allow_comments = "select allow_comments from posts where posts.id_post = comments.id_post";
+        
+        if( empty($days) )
+            $this->additional_select_fields[] =
+                "($allow_comments) as _can_be_replied";
+        else
+            $this->additional_select_fields[] =
+                "
+                if(
+                    $date_add > '$now',
+                    ($allow_comments),
+                    0
+                ) as _can_be_replied
+                ";
+        
+        parent::__construct();
+    }
     
     /**
      * @param $id
@@ -486,5 +515,12 @@ class comments_repository extends abstract_repository
         if( is_null(self::$accounts_repository) ) self::$accounts_repository = new accounts_repository();
         
         return self::$accounts_repository->get_multiple($author_ids);
+    }
+    
+    public function change_status($id_comment, $new_status)
+    {
+        global $database;
+        
+        return $database->exec("update comments set status = '$new_status' where id_comment = '$id_comment'");
     }
 }

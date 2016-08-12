@@ -3,6 +3,8 @@ namespace hng2_modules\comments;
 
 use hng2_base\account_record;
 use hng2_base\accounts_repository;
+use hng2_modules\posts\post_record;
+use hng2_modules\posts\posts_repository;
 use hng2_repository\abstract_record;
 
 class comment_record extends abstract_record
@@ -33,19 +35,18 @@ class comment_record extends abstract_record
     # TODO:                                                                                                        :
     
     private $_author_account;
+    public  $_can_be_replied;
+    public  $_replies_count;
     
     /**
      * @var accounts_repository|null
      */
     private static $accounts_repository = null;
     
-    public function __construct($object_or_array)
-    {
-        parent::__construct($object_or_array);
-        
-        if( is_null(self::$accounts_repository) )
-            self::$accounts_repository = new accounts_repository();
-    }
+    /**
+     * @var posts_repository|null
+     */
+    private static $posts_repository = null;
     
     public function set_new_id()
     {
@@ -57,6 +58,8 @@ class comment_record extends abstract_record
      */
     public function set_author($prefetched_author_record = null)
     {
+        if( is_null(self::$accounts_repository) ) self::$accounts_repository = new accounts_repository();
+        
         if( ! is_null($prefetched_author_record) )
             $this->_author_account = $prefetched_author_record;
         else
@@ -70,7 +73,10 @@ class comment_record extends abstract_record
     {
         if( is_object($this->_author_account) ) return $this->_author_account;
         
+        if( is_null(self::$accounts_repository) ) self::$accounts_repository = new accounts_repository();
+        
         $this->_author_account = self::$accounts_repository->get($this->id_author);
+        if( is_null($this->_author_account) ) $this->_author_account = new account_record();
         
         return $this->_author_account;
     }
@@ -83,7 +89,9 @@ class comment_record extends abstract_record
         $return = (array) $this;
         
         unset(
-            $return["_author_account"]
+            $return["_author_account"] ,
+            $return["_can_be_replied"] ,
+            $return["_replies_count"]
         );
         
         foreach( $return as $key => &$val ) $val = addslashes($val);
@@ -100,5 +108,15 @@ class comment_record extends abstract_record
         $contents = autolink_hash_tags($contents, "{$config->full_root_path}/tag/", "/comments");
         
         return $contents;
+    }
+    
+    /**
+     * @return post_record
+     */
+    public function get_post()
+    {
+        if( is_null(self::$posts_repository) ) self::$posts_repository = new posts_repository();
+        
+        return self::$posts_repository->get($this->id_post);
     }
 }

@@ -98,7 +98,7 @@ $authors = $repository->get_all_authors($records);
 ?>
 
 <h1 class="clearfix">
-    <button id="refresh_posts_browser" class="pull-right" onclick="paginate(<?= $offset ?>)">
+    <button id="refresh_commments_browser" class="pull-right" onclick="paginate(<?= $offset ?>)">
         <span class="fa fa-refresh"></span>
         <?= $language->refresh ?>
     </button>
@@ -149,7 +149,7 @@ $authors = $repository->get_all_authors($records);
 <? endif;  ?>
 
 <div class="table_wrapper">
-    <table id="posts_browser_table" class="nav_table evened">
+    <table id="posts_browser_table" class="nav_table evened comment_actions_container">
         
         <thead>
         <tr>
@@ -176,45 +176,75 @@ $authors = $repository->get_all_authors($records);
         <? foreach( $records as $row ): ?>
             <?
             $author       = $authors[$row->id_author];
-            $author_name  = empty($author->id_account) ? $row->author_display_name : convert_emojis($author->display_name);
-            $author_email = empty($author->id_account) ? $row->author_email        : $author->email;
+            $author_name  = empty($row->id_author) ? $row->author_display_name : $author->display_name;
+            $author_email = empty($row->id_author) ? $row->author_email        : $author->email;
             ?>
-            <tr data-record-id="<?= $row->id_comment ?>">
+            <tr class="comment_item" data-record-id="<?= $row->id_comment ?>">
                 <td data-for="sent_date">
                     <?= time_elapsed_string($row->creation_date) ?>
                 </td>
                 <td data-for="sent_by">
-                    <div class="principal_data"><?= $author_name ?></div>
-                    <a href="mailto:<?= $author_email ?>"><?= $author_email ?></a>
+                    <div class="principal_data"><?= convert_emojis($author_name) ?></div>
+                    <? if( $account->level >= config::MODERATOR_USER_LEVEL ): ?>
+                        <a href="mailto:<?= $author_email ?>">
+                            <span class="fa fa-envelope-o"></span>
+                            <?= $author_email ?>
+                        </a>
+                    <? endif; ?>
                 </td>
+                <td data-for="status"><?= $current_module->language->statuses->{$row->status} ?></td>
                 <td data-for="details">
+                    <? if( $row->_replies_count > 0): ?>
+                        <span class="framed_content inlined state_highlight pull-right"><?= replace_escaped_vars(
+                                $current_module->language->record_nav->columns->details->replies,
+                                '{$replies}',
+                                $row->_replies_count
+                            ) ?></span>
+                    <? endif; ?>
+                    
                     <?= make_excerpt_of($row->content, 100) ?>
                     
                     <div class="actions">
-                        <span class="action pseudo_link disabled" data-onclick="approve_comment('<?= $row->id_comment ?>')">
-                            <span class="fa fa-check"></span>
-                            <?= $current_module->language->record_nav->actions->approve ?>
-                        </span>
-                        <span class="action pseudo_link disabled" data-onclick="reject_comment('<?= $row->id_comment ?>')">
-                            <span class="fa fa-times"></span>
-                            <?= $current_module->language->record_nav->actions->reject ?>
-                        </span>
-                        <span class="action pseudo_link disabled" data-onclick="reply_comment('<?= $row->id_comment ?>')">
-                            <span class="fa fa-reply"></span>
-                            <?= $current_module->language->record_nav->actions->reply ?>
-                        </span>
-                        <span class="action pseudo_link disabled" data-onclick="edit_comment('<?= $row->id_comment ?>')">
-                            <span class="fa fa-pencil"></span>
-                            <?= $current_module->language->record_nav->actions->edit ?>
-                        </span>
-                        <span class="action pseudo_link disabled" data-onclick="spam_comment('<?= $row->id_comment ?>')">
-                            <span class="fa fa-warning"></span>
-                            <?= $current_module->language->record_nav->actions->spam ?>
-                        </span>
-                        <span class="action pseudo_link disabled" data-onclick="trash_comment('<?= $row->id_comment ?>')">
-                            <span class="fa fa-trash"></span>
-                            <?= $current_module->language->record_nav->actions->trash ?>
-                        </span>
+                        <? if($account->level >= config::MODERATOR_USER_LEVEL && $row->status == "reviewing" ): ?>
+                            <span class="action pseudo_link greengo" onclick="publish_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                                <span class="fa fa-check"></span>
+                                <?= $current_module->language->record_nav->actions->approve ?>
+                            </span>
+                            <span class="action pseudo_link important" onclick="reject_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                                <span class="fa fa-times"></span>
+                                <?= $current_module->language->record_nav->actions->reject ?>
+                            </span>
+                        <? endif; ?>
+                        
+                        <? if($account->level >= config::MODERATOR_USER_LEVEL || $row->_can_be_replied ): ?>
+                            <span class="action pseudo_link disabled" onclick="reply_comment('<?= $row->id_comment ?>')">
+                                <span class="fa fa-reply"></span>
+                                <?= $current_module->language->record_nav->actions->reply ?>
+                            </span>
+                        <? endif; ?>
+                        
+                        <? if( is_comment_editable($row) ): ?>
+                            <span class="action pseudo_link disabled" onclick="edit_comment('<?= $row->id_comment ?>')">
+                                <span class="fa fa-pencil"></span>
+                                <?= $current_module->language->record_nav->actions->edit ?>
+                            </span>
+                        <? endif; ?>
+                        
+                        <? if($row->id_author != $account->id_account && $row->status != "spam"): ?>
+                            <span class="action pseudo_link critical disabled" onclick="spam_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                                <span class="fa fa-warning"></span>
+                                <?= $current_module->language->record_nav->actions->spam ?>
+                            </span>
+                        <? endif; ?>
+                        
+                        <? if($row->status != "trashed"): ?>
+                            <? if($row->id_author == $account->id_account || $account->level >= config::MODERATOR_USER_LEVEL): ?>
+                                <span class="action pseudo_link critical" onclick="delete_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                                    <span class="fa fa-trash"></span>
+                                    <?= $current_module->language->record_nav->actions->trash ?>
+                                </span>
+                            <? endif; ?>
+                        <? endif; ?>
                     </div>
                 </td>
                 <td data-for="in_reply_to">
