@@ -31,7 +31,7 @@ $tables = array(
             author_url          varchar(100) not null default '',
             
             content             longtext,
-            status              enum('published', 'reviewing', 'hidden', 'trashed') not null default 'published',
+            status              enum('published', 'reviewing', 'rejected', 'spam', 'hidden', 'trashed') not null default 'published',
             
             creation_date       datetime default null,
             creation_ip         varchar(15) not null default '',
