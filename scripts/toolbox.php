@@ -35,7 +35,7 @@ if( is_null($comment) ) die($current_module->language->messages->comment_not_fou
 
 if($_GET["action"] == "change_status")
 {
-    if( ! in_array($_GET["new_status"], array("trashed", "published", "rejected")) )
+    if( ! in_array($_GET["new_status"], array("trashed", "published", "rejected", "spam")) )
         die($current_module->language->messages->toolbox->invalid_status);
     
     switch( $_GET["new_status"] )
@@ -66,7 +66,7 @@ if($_GET["action"] == "change_status")
                 array($comment->id_comment, $author_link, $comment_link)
             ));
             
-            if( ! empty($comment->id_author) )
+            if( ! empty($comment->id_author) && $comment->id_author != $account->id_account )
                 send_notification($comment->id_author, "information", replace_escaped_vars(
                     $current_module->language->notifications->published_ok,
                     array('{$user}', '{$post_title}', '{$link}'),
@@ -102,7 +102,7 @@ if($_GET["action"] == "change_status")
                 array($comment->id_comment, $author_link, $comment_link)
             ));
             
-            if( ! empty($comment->id_author) )
+            if( ! empty($comment->id_author) && $comment->id_author != $account->id_account )
                 send_notification($comment->id_author, "information", replace_escaped_vars(
                     $current_module->language->notifications->rejected_ok,
                     array('{$user}', '{$post_title}', '{$link}'),
@@ -157,6 +157,42 @@ if($_GET["action"] == "change_status")
             
             die("OK");
             break;
+        
+        case "spam":
+            
+            if( $comment->status == "spam" ) die("OK");
+            
+            $res = $repository->change_status($comment->id_comment, "spam");
+            if( empty($res) ) die("OK");
+            
+            $cuser_link   = "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
+            $post         = $comment->get_post();
+            $post_title   = $post->title;
+            $comment_link = $post->get_permalink(true) . "#comment_" . $comment->id_comment;
+            
+            $author       = $comment->get_author();
+            $author_link  = empty($comment->id_author)
+                ? $comment->author_display_name
+                : "<a href='{$config->full_root_url}/user/{$author->user_name}'>{$author->display_name}</a>";
+            
+            if( $comment->id_author != $account->id_account )
+                send_notification($account->id_account, "success", replace_escaped_vars(
+                    $current_module->language->messages->toolbox->spammed_ok,
+                    array('{$id}', '{$author}', '{$link}'),
+                    array($comment->id_comment, $author_link, $comment_link)
+                ));
+            
+            if( $account->level < config::MODERATOR_USER_LEVEL )
+                broadcast_to_moderators("information", replace_escaped_vars(
+                    $current_module->language->notifications->spammed,
+                    array('{$author}', '{$id}', '{$user}', '{$post_title}', '{$link}'),
+                    array($author_link, $comment->id, $cuser_link, $post_title, $comment_link)
+                ));
+            
+            die("OK");
+            break;
+        
+        # end cases
     }
 }
 

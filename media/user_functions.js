@@ -11,7 +11,7 @@ function edit_comment(id_comment)
 
 function spam_comment(id_comment, callback)
 {
-    
+    change_comment_status(id_comment, 'spam', callback)
 }
 
 function delete_comment(id_comment, callback)

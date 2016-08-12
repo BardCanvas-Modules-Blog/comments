@@ -117,6 +117,10 @@
             <deleted_from_others><![CDATA[
                 Comment #{$id} by {$author} has been sent to the trash can. A notification has been sent to them.
             ]]></deleted_from_others>
+            <spammed_ok><![CDATA[
+                Comment #{$id} by {$author} has been flagged as spam.
+                A notification has been sent to the moderators.
+            ]]></spammed_ok>
         </toolbox>
     </messages>
     
@@ -135,6 +139,11 @@
         <deleted_by_self><![CDATA[
             {$author}'s comment #{$id} on "{$post_title}" has been deleted by {$user}.
         ]]></deleted_by_self>
+        <spammed><![CDATA[
+            {$author}'s comment #{$id} on "{$post_title}" has been flagged as spam
+            by {$user}. Please go to the comments section and decide if it is
+            rejected or approved.
+        ]]></spammed>
     </notifications>
     
     <settings_data>

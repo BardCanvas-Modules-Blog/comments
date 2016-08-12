@@ -205,7 +205,7 @@ $authors = $repository->get_all_authors($records);
                     <?= make_excerpt_of($row->content, 100) ?>
                     
                     <div class="actions">
-                        <? if($account->level >= config::MODERATOR_USER_LEVEL && $row->status == "reviewing" ): ?>
+                        <? if($account->level >= config::MODERATOR_USER_LEVEL && in_array($row->status, array("reviewing", "spam")) ): ?>
                             <span class="action pseudo_link greengo" onclick="publish_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
                                 <span class="fa fa-check"></span>
                                 <?= $current_module->language->record_nav->actions->approve ?>
@@ -231,7 +231,7 @@ $authors = $repository->get_all_authors($records);
                         <? endif; ?>
                         
                         <? if($row->id_author != $account->id_account && $row->status != "spam"): ?>
-                            <span class="action pseudo_link critical disabled" onclick="spam_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                            <span class="action pseudo_link critical" onclick="spam_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
                                 <span class="fa fa-warning"></span>
                                 <?= $current_module->language->record_nav->actions->spam ?>
                             </span>
