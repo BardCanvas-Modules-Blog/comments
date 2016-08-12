@@ -22,14 +22,12 @@ use hng2_base\settings;
 use hng2_base\template;
 use hng2_modules\comments\comment_record;
 
-$post = $comment->get_post();
-
 $author     = $comment->get_author();
 $avatar_url = $author->get_avatar_url();
 $level      = 1;
 ?>
 
-<div id="post_comments" data-post-id="<?= $post->id_post ?>">
+<div id="post_comments" data-post-id="<?= $comment->id_post ?>">
     
     <div class="comment_entry single_preview" id="comment_<?= $comment->id_comment ?>" data-id-comment="<?= $comment->id_comment ?>"
          data-parent-comment="<?= $comment->parent_comment ?>" data-indent-level="<?= $level ?>">

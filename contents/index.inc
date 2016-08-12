@@ -14,6 +14,9 @@ use hng2_base\config;
 ?>
 
 <script type="text/javascript">
+    comment_reply_management_type = 'dialog';
+    comment_reply_dialog_callback = function() { $('#refresh_commments_browser').click(); };
+    
     function reset_filter()
     {
         var $form = $('#filter_form');
@@ -44,16 +47,5 @@ use hng2_base\config;
     
 </div>
 
-<div id="form_workarea" style="display: none;">
-    
-    <h1 class="clearfix" style="display: none">
-        <button class="pull-right" onclick="hide_comments_form()">
-            <span class="fa fa-reply"></span>
-            <?= $language->return ?>
-        </button>
-        
-        <?= $current_module->language->form->edit_title; ?>
-    </h1>
-    
-    <? include __DIR__ . "/form.inc"; ?>
-</div>
+<div id="reply_target" style="display: none;"></div>
+<div id="post_comment_target" style="display: none;"></div>

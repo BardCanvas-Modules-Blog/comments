@@ -124,6 +124,7 @@
             ]]></spammed_ok>
         </toolbox>
         <previewing>Previewing message #{$id} on post "{$post_title}"</previewing>
+        <replying>Replying to message #{$id} on post "{$post_title}"</replying>
     </messages>
     
     <notifications>

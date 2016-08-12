@@ -1,9 +1,4 @@
 
-function reply_comment(id_comment)
-{
-    
-}
-
 function edit_comment(id_comment)
 {
     

@@ -187,7 +187,8 @@ $authors = $repository->get_all_authors($records);
                                $post_title
                            </a>";
             ?>
-            <tr class="comment_item" data-record-id="<?= $row->id_comment ?>">
+            <tr class="comment_item comment_entry" data-record-id="<?= $row->id_comment ?>"
+                data-id-comment="<?= $row->id_comment ?>" data-post-id="<?= $row->id_post ?>">
                 <td data-for="sent_date">
                     <?= time_elapsed_string($row->creation_date) ?>
                 </td>
@@ -212,20 +213,20 @@ $authors = $repository->get_all_authors($records);
                     
                     <?= make_excerpt_of($row->content, 100) ?>
                     
-                    <?
-                    $dialog_title = replace_escaped_vars(
-                        $current_module->language->messages->previewing,
-                        array('{$id}', '{$post_title}'),
-                        array($row->id_comment, $post->title)
-                    );
-                    
-                    $url = "{$config->full_root_path}/comments/scripts/toolbox.php"
-                         . "?action=preview"
-                         . "&id_comment={$row->id_comment}"
-                         . "&wasuuup=" . md5(mt_rand(1, 65535))
-                         ;
-                    ?>
                     <div class="actions">
+                        <?
+                        $dialog_title = replace_escaped_vars(
+                            $current_module->language->messages->previewing,
+                            array('{$id}', '{$post_title}'),
+                            array($row->id_comment, $post->title)
+                        );
+    
+                        $url = "{$config->full_root_path}/comments/scripts/toolbox.php"
+                            . "?action=preview"
+                            . "&id_comment={$row->id_comment}"
+                            . "&wasuuup=" . md5(mt_rand(1, 65535))
+                        ;
+                        ?>
                         <span class="action pseudo_link" onclick="show_ajax_dialog('<?= htmlspecialchars($dialog_title) ?>', '<?= $url ?>', false)">
                             <span class="fa fa-search"></span>
                             <?= $current_module->language->record_nav->actions->preview ?>
@@ -243,9 +244,20 @@ $authors = $repository->get_all_authors($records);
                         <? endif; ?>
                         
                         <? if($account->level >= config::MODERATOR_USER_LEVEL || $row->_can_be_replied ): ?>
-                            <span class="action pseudo_link disabled" onclick="reply_comment('<?= $row->id_comment ?>')">
-                                <span class="fa fa-reply"></span>
-                                <?= $current_module->language->record_nav->actions->reply ?>
+                            <?
+                            $dialog_title = replace_escaped_vars(
+                                $current_module->language->messages->replying,
+                                array('{$id}', '{$post_title}'),
+                                array($row->id_comment, $post->title)
+                            );
+                            ?>
+                            <span class="comment_reply">
+                                <span class="trigger" data-dialog-title="<?= htmlspecialchars($dialog_title) ?>">
+                                    <span class="action pseudo_link" onclick="prepare_comment_reply(this)">
+                                        <span class="fa fa-reply"></span>
+                                        <?= $current_module->language->record_nav->actions->reply ?>
+                                    </span>
+                                </span>
                             </span>
                         <? endif; ?>
                         
