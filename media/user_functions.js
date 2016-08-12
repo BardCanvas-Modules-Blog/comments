@@ -22,7 +22,8 @@ function delete_comment(id_comment, callback)
 function change_comment_status(id_comment, new_state, callback)
 {
     var $trigger = $('.comment_actions_container .comment_item[data-record-id="' + id_comment +'"]');
-    var url      = $_FULL_ROOT_PATH + '/comments/scripts/toolbox.php'
+    
+    var url = $_FULL_ROOT_PATH + '/comments/scripts/toolbox.php'
             + '?action=change_status'
             + '&id_comment=' + id_comment
             + '&new_status=' + new_state

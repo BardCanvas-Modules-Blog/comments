@@ -79,6 +79,7 @@
             </sent_from>
         </columns>
         <actions>
+            <preview>Preview</preview>
             <approve>Approve</approve>
             <reject>Reject</reject>
             <reply>Reply</reply>
@@ -122,6 +123,7 @@
                 A notification has been sent to the moderators.
             ]]></spammed_ok>
         </toolbox>
+        <previewing>Previewing message #{$id} on post "{$post_title}"</previewing>
     </messages>
     
     <notifications>

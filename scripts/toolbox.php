@@ -11,7 +11,7 @@
  * @var \SimpleXMLElement $language
  * 
  * $_GET params:
- * @param string "action"     change_status
+ * @param string "action"     change_status|preview
  * @param string "new_status" trashed|published|rejected
  * @param string "id_comment"
  */
@@ -25,7 +25,7 @@ header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
 include "../../includes/bootstrap.inc";
 
-if( ! in_array($_GET["action"], array("change_status")) ) die($current_module->language->messages->toolbox->invalid_action);
+if( ! in_array($_GET["action"], array("change_status", "preview")) ) die($current_module->language->messages->toolbox->invalid_action);
 
 if( empty($_GET["id_comment"]) ) die($current_module->language->messages->missing_comment_id);
 
@@ -194,6 +194,13 @@ if($_GET["action"] == "change_status")
         
         # end cases
     }
+}
+
+if($_GET["action"] == "preview")
+{
+    $template->page_contents_include = "contents/preview_comment.inc";
+    include "{$template->abspath}/embeddable.php";
+    die();
 }
 
 die($language->errors->invalid_call);

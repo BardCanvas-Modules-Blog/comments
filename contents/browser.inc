@@ -178,6 +178,14 @@ $authors = $repository->get_all_authors($records);
             $author       = $authors[$row->id_author];
             $author_name  = empty($row->id_author) ? $row->author_display_name : $author->display_name;
             $author_email = empty($row->id_author) ? $row->author_email        : $author->email;
+            
+            $post       = $row->get_post();
+            $post_url   = $post->get_permalink();
+            $post_title = $post->get_processed_title(false);
+            $post_link  = "<a href='$post_url' target='_blank'>
+                               <span class='fa fa-newspaper-o'></span>
+                               $post_title
+                           </a>";
             ?>
             <tr class="comment_item" data-record-id="<?= $row->id_comment ?>">
                 <td data-for="sent_date">
@@ -204,7 +212,25 @@ $authors = $repository->get_all_authors($records);
                     
                     <?= make_excerpt_of($row->content, 100) ?>
                     
+                    <?
+                    $dialog_title = replace_escaped_vars(
+                        $current_module->language->messages->previewing,
+                        array('{$id}', '{$post_title}'),
+                        array($row->id_comment, $post->title)
+                    );
+                    
+                    $url = "{$config->full_root_path}/comments/scripts/toolbox.php"
+                         . "?action=preview"
+                         . "&id_comment={$row->id_comment}"
+                         . "&wasuuup=" . md5(mt_rand(1, 65535))
+                         ;
+                    ?>
                     <div class="actions">
+                        <span class="action pseudo_link" onclick="show_ajax_dialog('<?= htmlspecialchars($dialog_title) ?>', '<?= $url ?>', false)">
+                            <span class="fa fa-search"></span>
+                            <?= $current_module->language->record_nav->actions->preview ?>
+                        </span>
+                        
                         <? if($account->level >= config::MODERATOR_USER_LEVEL && in_array($row->status, array("reviewing", "spam")) ): ?>
                             <span class="action pseudo_link greengo" onclick="publish_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
                                 <span class="fa fa-check"></span>
@@ -249,14 +275,6 @@ $authors = $repository->get_all_authors($records);
                 </td>
                 <td data-for="in_reply_to">
                     <?
-                    $post       = $row->get_post();
-                    $post_url   = $post->get_permalink();
-                    $post_title = $post->get_processed_title(false);
-                    $post_link  = "<a href='$post_url' target='_blank'>
-                                       <span class='fa fa-newspaper-o'></span>
-                                       $post_title
-                                   </a>";
-                    
                     if( empty($row->parent_comment) )
                     {
                         echo $post_link;
