@@ -222,7 +222,7 @@
             <title>Time allowed for editing after submission</title>
             <description><![CDATA[
                 Amount of minutes a user has to edit a comment once submitted.<br>
-                Set to <code>0</code> to disable comment edition.
+                Set to <code>0</code> to disable comment editing non mods/admins.
             ]]></description>
             <type>number</type>
         </specs>
