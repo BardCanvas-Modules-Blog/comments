@@ -12,6 +12,7 @@
  */
 
 use hng2_base\account;
+use hng2_base\accounts_repository;
 use hng2_base\config;
 use hng2_base\settings;
 use hng2_modules\comments\comment_record;
@@ -67,6 +68,16 @@ if( $account->_exists )
 // Recaptcha check
 if( ! $account->_exists )
 {
+    $accounts_repository = new accounts_repository();
+    if( $accounts_repository->get_record_count(array("user_name" => $comment->author_display_name)) > 0 )
+        die($current_module->language->messages->impersonation->user_name_exists);
+    if( $accounts_repository->get_record_count(array("display_name" => $comment->author_display_name)) > 0 )
+        die($current_module->language->messages->impersonation->display_name_exists);
+    if( $accounts_repository->get_record_count(array("email" => $comment->author_email)) > 0 )
+        die($current_module->language->messages->impersonation->email_exists);
+    if( $accounts_repository->get_record_count(array("alt_email" => $comment->author_email)) > 0 )
+        die($current_module->language->messages->impersonation->email_exists);
+    
     if( $settings->get("engine.recaptcha_private_key") == "" ) die( $language->captcha_not_configured );
     
     $res = recaptcha_check_answer(
