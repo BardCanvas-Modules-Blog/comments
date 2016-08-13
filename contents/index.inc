@@ -14,8 +14,10 @@ use hng2_base\config;
 ?>
 
 <script type="text/javascript">
+    // These are declared on html_head.inc and overriden here
     comment_reply_management_type = 'dialog';
     comment_reply_dialog_callback = function() { $('#refresh_commments_browser').click(); };
+    comment_edit_dialog_callback  = function() { $('#refresh_commments_browser').click(); };
     
     function reset_filter()
     {
@@ -49,3 +51,6 @@ use hng2_base\config;
 
 <div id="reply_target" style="display: none;"></div>
 <div id="post_comment_target" style="display: none;"></div>
+
+<div id="comments_edit_form" style="display: none;" data-title-template="<?= $current_module->language->form->edit ?>"></div>
+<div id="comments_edit_target" style="display: none;"></div>

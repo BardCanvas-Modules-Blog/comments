@@ -8,7 +8,7 @@ function prepare_comment_reply(trigger)
 {
     var $trigger  = $(trigger).closest('.trigger');
     var parent_id = $trigger.closest('.comment_entry').attr('data-id-comment');
-    var url       = $_FULL_ROOT_PATH + '/comments/scripts/render_reply_form.php';
+    var url       = $_FULL_ROOT_PATH + '/comments/scripts/render_prefilled_form.php';
     var id_post   = $trigger.closest('.comment_entry').attr('data-post-id');
     var form_id   = 'comment_reply_' + parseInt(Math.random() * 1000000000000000);
     

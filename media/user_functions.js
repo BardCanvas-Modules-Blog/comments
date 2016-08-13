@@ -1,7 +1,94 @@
 
-function edit_comment(id_comment)
+function edit_comment(id_comment, dialog_title)
 {
+    var url       = $_FULL_ROOT_PATH + '/comments/scripts/render_prefilled_form.php';
+    var form_id   = 'comment_edit_' + parseInt(Math.random() * 1000000000000000);
+    var $target = $('#comments_edit_form');
+    $target.dialog('option', 'title', dialog_title);
     
+    var params = {
+        edit_comment: id_comment,
+        wasuuup:      parseInt(Math.random() * 1000000000000000)
+    };
+    
+    $target.load(url, params, function()
+    {
+        var $form = $target.find('form');
+        
+        $form.attr('name', form_id);
+        $form.attr('id',   form_id);
+        $form.find('input[name="id_comment"]').val(id_comment);
+        
+        tinymce.init(tinymce_defaults);
+        
+        $form.ajaxForm({
+            target:          '#post_comment_target',
+            beforeSerialize: prepare_comment_edit_serialization,
+            beforeSubmit:    prepare_comment_edit_submission,
+            success:         process_comment_edit_submission
+        });
+        
+        $target.dialog('open');
+    });
+}
+
+function prepare_comment_edit_serialization($form)
+{
+    $form.find('textarea[class*="tinymce"]').each(function()
+    {
+        var id      = $(this).attr('id');
+        var editor  = tinymce.get(id);
+        var content = editor.getContent();
+        $(this).val( content );
+    });
+}
+
+function prepare_comment_edit_submission(data, $form)
+{
+    $form.block(blockUI_default_params);
+}
+
+function process_comment_edit_submission(response, status, xhr, $form)
+{
+    if( response.indexOf('OK') < 0 )
+    {
+        alert( response );
+        $form.unblock();
+        
+        return;
+    }
+    
+    if( typeof comment_edit_dialog_callback == 'function' )
+    {
+        $('#comments_edit_form').dialog('close');
+        
+        comment_edit_dialog_callback();
+        
+        return;
+    }
+    
+    var parts;
+    
+    parts = response.split(':');
+    
+    var comment_id = parts[1];
+    var href       = location.href;
+    
+    href = href.replace(/\?wasuuup=\d+@/g, '');
+    href = href.replace(/&wasuuup=\d+@/g, '');
+    
+    if( href.indexOf('#') >= 0 )
+    {
+        parts = href.split('#');
+        href  = parts[0];
+    }
+    
+    if( href.indexOf('?') < 0 ) href = href + '?wasuuup=' + parseInt(Math.random() * 1000000000000000) + '@';
+    else                        href = href + '&wasuuup=' + parseInt(Math.random() * 1000000000000000) + '@';
+    
+    href = href + '#comment_' + comment_id;
+    
+    location.href = href;
 }
 
 function spam_comment(id_comment, callback)
@@ -39,3 +126,30 @@ function change_comment_status(id_comment, new_state, callback)
         if( typeof callback == 'function' ) callback();
     });
 }
+
+function discard_comment_edit(trigger)
+{
+    $('#comments_edit_form').dialog('close');
+}
+
+$(document).ready(function()
+{
+    var $form = $('#comments_edit_form');
+    if( $form.length > 0 )
+    {
+        var height = $(window).height();
+        var width  = $(window).width();
+    
+        if( width  > 500 ) width  = 500;
+        if( width  < 320 ) width  = 320;
+        if( height > 500 ) height = 500;
+        if( height < 320 ) height = 320;
+    
+        $form.dialog({
+            modal:     true,
+            autoOpen:  false,
+            width:     width  - 20,
+            height:    height - 20
+        });
+    }
+});

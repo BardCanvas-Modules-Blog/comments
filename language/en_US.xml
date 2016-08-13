@@ -10,6 +10,7 @@
     <leave_a_comment>Leave a comment</leave_a_comment>
     
     <form>
+        <edit>Editing comment #{$id} on "{$post_title}"</edit>
         <fields>
             <name>
                 <caption>Your name (required)</caption>
@@ -95,6 +96,24 @@
         <post_unavailable>The post you're trying to comment isn't available</post_unavailable>
         <unable_to_comment>You can't send comments to this post</unable_to_comment>
         <empty_message>Please type a comment</empty_message>
+        <message_cannot_be_empty>The comment cannot be empty</message_cannot_be_empty>
+        <comment_cannot_be_edited>
+            <with_timing><![CDATA[
+                Sorry, but you can't change the comment for any of the next reasons:
+                • You're not a registered user
+                • The time you have to edit has been expired
+                • The comment has been replied
+                • You're not the author
+                • You don't have the privileges to do it
+            ]]></with_timing>
+            <without_timing><![CDATA[
+                Sorry, but you can't change the comment for any of the next reasons:
+                • You're not a registered user
+                • The comment has been replied
+                • You're not the author
+                • You don't have the privileges to do it
+            ]]></without_timing>
+        </comment_cannot_be_edited>
         <empty_name>Please type your name/alias</empty_name>
         <invalid_email>Please type a valid email</invalid_email>
         <invalid_captcha>Invalid captcha input. Please try again.</invalid_captcha>
@@ -147,6 +166,12 @@
             by {$user}. Please go to the comments section and decide if it is
             rejected or approved.
         ]]></spammed>
+        <saved_ok><![CDATA[
+            Comment saved successfully. Current status is "{$status}".
+        ]]></saved_ok>
+        <saved_with_status_change><![CDATA[
+            The comment has been saved. Status has been changed from "{$old_status}" to "{$new_status}".
+        ]]></saved_with_status_change>
     </notifications>
     
     <settings_data>

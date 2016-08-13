@@ -25,13 +25,20 @@ use hng2_modules\posts\post_record;
 global $post, $template, $language, $settings, $account;
 
 if( ! function_exists("recaptcha_get_html") ) include_once ABSPATH . "/lib/recaptcha-php-1.11/recaptchalib.php";
+
+$action = "add.php";
+
+$form_mode = $template->get("comment_form_mode");
+if( $form_mode == "edit" ) $action = "save.php";
 ?>
 
 <form name="post_comment" id="post_comment" method="post"
-      action="<?= $config->full_root_path ?>/comments/scripts/add.php">
+      action="<?= $config->full_root_path ?>/comments/scripts/<?= $action ?>">
     
-    <input type="hidden" name="id_post" value="<?= $post->id_post ?>">
-    <input type="hidden" name="parent_comment" value="">
+    <!-- Autofilled on main pages -->
+    <input type="hidden" name="id_comment"     value="<?= $template->get("id_comment") ?>">
+    <input type="hidden" name="id_post"        value="<?= $post->id_post ?>">
+    <input type="hidden" name="parent_comment" value="<?= $template->get("parent_comment") ?>">
     
     <div class="field tinymce_container">
         <textarea name="content" class="tinymce"><?= $template->get("prefilled_comment_content") ?></textarea>
@@ -80,10 +87,17 @@ if( ! function_exists("recaptcha_get_html") ) include_once ABSPATH . "/lib/recap
         </button>
         
         <? if($template->get("ajax_calling")): ?>
-            <button onclick="discard_comment_reply(this); return false">
-                <span class="fa fa-ban"></span>
-                <?= $language->cancel ?>
-            </button>
+            <? if( $template->get("comment_form_mode") == "reply" ): ?>
+                <button onclick="discard_comment_reply(this); return false">
+                    <span class="fa fa-ban"></span>
+                    <?= $language->cancel ?>
+                </button>
+            <? elseif( $template->get("comment_form_mode") == "edit" ): ?>
+                <button onclick="discard_comment_edit(); return false">
+                    <span class="fa fa-ban"></span>
+                    <?= $language->cancel ?>
+                </button>
+            <? endif; ?>
         <? endif; ?>
     </p>
 </form>

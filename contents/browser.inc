@@ -261,8 +261,13 @@ $authors = $repository->get_all_authors($records);
                             </span>
                         <? endif; ?>
                         
-                        <? if( is_comment_editable($row) ): ?>
-                            <span class="action pseudo_link disabled" onclick="edit_comment('<?= $row->id_comment ?>')">
+                        <? if( is_comment_editable($row) ):
+                            $dialog_title = replace_escaped_vars(
+                                $current_module->language->form->edit,
+                                array('{$id}', '{$post_title}'),
+                                array($row->id_comment, $post->title)
+                            ); ?>
+                            <span class="action pseudo_link" onclick="edit_comment('<?= $row->id_comment ?>', '<?= htmlspecialchars($dialog_title) ?>')">
                                 <span class="fa fa-pencil"></span>
                                 <?= $current_module->language->record_nav->actions->edit ?>
                             </span>
