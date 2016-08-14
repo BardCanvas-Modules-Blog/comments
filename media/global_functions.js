@@ -108,7 +108,7 @@ function process_comment_submission(response, status, xhr, $form)
         alert( response );
         $form.unblock();
     
-        Recaptcha.reload();
+        if( Recaptcha ) Recaptcha.reload();
         return;
     }
     
