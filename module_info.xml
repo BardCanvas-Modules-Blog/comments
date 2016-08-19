@@ -34,6 +34,10 @@
         <!--<post_rendering></post_rendering>-->
     </template_includes>
     
+    <extension_areas_info><![CDATA[
+        Adding posts: pre-saving checks
+    ]]></extension_areas_info>
+    
     <extends_to>
         <posts>
             <index_builders>

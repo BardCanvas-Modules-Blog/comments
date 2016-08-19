@@ -138,10 +138,6 @@ if( $account->level < config::MODERATOR_USER_LEVEL )
     $pattern = '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i';
     $matches = preg_match_all($pattern, $comment->content, $nothing);
     if( $matches >= $links ) $comment->status = "reviewing";
-    
-    //TODO: Spam filters: check in grey list
-    
-    //TODO: Spam filters: check in black list
 }
 
 $comment->set_new_id();
@@ -157,10 +153,11 @@ if( function_exists("extract_media_items") )
     $images = extract_media_items("image", $comment->content);
     $videos = extract_media_items("video", $comment->content);
     $media_items = array_merge($images, $videos);
-    
-    if( count($media_items) )
-        $repository->set_media_items($media_items, $comment->id_comment);
 }
+
+$current_module->load_extensions("add_comment", "pre_saving");
+
+if( count($media_items) ) $repository->set_media_items($media_items, $comment->id_comment);
 if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
 
 $repository->save($comment);
