@@ -521,6 +521,9 @@ class comments_repository extends abstract_repository
     {
         global $database;
         
-        return $database->exec("update comments set status = '$new_status' where id_comment = '$id_comment'");
+        $res = $database->exec("update comments set status = '$new_status' where id_comment = '$id_comment'");
+        $this->last_query = $database->get_last_query();
+        
+        return $res;
     }
 }

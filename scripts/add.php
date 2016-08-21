@@ -155,10 +155,10 @@ if( function_exists("extract_media_items") )
     $media_items = array_merge($images, $videos);
 }
 
-$current_module->load_extensions("add_comment", "pre_saving");
-
+$current_module->load_extensions("add_comment", "before_saving");
 if( count($media_items) ) $repository->set_media_items($media_items, $comment->id_comment);
 if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
 
 $repository->save($comment);
+$current_module->load_extensions("add_comment", "after_saving");
 echo "OK:{$comment->id_comment}";
