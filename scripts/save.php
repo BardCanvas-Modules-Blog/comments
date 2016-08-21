@@ -68,6 +68,7 @@ $current_module->load_extensions("save_comment", "before_saving");
 if( count($media_items) ) $repository->set_media_items($media_items, $comment->id_comment);
 if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
 $repository->save($comment);
+$current_module->load_extensions("save_comment", "after_saving");
 
 if( $comment->status == $old_comment->status )
     send_notification($account->id_account, "success", replace_escaped_vars(
