@@ -35,7 +35,8 @@
     </template_includes>
     
     <extension_areas_info><![CDATA[
-        Adding posts: pre-saving checks
+        Adding comments: before saving, after saving.
+        Saving comments: before saving, after saving.
     ]]></extension_areas_info>
     
     <extends_to>
