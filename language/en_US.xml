@@ -122,6 +122,13 @@
         <parent_not_found>The parent comment can't be found. It should have been deleted.</parent_not_found>
         <missing_comment_id>You didn't specify a comment id</missing_comment_id>
         <comment_not_found>The comment you specified wasn't found</comment_not_found>
+        <links_exceeded><![CDATA[
+            Your comment has links that need to be reviewed.
+            It will be saved but it wont be publicly visible until a mod/admin
+            approves it or rejects it.<br>
+            Please be patient and wait for a response,
+            it will be attended as soon as possible.
+        ]]></links_exceeded>
         <toolbox>
             <invalid_action>The provided action is invalid</invalid_action>
             <invalid_status>The status flag you provided is invalid</invalid_status>

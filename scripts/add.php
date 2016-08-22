@@ -130,16 +130,6 @@ if( $account->level < config::MODERATOR_USER_LEVEL && $interval > 0 )
 
 $comment->status = "published";
 
-if( $account->level < config::MODERATOR_USER_LEVEL )
-{
-    // Spam filters: links
-    $links = $settings->get("module:comments.flag_for_review_on_link_amount");
-    if( empty($links) ) $links = 2;
-    $pattern = '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i';
-    $matches = preg_match_all($pattern, $comment->content, $nothing);
-    if( $matches >= $links ) $comment->status = "reviewing";
-}
-
 $comment->set_new_id();
 $comment->creation_ip       = get_user_ip();
 $comment->creation_host     = gethostbyaddr($comment->creation_ip);
@@ -155,10 +145,39 @@ if( function_exists("extract_media_items") )
     $media_items = array_merge($images, $videos);
 }
 
+if( $account->level < config::MODERATOR_USER_LEVEL )
+{
+    // Spam filters: links
+    $links = $settings->get("module:comments.flag_for_review_on_link_amount");
+    if( empty($links) ) $links = 2;
+    $pattern = '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i';
+    preg_match_all($pattern, $comment->content, $matches);
+    if( ! empty($matches) )
+    {
+        $matches = $matches[0];
+        foreach($matches as $index => $match)
+            if( stristr($match, $config->full_root_url) !== false )
+                unset($matches[$index]);
+        
+        if( count($matches) >= $links)
+        {
+            $comment->status = "reviewing";
+            if( $account->_exists ) send_notification(
+                $account->id_account, "warning", $current_module->language->messages->links_exceeded
+            );
+            
+            # Note: no extensions will run on this case!
+            if( count($media_items) ) $repository->set_media_items($media_items, $comment->id_comment);
+            if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
+            $repository->save($comment);
+            die("OK:{$comment->id_comment}");
+        }
+    }
+}
+
 $current_module->load_extensions("add_comment", "before_saving");
 if( count($media_items) ) $repository->set_media_items($media_items, $comment->id_comment);
 if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
-
 $repository->save($comment);
 $current_module->load_extensions("add_comment", "after_saving");
 echo "OK:{$comment->id_comment}";
