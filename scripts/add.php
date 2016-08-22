@@ -6,6 +6,7 @@
  * @subpackage categories
  * @author     Alejandro Caballero - lava.caballero@gmail.com
  * 
+ * @var module            $current_module
  * @var account           $account
  * @var settings          $settings
  * @var \SimpleXMLElement $language
@@ -14,6 +15,7 @@
 use hng2_base\account;
 use hng2_base\accounts_repository;
 use hng2_base\config;
+use hng2_base\module;
 use hng2_base\settings;
 use hng2_modules\comments\comment_record;
 use hng2_modules\comments\comments_repository;
