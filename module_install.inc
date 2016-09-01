@@ -114,9 +114,7 @@ if( $module_install_action == "install" )
         }
     }
     
-    foreach($init_settings as $key => $val)
-        if( $settings->get($key) != "" )
-            $settings->set($key, $val);
+    foreach($init_settings as $key => $val) $settings->set($key, $val);
     
     return;
 }
