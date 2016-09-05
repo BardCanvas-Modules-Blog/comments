@@ -101,11 +101,15 @@ class comment_record extends abstract_record
     
     public function get_processed_content()
     {
-        global $config;
+        global $config, $modules;
         
         $contents = $this->content;
         $contents = convert_emojis($contents);
         $contents = autolink_hash_tags($contents, "{$config->full_root_path}/tag/", "/comments");
+        
+        $config->globals["processing_contents"] = $contents;
+        $modules["comments"]->load_extensions("comment_record_class", "get_processed_content");
+        $contents = $config->globals["processing_contents"];
         
         return $contents;
     }

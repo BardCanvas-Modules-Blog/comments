@@ -37,6 +37,7 @@
     <extension_areas_info><![CDATA[
         Adding comments: before saving, after saving.
         Saving comments: before saving, after saving.
+        Comment Record Class: Get Processed Content.
     ]]></extension_areas_info>
     
     <extends_to>
