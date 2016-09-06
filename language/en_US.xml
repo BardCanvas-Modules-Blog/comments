@@ -204,6 +204,16 @@
             ]]></description>
             <type>number</type>
         </specs>
+        <specs key="privileged_user_level">
+            <title>Privileged user level for automatic approval</title>
+            <description><![CDATA[
+                Users of this level and up will be excluded from the "flag for review on link amount" rule.
+                Defaults to <code>200</code> (moderator).<br>
+                <span class="fa fa-info-circle"></span>
+                Please check the user levels setting to get hints on defined user levels.
+            ]]></description>
+            <type>number</type>
+        </specs>
         <specs key="repeated_interval">
             <title>Repeated comment check interval</title>
             <description><![CDATA[
