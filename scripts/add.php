@@ -161,7 +161,9 @@ if( function_exists("extract_media_items") )
     $media_items = array_merge($images, $videos);
 }
 
-if( $account->level < config::MODERATOR_USER_LEVEL )
+$min_level = $settings->get("modules:comments.privileged_user_level");
+if( empty($min_level) ) $min_level = config::MODERATOR_USER_LEVEL;
+if( $account->level < $min_level )
 {
     // Spam filters: links
     $links = $settings->get("module:comments.flag_for_review_on_link_amount");
@@ -175,18 +177,25 @@ if( $account->level < config::MODERATOR_USER_LEVEL )
             if( stristr($match, $config->full_root_url) !== false )
                 unset($matches[$index]);
         
-        if( count($matches) >= $links)
+        if( count($matches) >= $links )
         {
             $comment->status = "reviewing";
-            if( $account->_exists ) send_notification(
-                $account->id_account, "warning", $current_module->language->messages->links_exceeded
-            );
-            
-            # Note: no extensions will run on this case!
             if( count($media_items) ) $repository->set_media_items($media_items, $comment->id_comment);
             if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
             $repository->save($comment);
-            die("OK:{$comment->id_comment}");
+            $current_module->load_extensions("add_comment", "after_saving_for_review");
+            
+            if( $account->_exists )
+            {
+                send_notification(
+                    $account->id_account, "warning", $current_module->language->messages->links_exceeded
+                );
+                die("OK:{$comment->id_comment}");
+            }
+            else
+            {
+                die( unindent(strip_tags($current_module->language->messages->links_exceeded)) );
+            }
         }
     }
 }

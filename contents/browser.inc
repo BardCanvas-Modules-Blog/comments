@@ -102,6 +102,21 @@ $authors = $repository->get_all_authors($records);
         spam_comment('<?= $_GET["flag_as_spam"] ?>', function() { $('#refresh_commments_browser').click(); })
     }); </script>
 <? endif; ?>
+<? if( ! empty($_GET["approve"]) ): ?>
+    <script type="text/javascript"> $(document).ready(function() {
+        publish_comment('<?= $_GET["approve"] ?>', function() { $('#refresh_commments_browser').click(); })
+    }); </script>
+<? endif; ?>
+<? if( ! empty($_GET["reject"]) ): ?>
+    <script type="text/javascript"> $(document).ready(function() {
+        reject_comment('<?= $_GET["reject"] ?>', function() { $('#refresh_commments_browser').click(); })
+    }); </script>
+<? endif; ?>
+<? if( ! empty($_GET["delete"]) ): ?>
+    <script type="text/javascript"> $(document).ready(function() {
+        delete_comment('<?= $_GET["delete"] ?>', function() { $('#refresh_commments_browser').click(); })
+    }); </script>
+<? endif; ?>
 
 <h1 class="clearfix">
     <button id="refresh_commments_browser" class="pull-right" onclick="paginate(<?= $offset ?>)">

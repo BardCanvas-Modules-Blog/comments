@@ -43,14 +43,24 @@ if( $account->level < config::MODERATOR_USER_LEVEL && ! is_comment_editable($com
         die( unindent($current_module->language->messages->comment_cannot_be_edited->without_timing) );
 }
 
-if( $account->level < config::MODERATOR_USER_LEVEL )
+$min_level = $settings->get("modules:comments.privileged_user_level");
+if( empty($min_level) ) $min_level = config::MODERATOR_USER_LEVEL;
+if( $account->level < $min_level )
 {
     // Spam filters: links
     $links = $settings->get("module:comments.flag_for_review_on_link_amount");
     if( empty($links) ) $links = 2;
     $pattern = '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i';
-    $matches = preg_match_all($pattern, $comment->content, $nothing);
-    if( $matches >= $links ) $comment->status = "reviewing";
+    preg_match_all($pattern, $comment->content, $matches);
+    if( ! empty($matches) )
+    {
+        $matches = $matches[0];
+        foreach($matches as $index => $match)
+            if( stristr($match, $config->full_root_url) !== false )
+                unset($matches[$index]);
+    
+        if( count($matches) >= $links ) $comment->status = "reviewing";
+    }
 }
 
 $tags = extract_hash_tags($comment->content);

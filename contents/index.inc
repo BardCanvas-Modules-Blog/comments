@@ -42,6 +42,9 @@ use hng2_base\config;
     <?
     $url = "browser.php?wasuuup=" . md5(mt_rand(1, 65535));
     if( ! empty($_GET["flag_as_spam"]) ) $url .= "&flag_as_spam={$_GET["flag_as_spam"]}";
+    if( ! empty($_GET["approve"]) )      $url .= "&approve={$_GET["approve"]}";
+    if( ! empty($_GET["reject"]) )       $url .= "&reject={$_GET["reject"]}";
+    if( ! empty($_GET["delete"]) )       $url .= "&delete={$_GET["delete"]}";
     ?>
     <div id="comments_browser" class="ajax_record_browser" data-src="<?= $url ?>">
         <div class="framed_content state_highlight" style="padding: 100px 0; text-align: center;">
