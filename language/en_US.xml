@@ -245,4 +245,23 @@
         <description>Latest comments on all posts published on {$website_name}</description>
     </rss_feed_generator>
     
+    <reporting>
+        <id_not_set>You didn't specify a valid comment ID to report.</id_not_set>
+        <not_found>The comment you specified wasn't found. It may be already deleted.</not_found>
+        <already_processed>The comment has already been processed and it was rejected. Theres' no need to report it again.</already_processed>
+        <in_review>The comment is already being reviewed. There's no need to report it again.</in_review>
+        <post_deleted><![CDATA[
+            Sorry, but the post where this comment was posted in has been deleted.
+            There's no need to report the comment since it is already removed and pending deletion.
+        ]]></post_deleted>
+        <subject>Spam/Inappropiate comment report for comment #{$comment_id} on {$post_author}'s post "{$post_title}"</subject>
+        <content><![CDATA[
+            <p><i>Please review this submission.</i></p>
+            <hr>
+            Comment written by {$comment_author} on {$date}:<br>
+            <a href='{$permalink}'>{$permalink}</a>
+            <blockquote>{$comment}</blockquote>
+        ]]></content>
+    </reporting>
+    
 </language>

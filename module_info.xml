@@ -63,6 +63,11 @@
                 <collection_builder>extenders/search_by_tag_builder.inc</collection_builder>
             </search_by_tag>
         </search>
+        <contact>
+            <form>
+                <presets>extenders/contact_form_report_presets.inc</presets>
+            </form>
+        </contact>
     </extends_to>
     
 </module>
