@@ -54,10 +54,6 @@ if( ! $account->_exists )
         setcookie("{$config->website_key}_comments_ae", encrypt($_POST["author_email"],        $config->encryption_key), time()+(86400 * 30), "/", $config->cookies_domain);
         if( ! empty($_POST["author_url"]) )
             setcookie("{$config->website_key}_comments_au", encrypt($_POST["author_url"],      $config->encryption_key), time()+(86400 * 30), "/", $config->cookies_domain);
-        //echo "\n{$config->website_key}_comments_dn => " . encrypt($_POST["author_display_name"], $config->encryption_key);
-        //echo "\n{$config->website_key}_comments_ae => " . encrypt($_POST["author_email"], $config->encryption_key);
-        //echo "\n{$config->website_key}_comments_au => " . encrypt($_POST["author_url"], $config->encryption_key);
-        //die();
     }
     else
     {
