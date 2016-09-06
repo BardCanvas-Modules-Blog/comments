@@ -47,6 +47,24 @@ if( ! $account->_exists )
     
     if( ! filter_var($_POST["author_email"], FILTER_VALIDATE_EMAIL) )
         die($current_module->language->messages->invalid_email);
+    
+    if( $_POST["save_details"] == "true" )
+    {
+        setcookie("{$config->website_key}_comments_dn", encrypt($_POST["author_display_name"], $config->encryption_key), time()+(86400 * 30), "/", $config->cookies_domain);
+        setcookie("{$config->website_key}_comments_ae", encrypt($_POST["author_email"],        $config->encryption_key), time()+(86400 * 30), "/", $config->cookies_domain);
+        if( ! empty($_POST["author_url"]) )
+            setcookie("{$config->website_key}_comments_au", encrypt($_POST["author_url"],      $config->encryption_key), time()+(86400 * 30), "/", $config->cookies_domain);
+        //echo "\n{$config->website_key}_comments_dn => " . encrypt($_POST["author_display_name"], $config->encryption_key);
+        //echo "\n{$config->website_key}_comments_ae => " . encrypt($_POST["author_email"], $config->encryption_key);
+        //echo "\n{$config->website_key}_comments_au => " . encrypt($_POST["author_url"], $config->encryption_key);
+        //die();
+    }
+    else
+    {
+        setcookie("{$config->website_key}_comments_dn", "", 0, "/", $config->cookies_domain);
+        setcookie("{$config->website_key}_comments_ae", "", 0, "/", $config->cookies_domain);
+        setcookie("{$config->website_key}_comments_au", "", 0, "/", $config->cookies_domain);
+    }
 }
 
 $repository = new comments_repository();

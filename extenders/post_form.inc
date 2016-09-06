@@ -30,6 +30,18 @@ $action = "add.php";
 
 $form_mode = $template->get("comment_form_mode");
 if( $form_mode == "edit" ) $action = "save.php";
+
+$author_display_name = "";
+if( ! empty($_COOKIE["{$config->website_key}_comments_dn"]) )
+    $author_display_name = decrypt($_COOKIE["{$config->website_key}_comments_dn"], $config->encryption_key);
+
+$author_email = "";
+if( ! empty($_COOKIE["{$config->website_key}_comments_ae"]) )
+    $author_email = decrypt($_COOKIE["{$config->website_key}_comments_ae"], $config->encryption_key);
+
+$author_url = "";
+if( ! empty($_COOKIE["{$config->website_key}_comments_au"]) )
+    $author_url = decrypt($_COOKIE["{$config->website_key}_comments_au"], $config->encryption_key);
 ?>
 
 <form name="post_comment" id="post_comment" method="post"
@@ -48,17 +60,17 @@ if( $form_mode == "edit" ) $action = "save.php";
         
         <div class="field">
             <div class="caption"><?= $this_module->language->form->fields->name->caption ?></div>
-            <div class="input"><input type="text" name="author_display_name"></div>
+            <div class="input"><input type="text" name="author_display_name" value="<?= $author_display_name ?>"></div>
         </div>
         
         <div class="field">
             <div class="caption"><?= $this_module->language->form->fields->email->caption ?></div>
-            <div class="input"><input type="email" name="author_email"></div>
+            <div class="input"><input type="email" name="author_email" value="<?= $author_email ?>"></div>
         </div>
         
         <div class="field">
             <div class="caption"><?= $this_module->language->form->fields->author_url->caption ?></div>
-            <div class="input"><input type="text" name="author_url"></div>
+            <div class="input"><input type="text" name="author_url" value="<?= $author_url ?>"></div>
         </div>
         
         <div class="field">
