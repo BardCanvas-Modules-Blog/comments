@@ -97,6 +97,12 @@ $authors = $repository->get_all_authors($records);
 #endregion
 ?>
 
+<? if( ! empty($_GET["flag_as_spam"]) ): ?>
+    <script type="text/javascript"> $(document).ready(function() {
+        spam_comment('<?= $_GET["flag_as_spam"] ?>', function() { $('#refresh_commments_browser').click(); })
+    }); </script>
+<? endif; ?>
+
 <h1 class="clearfix">
     <button id="refresh_commments_browser" class="pull-right" onclick="paginate(<?= $offset ?>)">
         <span class="fa fa-refresh"></span>

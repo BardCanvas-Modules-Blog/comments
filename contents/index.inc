@@ -39,7 +39,10 @@ use hng2_base\config;
 
 <div id="main_workarea">
     
-    <? $url = "browser.php?wasuuup=" . md5(mt_rand(1, 65535)); ?>
+    <?
+    $url = "browser.php?wasuuup=" . md5(mt_rand(1, 65535));
+    if( ! empty($_GET["flag_as_spam"]) ) $url .= "&flag_as_spam={$_GET["flag_as_spam"]}";
+    ?>
     <div id="comments_browser" class="ajax_record_browser" data-src="<?= $url ?>">
         <div class="framed_content state_highlight" style="padding: 100px 0; text-align: center;">
             <span class="fa fa-spinner fa-pulse"></span>
