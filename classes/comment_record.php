@@ -123,4 +123,13 @@ class comment_record extends abstract_record
         
         return self::$posts_repository->get($this->id_post);
     }
+    
+    public function get_permalink($fully_qualified = false)
+    {
+        global $config;
+        
+        if( $fully_qualified ) return "{$config->full_root_url}/{$this->id_post}#{$this->id_comment}";
+        
+        return "{$config->full_root_path}/{$this->id_post}#{$this->id_comment}";
+    }
 }
