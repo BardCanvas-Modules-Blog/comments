@@ -153,6 +153,17 @@ $comment->creation_location = forge_geoip_location($comment->creation_ip);
 $comment->creation_date     = date("Y-m-d H:i:s");
 
 $tags = extract_hash_tags($comment->content);
+$featured_posts_tag = $settings->get("modules:posts.featured_posts_tag");
+if(
+    $account->level < config::MODERATOR_USER_LEVEL
+    && $settings->get("modules:posts.show_featured_posts_tag_everywhere") != "true"
+    && ! empty($featured_posts_tag)
+    && in_array($featured_posts_tag, $tags)
+) {
+    unset($tags[array_search($featured_posts_tag, $tags)]);
+    $comment->content = str_replace("#$featured_posts_tag", $featured_posts_tag, $comment->content);
+}
+
 $media_items = array();
 if( function_exists("extract_media_items") )
 {
