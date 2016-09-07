@@ -22,7 +22,7 @@ use hng2_base\template;
 use hng2_modules\comments\comments_repository;
 use hng2_modules\posts\posts_data;
 
-global $config, $settings, $template;
+global $config, $settings, $template, $mem_cache;
 
 if( $settings->get("modules:comments.show_in_indexes") != "true" ) return;
 
@@ -32,8 +32,27 @@ unset( $config->globals["posts_data"] );
 $all_post_ids = array();
 foreach($posts_data->posts as $post) $all_post_ids[] = $post->id_post;
 
+$mem_key = "comments_for_posts_in_indexes/" . md5(implode(",", $all_post_ids)) . "~v1";
+$cached  = $mem_cache->get($mem_key);
+if( is_array($cached) )
+{
+    foreach($cached as $post_id => $comments)
+        $template->set("comments_for_listed_post[{$post_id}]", $comments);
+    
+    return;
+}
+if( $cached == "none" ) return;
+
 $repository = new comments_repository();
 $res        = $repository->get_for_multiple_posts($all_post_ids);
 
+if( empty($res) )
+{
+    $mem_cache->set($mem_key, "none", 0, 60*5);
+    
+    return;
+}
+
+$mem_cache->set($mem_key, $res, 0, 60*5);
 foreach($res as $post_id => $comments)
     $template->set("comments_for_listed_post[{$post_id}]", $comments);
