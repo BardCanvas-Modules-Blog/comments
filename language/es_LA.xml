@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language>
+    
+    <display_name>Comentarios</display_name>
+    <icon>fa-comments-o</icon>
+    <description>
+        Subsistema de comentarios para entradas
+    </description>
+    
+    <leave_a_comment>Envía un comentario</leave_a_comment>
+    
+    <form>
+        <edit>Editando comentario #{$id} en "{$post_title}"</edit>
+        <fields>
+            <name>
+                <caption>Tu nombre (required)</caption>
+            </name>
+            <email>
+                <caption>Tu correo (required)</caption>
+            </email>
+            <author_url>
+                <caption>Tu página web (optional):</caption>
+            </author_url>
+            <save>
+                <caption>Guardar detalles en cookies (en este navegador)</caption>
+            </save>
+        </fields>
+    </form>
+    
+    <extenders>
+        <search_by_tag_builder>
+            <collection_heading>Comentarios</collection_heading>
+        </search_by_tag_builder>
+    </extenders>
+    
+    <list>
+        <title>{$amount} comentarios</title>
+        <post_comment>Enviar un comentario</post_comment>
+        <reply_comment>Responder</reply_comment>
+    </list>
+    
+    <index>
+        <title>Comentarios</title>
+    </index>
+    
+    <statuses>
+        <published>Publicado</published>
+        <reviewing>En revisión</reviewing>
+        <rejected>Rechazado</rejected>
+        <spam>Spam</spam>
+        <hidden>Oculto</hidden>
+        <trashed>Eliminado</trashed>
+    </statuses>
+    
+    <record_nav>
+        <menu_caption>Comentarios</menu_caption>
+        <columns>
+            <sent_date>
+                <caption>Enviado</caption>
+                <order_asc  id="1">Ordenar por fecha de envío ascendente</order_asc>
+                <order_desc id="2">Ordenar por fecha de envío descendente</order_desc>
+            </sent_date>
+            <sent_by>
+                <caption>Autor</caption>
+                <order_asc  id="3">Ordenar por nombre de autor ascendente</order_asc>
+                <order_desc id="4">Ordenar por nombre de autor descendente</order_desc>
+            </sent_by>
+            <status>
+                <caption>Estado</caption>
+            </status>
+            <details>
+                <caption>Detalles</caption>
+                <replies>{$replies} respuestas</replies>
+            </details>
+            <in_reply_to>
+                <caption>En respuesta a</caption>
+            </in_reply_to>
+            <sent_from>
+                <caption>Enviado desde</caption>
+            </sent_from>
+        </columns>
+        <actions>
+            <preview>Vista previa</preview>
+            <approve>Aprobar</approve>
+            <reject>Rechazar</reject>
+            <reply>Responder</reply>
+            <edit>Editar</edit>
+            <trash>Eliminar</trash>
+            <spam>Spam</spam>
+        </actions>
+    </record_nav>
+    
+    <messages>
+        <empty_post_id>No has especificado el identificador de la entrada</empty_post_id>
+        <post_not_found>La entrada que intentas comentar no existe</post_not_found>
+        <post_unavailable>La entrada que intentas comentar no está disponible</post_unavailable>
+        <unable_to_comment>No puedes enviar comentarios a esta entrada</unable_to_comment>
+        <empty_message>Escribe un comentario</empty_message>
+        <message_cannot_be_empty>El comentario no puede estar vacío</message_cannot_be_empty>
+        <comment_cannot_be_edited>
+            <with_timing><![CDATA[
+                Disculpa, pero no puedes cambiar el comentario
+                por una de las siguientes razones:
+                • Ha expirado el tiempo de gracia para editarlo
+                • No eres un usuario registrado
+                • El comentario ya ha sido respondido
+                • No eres el autor
+                • No tienes el nivel requerido
+            ]]></with_timing>
+            <without_timing><![CDATA[
+                Disculpa, pero no puedes cambiar el comentario
+                por una de las siguientes razones:
+                • No eres un usuario registrado
+                • El comentario ya ha sido respondido
+                • No eres el autor
+                • No tienes el nivel requerido
+            ]]></without_timing>
+        </comment_cannot_be_edited>
+        <empty_name>Por favor escribe tu nombre o alias</empty_name>
+        <invalid_email>Por favor escribe una dirección de correo válida</invalid_email>
+        <invalid_captcha>Clave de captcha inválida. Intenta de nuevo.</invalid_captcha>
+        <already_sent>Ya se ha registrado el comentario en el transcurso de los últimos minutos.</already_sent>
+        <sending_too_fast>Estás enviando comentarios demasiado rápido. Por favor espera {$time}.</sending_too_fast>
+        <parent_not_found>El comentario que intentas responder no se encuentra. Es posible que se haya eliminado.</parent_not_found>
+        <missing_comment_id>No has especificado un identificador de comentario</missing_comment_id>
+        <comment_not_found>El comentario no se ha encontrado</comment_not_found>
+        <links_exceeded><![CDATA[
+            Tu comentario tiene vínculos que deben revisarse.
+            Se guardará pero no se publicará hasta que un moderador lo apruebe
+            o lo rechace.<br>
+            Por favor sé paciente y espera por una respuesta.
+            Se atenderá tan pronto como sea posible.
+        ]]></links_exceeded>
+        <toolbox>
+            <invalid_action>La acción especificada es inválida</invalid_action>
+            <invalid_status>La bandera de estado especificada es inválida</invalid_status>
+            <action_not_allowed>Disculpa, pero no tienes privilegios para ejecutar esta acción</action_not_allowed>
+            <published_ok><![CDATA[
+                El comentario #{$id} de {$author} se ha publicado.
+                Se le ha enviado una notificación.<br>
+                <a href="{$link}">Da click aquí para revisarlo</a>
+            ]]></published_ok>
+            <rejected_ok><![CDATA[
+                El comentario #{$id} de {$author} ha sido rechazado.
+                Se le ha enviado una notificación.<br>
+                <a href="{$link}">Da click aquí para revisarlo</a>
+            ]]></rejected_ok>
+            <deleted_from_others><![CDATA[
+                El comentario #{$id} de {$author} ha sido enviado al basurero.
+                Se le ha enviado una notificación.
+            ]]></deleted_from_others>
+            <spammed_ok><![CDATA[
+                El comentario #{$id} de {$author} se ha marcado como spam.
+                Se ha notificado a los mods/admins.
+            ]]></spammed_ok>
+        </toolbox>
+        <previewing>Vista previa de comentario #{$id} en entrada "{$post_title}"</previewing>
+        <replying>Respondiendo a comentario #{$id} en entrada "{$post_title}"</replying>
+        <impersonation>
+            <user_name_exists>Disculpa, pero hay un usuario registrado con el nombre que has escrito. Por favor abre sesión o especifica un nombre distinto.</user_name_exists>
+            <display_name_exists>Disculpa, pero hay un usuario registrado con un alias similar al que has escrito. Por favor abre sesión o especifica un nombre distinto.</display_name_exists>
+            <email_exists>Disculpa, pero hay un usuario registrado con el mismo correo que has especificado. Por favor abre sesión o especifica una dirección de correo distinta.</email_exists>
+        </impersonation>
+    </messages>
+    
+    <notifications>
+        <published_ok><![CDATA[
+            Tu cometnario en "{$post_title}" ha sido liberado por {$user} y ahora está publicado.<br>
+            <a href="{$link}">Da click aquí para verlo.</a>
+        ]]></published_ok>
+        <rejected_ok><![CDATA[
+            Disculpa, pero tu comentario en "{$post_title}" ha sido rechazado por {$user}.<br>
+            <a href="{$link}">Da click aquí para verlo.</a>
+        ]]></rejected_ok>
+        <deleted_by_others><![CDATA[
+            Tu comentario #{$id} en "{$post_title}" ha sido eliminado por {$user}.
+        ]]></deleted_by_others>
+        <deleted_by_self><![CDATA[
+            El comentario #{$id} de {$author} en "{$post_title}" ha sido eliminado por {$user}.
+        ]]></deleted_by_self>
+        <spammed><![CDATA[
+            El comentario #{$id} de {$author} en "{$post_title}" ha sido marcado
+            como spam por {$user}. Por favor ve al navegador de comentarios y
+            decide si se apureba o rechaza.
+        ]]></spammed>
+        <saved_ok><![CDATA[
+            Comentario guardado con éxito. El estado actual es "{$status}".
+        ]]></saved_ok>
+        <saved_with_status_change><![CDATA[
+            Se ha guardado el comentario. El estado se ha cambiado de "{$old_status}" a "{$new_status}".
+        ]]></saved_with_status_change>
+    </notifications>
+    
+    <settings_data>
+        <title>Comentarios</title>
+        <specs key="disable_new_after">
+            <title>Deshabilitar forma de envío después de:</title>
+            <description><![CDATA[
+                Especifica la cantidad de días que una entrada permite envío de comentarios y respuestas.<br>
+                Una vez vencido el plazo, no se podrán enviar nuevos comentarios.<br>
+                Poner en <code>0</code> para permitir comentarios siempre.
+            ]]></description>
+            <type>number</type>
+        </specs>
+        <specs key="flag_for_review_on_link_amount">
+            <title>Vínculos para disparar revisión</title>
+            <description><![CDATA[
+                Cuando un comentario contenga la cantidad especificada de vínculos será marcado para revisión.<br>
+                Valor por defecto: <code>2</code>.
+            ]]></description>
+            <type>number</type>
+        </specs>
+        <specs key="privileged_user_level">
+            <title>Nivel de usuario para aprobación automática</title>
+            <description><![CDATA[
+                Si se ha especificado un valor en "Vínculos para disparar revisión",
+                los usuarios de este nivel o superior serán excluídos de la regla.
+                Nivel por defecto: <code>200</code> (moderador).<br>
+                <span class="fa fa-info-circle"></span>
+                Checa la opción de niveles de usuario para ver qué niveles puedes especificar.
+            ]]></description>
+            <type>number</type>
+        </specs>
+        <specs key="repeated_interval">
+            <title>Intervalo de chequeo de duplicados</title>
+            <description><![CDATA[
+                Cuando se recibe un comentario, checar dentro del rango de minutos especificado
+                por otro mensaje con el mismo contenido enviado por el mismo usuario para prevenir duplicados.
+                Valor por defecto: <code>1</code>. Especifica <code>0</code> para desactivar esta regla (no recomendado).
+            ]]></description>
+            <type>number</type>
+        </specs>
+        <specs key="sending_interval">
+            <title>Intervalo de velocidad</title>
+            <description><![CDATA[
+                Cantidad mínima de segundos a esperar antes de que un usuario envíe un nuevo comentario.<br>
+                Valor por defecto: <code>30</code>. Especificar <code>0</code> para desactivar esta regla (no recomendado).
+            ]]></description>
+            <type>number</type>
+        </specs>
+        <specs key="max_indent_level">
+            <title>Nivel máximo de indentado</title>
+            <description><![CDATA[
+                Al momento de generar el árbol de comentarios, evitar que el nivel de indentación vaya más allá
+                del nivel especificado.<br>
+                Valor por defecto: <code>5</code>.
+            ]]></description>
+            <type>number</type>
+        </specs>
+        <specs key="time_allowed_for_editing_after_submission">
+            <title>Tiempo de gracia para edición</title>
+            <description><![CDATA[
+                Cantidad de minutos que se le otorgan al usuario para editar un comentario una vez publicado.<br>
+                Definir <code>0</code> para sólo permitir la edición a mods/admins.
+            ]]></description>
+            <type>number</type>
+        </specs>
+    </settings_data>
+    
+    <rss_feed_generator>
+        <title>Feed de comentarios de {$website_name}</title>
+        <description>Últimos comentarios en todas las entradas publicadas en {$website_name}</description>
+    </rss_feed_generator>
+    
+    <reporting>
+        <id_not_set>No has especificado un identificador válido de comentario a reportar.</id_not_set>
+        <not_found>El comentario que has especificado no se encuentra. Es posible que se haya eliminado.</not_found>
+        <already_processed>El comentario ya ha sido procesado y se ha rechazado. No hay necesidad de reportarlo de nuevo.</already_processed>
+        <in_review>El comentario está siendo revisado. No hay necesidad de reportarlo de nuevo.</in_review>
+        <post_deleted><![CDATA[
+            Disculpa, pero la entrada en la que este comentario se ha registrado ha sido eliminada.
+            No hay necesidad de reportar el comentario puesto que ya se ha removido y está pendiente de eliminación.
+        ]]></post_deleted>
+        <subject>Reporte de spam/contenido inapropiado para comentario #{$comment_id} en la entrada "{$post_title}" de {$post_author}</subject>
+        <content><![CDATA[
+            <p><i>Favor de revisar este comentario.</i></p>
+            <hr>
+            Comentario escrito por {$comment_author} en {$date}:<br>
+            <a href='{$permalink}'>{$permalink}</a>
+            <blockquote>{$comment}</blockquote>
+        ]]></content>
+    </reporting>
+    
+</language>

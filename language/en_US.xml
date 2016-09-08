@@ -149,8 +149,8 @@
                 A notification has been sent to the moderators.
             ]]></spammed_ok>
         </toolbox>
-        <previewing>Previewing message #{$id} on post "{$post_title}"</previewing>
-        <replying>Replying to message #{$id} on post "{$post_title}"</replying>
+        <previewing>Previewing comment #{$id} on post "{$post_title}"</previewing>
+        <replying>Replying to comment #{$id} on post "{$post_title}"</replying>
         <impersonation>
             <user_name_exists>Sorry, but there's a registered user with a user name like yours. Please login or specify a different name.</user_name_exists>
             <display_name_exists>Sorry, but there's a registered user with a display name like yours. Please login or specify a different name.</display_name_exists>
@@ -192,14 +192,14 @@
             <title>Disable posting new comments after:</title>
             <description><![CDATA[
                 Specify the age in days a post should have so comment submissions/replies are blocked.<br>
-                Set to <code>0</code> to disable this feature.
+                Set to <code>0</code> allow comments always.
             ]]></description>
             <type>number</type>
         </specs>
         <specs key="flag_for_review_on_link_amount">
             <title>Flag for review on link amount</title>
             <description><![CDATA[
-                When the message has the specified amount of links (or more), the message is flagged for review.<br>
+                When the comment has the specified amount of links (or more), it will be flagged for review.<br>
                 Defaults to <code>2</code>.
             ]]></description>
             <type>number</type>
@@ -215,7 +215,7 @@
             <type>number</type>
         </specs>
         <specs key="repeated_interval">
-            <title>Repeated comment check interval</title>
+            <title>Duplicates check interval</title>
             <description><![CDATA[
                 When a comment is submitted, check within the specified amount of minutes for a message
                 with the same content from the same user to avoid repeated messages.<br>
@@ -235,7 +235,7 @@
             <title>Maximum indent level</title>
             <description><![CDATA[
                 When rendering the comments tree, all children above this level will be kept in the
-                specified value.
+                specified value.<br>
                 Defaults to <code>5</code>.
             ]]></description>
             <type>number</type>
