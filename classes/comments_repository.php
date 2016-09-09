@@ -210,8 +210,8 @@ class comments_repository extends abstract_repository
         $queries    = array();
         $author_ids = array();
         
-        $limit  = $settings->get("modules:comments.items_per_page");
-        if( empty($limit) ) $limit = 30;
+        $limit  = $settings->get("modules:comments.items_per_index_entry");
+        if( empty($limit) ) $limit = 10;
         
         foreach($post_ids as $post_id)
             $queries[] = "(

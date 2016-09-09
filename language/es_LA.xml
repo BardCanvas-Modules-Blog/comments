@@ -193,6 +193,41 @@
     
     <settings_data>
         <title>Comentarios</title>
+        <specs key="items_per_page">
+            <title>Cantidad a mostrar en entradas</title>
+            <description><![CDATA[
+                Cantidad de comentarios a mostrar en las páginas de entradas. Si hay más comentarios,
+                se dividirán en varias páginas.<br>
+                Valor por defecto: <code>20</code>.
+            ]]></description>
+            <type>number</type>
+            <options>
+                <min>1</min>
+                <max>1000</max>
+            </options>
+        </specs>
+        <specs key="show_in_indexes">
+            <title>Mostrar en índices de entradas</title>
+            <description><![CDATA[
+                Cuando se construyen los índices de entradas, pueden incluírse resúmenes de los comentarios
+                si se activa esta opción.<br>
+                <span class="fa fa-info-circle"></span>
+                Note: activar esta opción puede añadir una pequeña carga extra a la base de datos.
+            ]]></description>
+            <type>boolean</type>
+        </specs>
+        <specs key="items_per_index_entry">
+            <title>Cantidad por entrada en índices</title>
+            <description><![CDATA[
+                Cantidad de comentarios a mostrar por cada entrada en páginas de índices.<br>
+                Valor por defecto: <code>10</code>.
+            ]]></description>
+            <type>number</type>
+            <options>
+                <min>1</min>
+                <max>100</max>
+            </options>
+        </specs>
         <specs key="disable_new_after">
             <title>Deshabilitar forma de envío después de:</title>
             <description><![CDATA[

@@ -188,6 +188,40 @@
     
     <settings_data>
         <title>Comments</title>
+        <specs key="items_per_page">
+            <title>Amount to show on single posts</title>
+            <description><![CDATA[
+                Amount of comments to show on a single post page. If there are more comments,
+                they will be splitted in pages.<br>
+                Defaults to <code>20</code>.
+            ]]></description>
+            <type>number</type>
+            <options>
+                <min>1</min>
+                <max>1000</max>
+            </options>
+        </specs>
+        <specs key="show_in_indexes">
+            <title>Show in post indexes</title>
+            <description><![CDATA[
+                When post indexes are built, comment excerpts will be rendered when this option is enabled.<br>
+                <span class="fa fa-info-circle"></span>
+                Note: enabling this option may add a small overhead to the database.
+            ]]></description>
+            <type>boolean</type>
+        </specs>
+        <specs key="items_per_index_entry">
+            <title>Amount per post on indexes</title>
+            <description><![CDATA[
+                Amount of comments to show per post entry on index pages.<br>
+                Defaults to <code>10</code>.
+            ]]></description>
+            <type>number</type>
+            <options>
+                <min>1</min>
+                <max>100</max>
+            </options>
+        </specs>
         <specs key="disable_new_after">
             <title>Disable posting new comments after:</title>
             <description><![CDATA[
