@@ -146,7 +146,7 @@
                 <a href="{$link}">Da click aquí para revisarlo</a>
             ]]></rejected_ok>
             <deleted_from_others><![CDATA[
-                El comentario #{$id} de {$author} ha sido enviado al basurero.
+                El comentario #{$id} de {$author} ha sido enviado a la papelera.
                 Se le ha enviado una notificación.
             ]]></deleted_from_others>
             <spammed_ok><![CDATA[
