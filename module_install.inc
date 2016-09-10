@@ -44,6 +44,7 @@ $tables = array(
             primary key           ( id_comment ),
             index   comments_tree ( id_comment, parent_comment ),
             index   by_author     ( id_author ),
+            index   by_post       ( id_post, status ),
             index   by_ip         ( creation_ip(7) )
             
         ) engine=InnoDB default charset=utf8mb4 collate='utf8mb4_unicode_ci'

@@ -20,6 +20,7 @@ use hng2_base\account;
 use hng2_base\config;
 use hng2_base\settings;
 use hng2_modules\comments\comments_repository;
+use hng2_modules\posts\posts_repository;
 
 header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
@@ -29,6 +30,7 @@ if( ! in_array($_GET["action"], array("change_status", "preview")) ) die($curren
 
 if( empty($_GET["id_comment"]) ) die($current_module->language->messages->missing_comment_id);
 
+$posts_repository = new posts_repository();
 $repository = new comments_repository();
 $comment = $repository->get($_GET["id_comment"]);
 if( is_null($comment) ) die($current_module->language->messages->comment_not_found);
@@ -41,14 +43,17 @@ if($_GET["action"] == "change_status")
     switch( $_GET["new_status"] )
     {
         case "published":
-            
+        {
             if($account->level < config::MODERATOR_USER_LEVEL)
                 die($current_module->language->messages->toolbox->action_not_allowed);
             
             if( $comment->status == "published" ) die("OK");
             
             $res = $repository->change_status($comment->id_comment, "published");
-            if( empty($res) ) die("OK"); 
+            
+            if( empty($res) ) die("OK");
+            
+            $posts_repository->update_comments_count($comment->id_post);
             
             $cuser_link   = "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
@@ -75,9 +80,9 @@ if($_GET["action"] == "change_status")
             
             die("OK");
             break;
-        
+        }
         case "rejected":
-            
+        {
             if($account->level < config::MODERATOR_USER_LEVEL)
                 die($current_module->language->messages->toolbox->action_not_allowed);
             
@@ -85,6 +90,8 @@ if($_GET["action"] == "change_status")
             
             $res = $repository->change_status($comment->id_comment, "rejected");
             if( empty($res) ) die("OK");
+            
+            $posts_repository->update_comments_count($comment->id_post);
             
             $cuser_link   = "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
@@ -111,9 +118,9 @@ if($_GET["action"] == "change_status")
             
             die("OK");
             break;
-        
+        }
         case "trashed":
-            
+        {
             if($account->id_account != $comment->id_author && $account->level < config::MODERATOR_USER_LEVEL)
                 die($current_module->language->messages->toolbox->action_not_allowed);
             
@@ -121,6 +128,8 @@ if($_GET["action"] == "change_status")
             
             $res = $repository->change_status($comment->id_comment, "trashed");
             if( empty($res) ) die("OK");
+            
+            $posts_repository->update_comments_count($comment->id_post);
             
             $cuser_link   = "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
@@ -157,13 +166,15 @@ if($_GET["action"] == "change_status")
             
             die("OK");
             break;
-        
+        }
         case "spam":
-            
+        {
             if( $comment->status == "spam" ) die("OK");
             
             $res = $repository->change_status($comment->id_comment, "spam");
             if( empty($res) ) die("OK");
+            
+            $posts_repository->update_comments_count($comment->id_post);
             
             $cuser_link   = "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
@@ -191,8 +202,7 @@ if($_GET["action"] == "change_status")
             
             die("OK");
             break;
-        
-        # end cases
+        }
     }
 }
 

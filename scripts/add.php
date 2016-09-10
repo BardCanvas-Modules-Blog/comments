@@ -216,4 +216,5 @@ if( count($media_items) ) $repository->set_media_items($media_items, $comment->i
 if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
 $repository->save($comment);
 $current_module->load_extensions("add_comment", "after_saving");
+$posts_repository->update_comments_count($comment->id_post);
 echo "OK:{$comment->id_comment}";

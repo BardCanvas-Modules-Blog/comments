@@ -19,6 +19,7 @@ use hng2_base\account;
 use hng2_base\config;
 use hng2_base\settings;
 use hng2_modules\comments\comments_repository;
+use hng2_modules\posts\posts_repository;
 
 header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
@@ -106,5 +107,11 @@ else
             $current_module->language->statuses->{$comment->status}
         )
     ));
+
+if( $old_comment->status != $comment->status )
+{
+    $posts_repository = new posts_repository();
+    $posts_repository->update_comments_count($comment->id_post);
+}
 
 echo "OK:{$comment->id_comment}";
