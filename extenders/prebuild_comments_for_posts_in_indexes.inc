@@ -32,7 +32,7 @@ unset( $config->globals["posts_data"] );
 $all_post_ids = array();
 foreach($posts_data->posts as $post) $all_post_ids[] = $post->id_post;
 
-$mem_key = "comments_for_posts_in_indexes/" . md5(implode(",", $all_post_ids)) . "~v1";
+$mem_key = "comments_for_posts_in_indexes/" . md5(implode(",", $all_post_ids));
 $cached  = $mem_cache->get($mem_key);
 if( is_array($cached) )
 {
