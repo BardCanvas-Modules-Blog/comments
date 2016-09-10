@@ -13,6 +13,7 @@
  * $_REQUEST params:
  * @param parent_id
  * @param edit_comment
+ * @param quote_parent
  */
 
 use hng2_base\config;
@@ -36,16 +37,22 @@ if( ! empty( $_REQUEST["parent_id"] ) )
     
     if( ! is_null($parent) )
     {
-        $author      = $parent->get_author();
-        $author_link = $author->_exists
-                     ? "<a href='{$config->full_root_url}/user/{$author->user_name}/'>{$author->get_processed_display_name()}</a>"
-                     : $parent->author_display_name; 
+        $content = "";
         
-        $content  = "<p></p>";
-        $content .= "<blockquote class='comment_quote'>";
-        $content .= "<p>[{$parent->creation_date}] {$author_link}:</p>";
-        $content .= $parent->content;
-        $content .= "</blockquote>";
+        if($_REQUEST["quote"] == "true")
+        {
+            $author      = $parent->get_author();
+            $author_link = $author->_exists
+                         ? "<a href='{$config->full_root_url}/user/{$author->user_name}/'>{$author->get_processed_display_name()}</a>"
+                         : $parent->author_display_name;
+            
+            $content  = "<p></p>";
+            $content .= "<blockquote class='comment_quote'>";
+            $content .= "<p>[{$parent->creation_date}] {$author_link}:</p>";
+            $content .= $parent->content;
+            $content .= "</blockquote>";
+        }
+        
         $template->set("prefilled_comment_content", $content);
         $template->set("parent_comment",            $parent->id_comment);
     }

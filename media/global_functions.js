@@ -4,8 +4,10 @@
 var comment_reply_management_type;
 var comment_reply_dialog_callback;
 
-function prepare_comment_reply(trigger)
+function prepare_comment_reply(trigger, quote_parent)
 {
+    if( typeof quote_parent == 'undefined' ) quote_parent = false;
+    
     var $trigger  = $(trigger).closest('.trigger');
     var parent_id = $trigger.closest('.comment_entry').attr('data-id-comment');
     var url       = $_FULL_ROOT_PATH + '/comments/scripts/render_prefilled_form.php';
@@ -26,7 +28,8 @@ function prepare_comment_reply(trigger)
     
     var params = {
         parent_id: parent_id,
-        wasuuup: parseInt(Math.random() * 1000000000000000)
+        quote:     quote_parent ? 'true' : 'false',
+        wasuuup:   parseInt(Math.random() * 1000000000000000)
     };
     
     $target.load(url, params, function()
@@ -166,9 +169,9 @@ $(document).ready(function()
         var height = $(window).height();
         var width  = $(window).width();
         
-        if( width  > 500 ) width  = 500;
+        if( width  > 700 ) width  = 700;
         if( width  < 320 ) width  = 320;
-        if( height > 500 ) height = 500;
+        if( height > 590 ) height = 590;
         if( height < 320 ) height = 320;
         
         $('#reply_target').dialog({

@@ -278,6 +278,10 @@ $authors = $repository->get_all_authors($records);
                                         <span class="fa fa-reply"></span>
                                         <?= $current_module->language->record_nav->actions->reply ?>
                                     </span>
+                                    <span class="action pseudo_link" onclick="prepare_comment_reply(this, true)">
+                                        <span class="fa fa-quote-right"></span>
+                                        <?= $current_module->language->record_nav->actions->quote ?>
+                                    </span>
                                 </span>
                             </span>
                         <? endif; ?>

@@ -37,6 +37,7 @@
         <title>{$amount} comments</title>
         <post_comment>Send a comment</post_comment>
         <reply_comment>Reply comment</reply_comment>
+        <quote_comment>Quote comment</quote_comment>
     </list>
     
     <index>
@@ -84,6 +85,7 @@
             <approve>Approve</approve>
             <reject>Reject</reject>
             <reply>Reply</reply>
+            <quote>Quote</quote>
             <edit>Edit</edit>
             <trash>Trash</trash>
             <spam>Spam</spam>
