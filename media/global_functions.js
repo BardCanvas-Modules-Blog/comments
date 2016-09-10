@@ -41,7 +41,7 @@ function prepare_comment_reply(trigger)
         var recaptcha_id = $form.find('.recaptcha_target').attr('id');
         var public_key   = $form.find('.recaptcha_target').attr('data-public-key');
         
-        Recaptcha.create(public_key, recaptcha_id);
+        if(Recaptcha) Recaptcha.create(public_key, recaptcha_id);
         
         tinymce.init(tinymce_defaults);
         
@@ -81,7 +81,7 @@ function discard_comment_reply(trigger)
     var $form        = $('#post_new_comment_form');
     var recaptcha_id = $form.find('.recaptcha_target').attr('id');
     var public_key   = $form.find('.recaptcha_target').attr('data-public-key');
-    Recaptcha.create(public_key, recaptcha_id);
+    if(Recaptcha) Recaptcha.create(public_key, recaptcha_id);
     $form.show();
 }
 
