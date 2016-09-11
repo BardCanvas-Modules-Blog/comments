@@ -117,6 +117,25 @@ $authors = $repository->get_all_authors($records);
         delete_comment('<?= $_GET["delete"] ?>', function() { $('#refresh_commments_browser').click(); })
     }); </script>
 <? endif; ?>
+<?
+if( ! empty($_GET["edit"]) ):
+    $row = $repository->get($_GET["edit"]);
+    if( ! is_null($row) ):
+        if( is_comment_editable($row) ):
+            $post         = $row->get_post();
+            $dialog_title = replace_escaped_vars(
+                $current_module->language->form->edit,
+                array('{$id}', '{$post_title}'),
+                array($row->id_comment, $post->title)
+            ); ?>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    edit_comment('<?= $row->id_comment ?>', '<?= htmlspecialchars($dialog_title) ?>');
+                });
+            </script>
+        <? endif; ?>
+    <? endif; ?>
+<? endif; ?>
 
 <h1 class="clearfix">
     <button id="refresh_commments_browser" class="pull-right" onclick="paginate(<?= $offset ?>)">

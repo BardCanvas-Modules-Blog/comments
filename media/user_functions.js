@@ -139,12 +139,12 @@ $(document).ready(function()
     {
         var height = $(window).height();
         var width  = $(window).width();
-    
-        if( width  > 500 ) width  = 500;
+        
+        if( width  > 700 ) width  = 700;
         if( width  < 320 ) width  = 320;
-        if( height > 500 ) height = 500;
+        if( height > 590 ) height = 590;
         if( height < 320 ) height = 320;
-    
+        
         $form.dialog({
             modal:     true,
             autoOpen:  false,
