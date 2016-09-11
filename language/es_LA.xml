@@ -310,7 +310,8 @@
         ]]></post_deleted>
         <subject>Reporte de spam/contenido inapropiado para comentario #{$comment_id} en la entrada "{$post_title}" de {$post_author}</subject>
         <content><![CDATA[
-            <p><i>Favor de revisar este comentario.</i></p>
+            <p><b>Describe porqué este comentario debería ser revisado:</b></p>
+            <ul><li><i>Escribe tus razones aquí</i></li></ul>
             <hr>
             Comentario escrito por {$comment_author} en {$date}:<br>
             <a href='{$permalink}'>{$permalink}</a>

@@ -300,9 +300,10 @@
             Sorry, but the post where this comment was posted in has been deleted.
             There's no need to report the comment since it is already removed and pending deletion.
         ]]></post_deleted>
-        <subject>Spam/Inappropiate comment report for comment #{$comment_id} on {$post_author}'s post "{$post_title}"</subject>
+        <subject>Spam/Inappropiate report for comment #{$comment_id} on {$post_author}'s post "{$post_title}"</subject>
         <content><![CDATA[
-            <p><i>Please review this submission.</i></p>
+            <p><b>Describe why you think this comment should be reviewed:</b></p>
+            <ul><li><i>Type your reasons here</i></li></ul>
             <hr>
             Comment written by {$comment_author} on {$date}:<br>
             <a href='{$permalink}'>{$permalink}</a>
