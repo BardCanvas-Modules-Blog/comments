@@ -38,7 +38,8 @@ $level      = 1;
                 
                 <div class="meta_section upper">
                     <? if($author->_exists): ?>
-                        <a class="meta_field" href="<?= $config->full_root_url ?>/user/<?= $author->user_name ?>/">
+                        <a class="meta_field user_display_name" data-user-level="<?= $author->level ?>"
+                           href="<?= $config->full_root_url ?>/user/<?= $author->user_name ?>/">
                             <span class="fa fa-user fa-fw"></span>
                             <?= $author->get_processed_display_name() ?>
                         </a>
