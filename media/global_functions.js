@@ -32,8 +32,10 @@ function prepare_comment_reply(trigger, quote_parent)
         wasuuup:   parseInt(Math.random() * 1000000000000000)
     };
     
+    $trigger.block(blockUI_smallest_params);
     $target.load(url, params, function()
     {
+        $trigger.unblock();
         var $form = $target.find('form');
         
         $form.attr('name', form_id);
@@ -62,9 +64,9 @@ function prepare_comment_reply(trigger, quote_parent)
         });
         
         if( comment_reply_management_type == 'dialog' )
-        {
             $target.dialog('open');
-        }
+        else
+            $trigger.closest('.comment_reply').attr('data-is-reply-active', 'true');
     });
 }
 
@@ -80,6 +82,7 @@ function discard_comment_reply(trigger)
     var $source = $(trigger).closest('.comment_reply');
     $source.find('.target').html('');
     $source.find('.trigger').show();
+    $source.attr('data-is-reply-active', 'false');
     
     var $form        = $('#post_new_comment_form');
     var recaptcha_id = $form.find('.recaptcha_target').attr('id');
