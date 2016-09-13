@@ -35,6 +35,8 @@ global $post, $template, $language, $settings, $account;
     <? return; ?>
 <? endif; ?>
 
+<? if( $post->allow_comments == 0 ) return; ?>
+
 <div id="post_new_comment_form" class="content_frame">
     <h1><?= $this_module->language->leave_a_comment ?></h1>
     <? include __DIR__ . "/post_form.inc"; ?>
