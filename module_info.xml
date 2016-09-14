@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module>
     
-    <version>1.2.9</version>
+    <version>1.2.10</version>
     <group>BardCanvas</group>
     
     <working_flags>
@@ -68,6 +68,13 @@
                 <presets>extenders/contact_form_report_presets.inc</presets>
             </form>
         </contact>
+        <accounts>
+            <records_browser>
+                <additional_headers priority="120">extenders/accounts/browser_headers.inc</additional_headers>
+                <additional_columns priority="120">extenders/accounts/browser_columns.inc</additional_columns>
+                <presettings_data   priority="120">extenders/accounts/browser_presets.inc</presettings_data>
+            </records_browser>
+        </accounts>
     </extends_to>
     
 </module>

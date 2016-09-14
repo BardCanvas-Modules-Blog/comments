@@ -311,4 +311,13 @@
         ]]></content>
     </reporting>
     
+    <accounts_nav_columns>
+        <comments>
+            <caption><![CDATA[ <span class="fa fa-comments-o fa-fw"></span> ]]></caption>
+            <layout xnowrap="true" xalign="right" />
+            <order_asc  id="comments_count_asc">Order by published comments count ascending</order_asc>
+            <order_desc id="comments_count_desc">Order by published comments count descending</order_desc>
+        </comments>
+    </accounts_nav_columns>
+    
 </language>
