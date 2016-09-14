@@ -50,7 +50,7 @@
         <rejected>Rechazado</rejected>
         <spam>Spam</spam>
         <hidden>Oculto</hidden>
-        <trashed>Eliminado</trashed>
+        <trashed>En papelera</trashed>
     </statuses>
     
     <record_nav>
@@ -87,7 +87,7 @@
             <reply>Responder</reply>
             <quote>Citar</quote>
             <edit>Editar</edit>
-            <trash>Eliminar</trash>
+            <trash>Papelera</trash>
             <spam>Spam</spam>
         </actions>
     </record_nav>

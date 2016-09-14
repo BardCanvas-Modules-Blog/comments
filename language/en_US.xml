@@ -50,7 +50,7 @@
         <rejected>Rejected</rejected>
         <spam>Flagged as Spam</spam>
         <hidden>Hidden</hidden>
-        <trashed>Deleted</trashed>
+        <trashed>Trashed</trashed>
     </statuses>
     
     <record_nav>
