@@ -10,11 +10,14 @@
  */
 
 use hng2_base\config;
+use hng2_media\media_repository;
+use hng2_modules\comments\comment_record;
 use hng2_modules\comments\comments_repository;
 use hng2_tools\record_browser;
 
-$browser    = new record_browser("{$config->website_key}_{$current_module->name}");
-$repository = new comments_repository();
+$browser          = new record_browser("{$config->website_key}_{$current_module->name}");
+$repository       = new comments_repository();
+$media_repository = new media_repository();
 
 /**
  * @var int    $offset
@@ -253,6 +256,11 @@ if( ! empty($_GET["edit"]) ):
                     
                     <?= make_excerpt_of($row->content, 100) ?>
                     
+                    <? render_comment_tags($row); ?>
+                    
+                    <? render_comment_attached_media($row); ?>
+                    
+                    <hr>
                     <div class="actions">
                         <?
                         $dialog_title = replace_escaped_vars(
@@ -367,3 +375,61 @@ if( ! empty($_GET["edit"]) ):
 <div class="pagination">
     <? $browser->render_pagination_controls("paginate", $pagination); ?>
 </div>
+
+<?
+function render_comment_tags(comment_record $row)
+{
+    global $account, $current_module;
+    
+    $remove_tag_link = "";
+    //TODO: add remove_tag_from_comment JS function
+    //if( is_comment_editable($row) ) $remove_tag_link = "
+    //    <span class='pseudo_link fa fa-times fa-border' title='{$current_module->language->record_nav->extras->remove_tag}'
+    //          onclick='remove_tag_from_comment(\$(this).closest(\".hashtag\"), \"{$row->id_comment}\", \"\{\$tag}\")'></span>
+    //";
+    if( $account->level < config::MODERATOR_USER_LEVEL )
+    {
+        foreach( $row->get_filtered_tags_list() as $tag)
+        {
+            $link = str_replace('{$tag}', $tag, $remove_tag_link);
+            echo "<span class='hashtag'><span class='fa fa-hashtag fa-fw'></span>{$tag}{$link}</span> ";
+        }
+    }
+    else
+    {
+        if( is_array($row->tags_list) )
+        {
+            echo "<hr>";
+            foreach( $row->tags_list as $tag)
+            {
+                $link = str_replace('{$tag}', $tag, $remove_tag_link);
+                echo "<span class='hashtag'><span class='fa fa-hashtag fa-fw'></span>{$tag}{$link}</span> ";
+            }
+        }
+    }
+}
+
+function render_comment_attached_media(comment_record $row)
+{
+    global $media_repository, $config;
+    
+    if( empty($row->media_list) ) return;
+    
+    echo "\n<hr>\n";
+    
+    $media_records = $media_repository->get_multiple($row->media_list);
+    foreach($media_records as $media_record):
+        $icon = $media_record->type == "image" ? "fa-picture-o" : "fa-film"; ?>
+        <div class="media_bullet">
+            <span class="bullet fa <?= $icon ?> fa-fw"></span>
+            <a href="<?= $config->full_root_path ?>/user/<?= $media_record->author_user_name ?>"
+               class="user_display_name" data-user-level="<?= $media_record->author_level ?>">
+                <span class="fa fa-user fa-fw"></span>
+                <?= $media_record->get_processed_author_display_name() ?></a>
+            [<?= time_elapsed_string($media_record->publishing_date) ?>]
+            <a class="prettyPhoto" href="<?= $media_record->get_thumbnail_url() ?>"><?= $media_record->title ?></a>
+            <a href="<?= $media_record->get_page_url() ?>" target="_blank"><span class="fa fa-external-link fa-fw"></span></a>
+        </div>
+        <?
+    endforeach;
+}

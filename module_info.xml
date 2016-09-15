@@ -14,6 +14,7 @@
     <php_includes>
         <bootstrap>functions.inc</bootstrap>
         <rss_feed_generator handle_pattern="^comments$">extenders/rss_feed_generator.inc</rss_feed_generator>
+        <media_repository_delete_multiple_if_unused>extenders/media_repository_delete_multiple_if_unused.inc</media_repository_delete_multiple_if_unused>
     </php_includes>
     
     <template_includes>

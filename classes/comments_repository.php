@@ -13,7 +13,16 @@ class comments_repository extends abstract_repository
     protected $table_name               = "comments";
     protected $key_column_name          = "id_comment";
     protected $additional_select_fields = array(
-        "(select count(id_comment) from comments c2 where c2.parent_comment = comments.id_comment) as _replies_count"
+        # Replies for comment
+        "(select count(id_comment) from comments c2 where c2.parent_comment = comments.id_comment) as _replies_count",
+        # Tags
+        "( select group_concat(tag order by date_attached asc, order_attached asc separator ',')
+           from comment_tags where comment_tags.id_comment = comments.id_comment
+           ) as tags_list",
+        # Attachments
+        "( select group_concat(id_media order by date_attached asc, order_attached asc separator ',')
+           from comment_media where comment_media.id_comment = comments.id_comment
+           ) as media_list",
     );
     
     /**
@@ -167,8 +176,8 @@ class comments_repository extends abstract_repository
     {
         global $account, $settings;
         
-        if( $account->level < config::MODERATOR_USER_LEVEL )
-        {
+        # if( $account->level < config::MODERATOR_USER_LEVEL )
+        # {
             if( ! $account->_exists )
                 $where[] = "status = 'published'";
             else
@@ -179,7 +188,7 @@ class comments_repository extends abstract_repository
                         (id_author <> '{$account->id_account}' and status = 'published')
                     )
                 ";
-        }
+        # }
         
         $limit       = $settings->get("modules:comments.items_per_page");
         $offset      = (int) $_GET["offset"];
@@ -428,13 +437,19 @@ class comments_repository extends abstract_repository
         return $rows;
     }
     
+    /**
+     * @param array  $list
+     * @param string $id_comment
+     *
+     * @return array
+     */
     public function set_media_items(array $list, $id_comment)
     {
         global $database;
         
         $actual_items = $this->get_media_items($id_comment);
         
-        if( empty($actual_items) && empty($list) ) return;
+        if( empty($actual_items) && empty($list) ) return array();
         
         $date    = date("Y-m-d H:i:s");
         $inserts = array();
@@ -455,15 +470,17 @@ class comments_repository extends abstract_repository
             $this->last_query = $database->get_last_query();
         }
         
+        $deletes = array();
         if( ! empty($actual_items) )
         {
-            $deletes = array();
             foreach($actual_items as $id => $object) $deletes[] = "'$id'";
             $database->exec(
                 "delete from comment_media where id_comment = '$id_comment' and id_media in (" . implode(", ", $deletes) . ")"
             );
             $this->last_query = $database->get_last_query();
         }
+        
+        return $deletes;
     }
     
     public function get_grouped_tag_counts($since = "", $min_hits = 10)

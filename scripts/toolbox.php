@@ -19,6 +19,7 @@
 use hng2_base\account;
 use hng2_base\config;
 use hng2_base\settings;
+use hng2_media\media_repository;
 use hng2_modules\comments\comments_repository;
 use hng2_modules\posts\posts_repository;
 
@@ -30,8 +31,10 @@ if( ! in_array($_GET["action"], array("change_status", "preview")) ) die($curren
 
 if( empty($_GET["id_comment"]) ) die($current_module->language->messages->missing_comment_id);
 
+$media_repository = new media_repository();
 $posts_repository = new posts_repository();
-$repository = new comments_repository();
+$repository       = new comments_repository();
+
 $comment = $repository->get($_GET["id_comment"]);
 if( is_null($comment) ) die($current_module->language->messages->comment_not_found);
 
@@ -78,6 +81,29 @@ if($_GET["action"] == "change_status")
                     array($cuser_link, $post_title, $comment_link)
                 ));
             
+            $tags = extract_hash_tags($comment->content);
+            $featured_posts_tag = $settings->get("modules:posts.featured_posts_tag");
+            if(
+                $account->level < config::MODERATOR_USER_LEVEL
+                && $settings->get("modules:posts.show_featured_posts_tag_everywhere") != "true"
+                && ! empty($featured_posts_tag)
+                && in_array($featured_posts_tag, $tags)
+            ) {
+                unset($tags[array_search($featured_posts_tag, $tags)]);
+                $comment->content = str_replace("#$featured_posts_tag", $featured_posts_tag, $comment->content);
+            }
+            
+            $media_items = array();
+            if( function_exists("extract_media_items") )
+            {
+                $images = extract_media_items("image", $comment->content);
+                $videos = extract_media_items("video", $comment->content);
+                $media_items = array_merge($images, $videos);
+            }
+            
+            $repository->set_tags($tags, $comment->id_comment);
+            $deletions = $repository->set_media_items($media_items, $comment->id_comment);
+            
             die("OK");
             break;
         }
@@ -115,6 +141,9 @@ if($_GET["action"] == "change_status")
                     array('{$user}', '{$post_title}', '{$link}'),
                     array($cuser_link, $post_title, $comment_link)
                 ));
+            
+            $repository->set_tags(array(), $comment->id_comment);
+            $repository->set_media_items(array(), $comment->id_comment);
             
             die("OK");
             break;
@@ -164,6 +193,11 @@ if($_GET["action"] == "change_status")
                     array(  $cuser_link,   $comment->id_comment,   $post_title,     $comment_link)
                 ));
             
+            $repository->set_tags(array(), $comment->id_comment);
+            $deletions = $repository->set_media_items(array(), $comment->id_comment);
+            if( is_array($media_deletions) && ! empty($media_deletions) )
+                $media_repository->delete_multiple_if_unused($media_deletions);
+            
             die("OK");
             break;
         }
@@ -199,6 +233,9 @@ if($_GET["action"] == "change_status")
                     array('{$author}', '{$id}', '{$user}', '{$post_title}', '{$link}'),
                     array($author_link, $comment->id, $cuser_link, $post_title, $comment_link)
                 ));
+            
+            $repository->set_tags(array(), $comment->id_comment);
+            $repository->set_media_items(array(), $comment->id_comment);
             
             die("OK");
             break;

@@ -44,6 +44,8 @@ if( $account->level < config::MODERATOR_USER_LEVEL && ! is_comment_editable($com
         die( unindent($current_module->language->messages->comment_cannot_be_edited->without_timing) );
 }
 
+$comment->content = stripslashes($_POST["content"]);
+
 $min_level = $settings->get("modules:comments.privileged_user_level");
 if( empty($min_level) ) $min_level = config::MODERATOR_USER_LEVEL;
 if( $account->level < $min_level )
@@ -84,13 +86,15 @@ if( function_exists("extract_media_items") )
     $media_items = array_merge($images, $videos);
 }
 
-$comment->content = stripslashes($_POST["content"]);
-
 $current_module->load_extensions("save_comment", "before_saving");
-if( count($media_items) ) $repository->set_media_items($media_items, $comment->id_comment);
-if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
 $repository->save($comment);
 $current_module->load_extensions("save_comment", "after_saving");
+
+if( $comment->status == "published" )
+{
+    $repository->set_media_items($media_items, $comment->id_comment);
+    $repository->set_tags($tags, $comment->id_comment);
+}
 
 if( $comment->status == $old_comment->status )
     send_notification($account->id_account, "success", replace_escaped_vars(

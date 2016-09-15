@@ -34,6 +34,10 @@ class comment_record extends abstract_record
     # TODO:  IMPORTANT! All dinamically generated members below should be undefined in get_for_database_insertion! :
     # TODO:                                                                                                        :
     
+    # Taken with a group_concat from other tables:
+    public $tags_list       = array(); # from post_tags
+    public $media_list      = array(); # from post_media
+    
     private $_author_account;
     public  $_can_be_replied;
     public  $_replies_count;
@@ -51,6 +55,14 @@ class comment_record extends abstract_record
     public function set_new_id()
     {
         $this->id_comment = uniqid();
+    }
+    
+    public function set_from_object($object_or_array)
+    {
+        parent::set_from_object($object_or_array);
+    
+        if( is_string($this->tags_list) )  $this->tags_list = explode(",", $this->tags_list);
+        if( is_string($this->media_list) ) $this->media_list = explode(",", $this->media_list);
     }
     
     /**
@@ -91,7 +103,9 @@ class comment_record extends abstract_record
         unset(
             $return["_author_account"] ,
             $return["_can_be_replied"] ,
-            $return["_replies_count"]
+            $return["_replies_count"]  ,
+            $return["tags_list"]       ,
+            $return["media_list"]      
         );
         
         foreach( $return as $key => &$val ) $val = addslashes($val);
@@ -131,5 +145,25 @@ class comment_record extends abstract_record
         if( $fully_qualified ) return "{$config->full_root_url}/{$this->id_post}#{$this->id_comment}";
         
         return "{$config->full_root_path}/{$this->id_post}#{$this->id_comment}";
+    }
+    
+    public function get_filtered_tags_list()
+    {
+        global $settings;
+        
+        $list = $this->tags_list;
+        if( empty($list) ) return array();
+        
+        if( is_string($list) ) $list = explode(",", $list);
+        
+        # TODO: Detach this to an extension!
+        $featureds_tag = $settings->get("modules:posts.featured_posts_tag");
+        if( empty($featureds_tag) ) return $list;
+        if( $settings->get("modules:posts.show_featured_posts_tag_everywhere") == "true" ) return $list;
+        $key = array_search($featureds_tag, $list);
+        if( $key === false ) return $list;
+        unset($list[$key]);
+        
+        return $list;
     }
 }
