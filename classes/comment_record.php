@@ -142,9 +142,9 @@ class comment_record extends abstract_record
     {
         global $config;
         
-        if( $fully_qualified ) return "{$config->full_root_url}/{$this->id_post}#{$this->id_comment}";
+        if( $fully_qualified ) return "{$config->full_root_url}/{$this->id_post}#comment_{$this->id_comment}";
         
-        return "{$config->full_root_path}/{$this->id_post}#{$this->id_comment}";
+        return "{$config->full_root_path}/{$this->id_post}#comment_{$this->id_comment}";
     }
     
     public function get_filtered_tags_list()

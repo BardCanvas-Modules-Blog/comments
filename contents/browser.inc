@@ -216,8 +216,9 @@ if( ! empty($_GET["edit"]) ):
         </thead>
         
         <tbody>
-        <? foreach( $records as $row ): ?>
-            <?
+        <?
+        foreach( $records as $row ):
+            
             $author       = $authors[$row->id_author];
             $author_name  = empty($row->id_author) ? $row->author_display_name : $author->display_name;
             $author_email = empty($row->id_author) ? $row->author_email        : $author->email;
@@ -225,24 +226,45 @@ if( ! empty($_GET["edit"]) ):
             $post       = $row->get_post();
             $post_url   = $post->get_permalink();
             $post_title = $post->get_processed_title(false);
-            $post_link  = "<a href='$post_url' target='_blank'>
-                               <span class='fa fa-newspaper-o'></span>
-                               $post_title
-                           </a>";
             ?>
             <tr class="comment_item comment_entry" data-record-id="<?= $row->id_comment ?>"
                 data-id-comment="<?= $row->id_comment ?>" data-post-id="<?= $row->id_post ?>">
                 <td data-for="sent_date">
                     <?= time_elapsed_string($row->creation_date) ?>
                 </td>
-                <td data-for="sent_by">
-                    <div class="principal_data"><?= convert_emojis($author_name) ?></div>
-                    <? if( $account->level >= config::MODERATOR_USER_LEVEL ): ?>
-                        <a href="mailto:<?= $author_email ?>">
-                            <span class="fa fa-envelope-o"></span>
-                            <?= $author_email ?>
-                        </a>
+                <td data-for="sent_by" nowrap>
+                    <? if( ! empty($author) ): ?>
+                        
+                        <a class="user_display_name" data-user-level="<?= $author->level ?>"
+                           href="<?= $config->full_root_url ?>/user/<?= $author->user_name ?>/" target="_blank">
+                            <span class="fa fa-user fa-fw"></span>
+                            <?= $author->get_processed_display_name() ?>
+                        </a><br>
+                        <? if( $account->id_account != $author->id_account ): ?>
+                            <span class="pseudo_link" onclick="send_pm(this, '<?= $author->user_name ?>', '<?= replace_escaped_vars($language->contact->pm->send_to, '{$recipient}', htmlspecialchars($author->display_name)) ?>')"
+                                  title="<?= replace_escaped_vars( $language->contact->pm->title, '{$website_name}', $settings->get("engine.website_name") ) ?>">
+                                <span class="fa fa-inbox fa-fw"></span>
+                                <?= $language->contact->pm->caption ?>
+                            </span>
+                        <? endif; ?>
+                        
+                    <? else: ?>
+                        
+                        <div class="principal_data"><?= convert_emojis($author_name) ?></div>
+                        
+                        <? if( $account->level >= config::MODERATOR_USER_LEVEL ): ?>
+                            <span class="clipboard-copy pseudo_link" data-clipboard-text="<?= $author_email ?>">
+                                <span class="caption">
+                                    <?= $author_email ?>
+                                </span>
+                                <span class="button">
+                                    <span class="fa fa-copy fa-fw"></span>
+                                </span>
+                            </span>
+                        <? endif; ?>
+                        
                     <? endif; ?>
+                    
                 </td>
                 <td data-for="status"><?= $current_module->language->statuses->{$row->status} ?></td>
                 <td data-for="details">
@@ -262,6 +284,12 @@ if( ! empty($_GET["edit"]) ):
                     
                     <hr>
                     <div class="actions">
+                        
+                        <a href="<?= $row->get_permalink() ?>" target="_blank">
+                            <span class="fa fa-link"></span>
+                            <?= $language->permalink ?>
+                        </a>
+                        
                         <?
                         $dialog_title = replace_escaped_vars(
                             $current_module->language->messages->previewing,
@@ -343,24 +371,7 @@ if( ! empty($_GET["edit"]) ):
                     </div>
                 </td>
                 <td data-for="in_reply_to">
-                    <?
-                    if( empty($row->parent_comment) )
-                    {
-                        echo $post_link;
-                    }
-                    else
-                    {
-                        $parent = $repository->get($row->parent_comment);
-                        if( is_null($parent) )
-                            echo $current_module->language->messages->parent_not_found;
-                        else
-                            echo  "{$post_link}<br>"
-                                . "<a href='$post_url#comment_{$parent->id_comment}' target='_blank'>" 
-                                . "<span class='fa fa-comment-o'></span> " 
-                                . make_excerpt_of($parent->content, 100) 
-                                . "</a>";
-                    }
-                    ?>
+                    <? render_in_reply_to_link($row); ?>
                 </td>
                 <td data-for="sent_from">
                     <?= $row->creation_ip ?><br>
@@ -377,6 +388,35 @@ if( ! empty($_GET["edit"]) ):
 </div>
 
 <?
+function render_in_reply_to_link($row)
+{
+    global $post_url, $post_title, $repository, $current_module;
+    
+    $post_link  = "
+        <a href='$post_url' target='_blank'>
+            <span class='fa fa-newspaper-o'></span>
+            $post_title
+        </a>
+        ";
+    
+    if( empty($row->parent_comment) )
+    {
+        echo $post_link;
+    }
+    else
+    {
+        $parent = $repository->get($row->parent_comment);
+        if( is_null($parent) )
+            echo $current_module->language->messages->parent_not_found;
+        else
+            echo  "{$post_link}<br>"
+                . "<a href='$post_url#comment_{$parent->id_comment}' target='_blank'>"
+                . "<span class='fa fa-comment-o'></span> "
+                . make_excerpt_of($parent->content, 100)
+                . "</a>";
+    }
+}
+
 function render_comment_tags(comment_record $row)
 {
     global $account, $current_module;
