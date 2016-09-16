@@ -334,4 +334,13 @@
         ]]></principal_data>
     </accounts_nav_columns>
     
+    <gallery_addons>
+        <principal_data><![CDATA[
+            <div class="media_bullet">
+                <span class="bullet fa fa-comments-o fa-fw"></span>
+                {$author} [{$time}, {$status}] <a href="{$url}" target="_blank">{$title}</a>
+            </div>
+        ]]></principal_data>
+    </gallery_addons>
+    
 </language>

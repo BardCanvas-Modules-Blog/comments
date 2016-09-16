@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module>
     
-    <version>1.3.4</version>
+    <version>1.3.5</version>
     <group>BardCanvas</group>
     
     <working_flags>
@@ -77,6 +77,11 @@
                 <principal_data_addons priority="120">extenders/accounts/principal_data_addons.inc</principal_data_addons>
             </records_browser>
         </accounts>
+        <gallery>
+            <records_browser>
+                <principal_data_addons priority="100">extenders/gallery/principal_data_addons.inc</principal_data_addons>
+            </records_browser>
+        </gallery>
     </extends_to>
     
 </module>
