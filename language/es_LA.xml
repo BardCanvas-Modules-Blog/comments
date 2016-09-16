@@ -327,7 +327,10 @@
             <order_desc id="comments_count_desc">Ordenar por cantidad de comentarios publicados descendente</order_desc>
         </comments>
         <principal_data><![CDATA[
-            Último comentario: [{$time}, {$status}] <a href="{$url}" target="_blank">{$title}</a>
+            <div class="media_bullet">
+                <span class="bullet fa fa-comments-o fa-fw"></span>
+                Último comentario: [{$time}, {$status}] <a href="{$url}" target="_blank">{$title}</a>
+            </div>
         ]]></principal_data>
     </accounts_nav_columns>
     

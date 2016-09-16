@@ -319,7 +319,10 @@
             <order_desc id="comments_count_desc">Order by published comments count descending</order_desc>
         </comments>
         <principal_data><![CDATA[
-            Last comment: [{$time}, {$status}] <a href="{$url}" target="_blank">{$title}</a>
+            <div class="media_bullet">
+                <span class="bullet fa fa-comments-o fa-fw"></span>
+                Last comment: [{$time}, {$status}] <a href="{$url}" target="_blank">{$title}</a>
+            </div>
         ]]></principal_data>
     </accounts_nav_columns>
     
