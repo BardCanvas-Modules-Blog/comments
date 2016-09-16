@@ -326,6 +326,9 @@
             <order_asc  id="comments_count_asc">Ordenar por cantidad de comentarios publicados ascendente</order_asc>
             <order_desc id="comments_count_desc">Ordenar por cantidad de comentarios publicados descendente</order_desc>
         </comments>
+        <principal_data><![CDATA[
+            Último comentario: [{$time}, {$status}] <a href="{$url}" target="_blank">{$title}</a>
+        ]]></principal_data>
     </accounts_nav_columns>
     
 </language>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module>
     
-    <version>1.3.1</version>
+    <version>1.3.2</version>
     <group>BardCanvas</group>
     
     <working_flags>
@@ -71,9 +71,10 @@
         </contact>
         <accounts>
             <records_browser>
-                <additional_headers priority="120">extenders/accounts/browser_headers.inc</additional_headers>
-                <additional_columns priority="120">extenders/accounts/browser_columns.inc</additional_columns>
-                <presettings_data   priority="120">extenders/accounts/browser_presets.inc</presettings_data>
+                <additional_headers    priority="120">extenders/accounts/browser_headers.inc</additional_headers>
+                <additional_columns    priority="120">extenders/accounts/browser_columns.inc</additional_columns>
+                <presettings_data      priority="120">extenders/accounts/browser_presets.inc</presettings_data>
+                <principal_data_addons priority="120">extenders/accounts/principal_data_addons.inc</principal_data_addons>
             </records_browser>
         </accounts>
     </extends_to>
