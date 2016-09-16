@@ -23,22 +23,44 @@ $media_repository = new media_repository();
  * @var int    $offset
  * @var int    $limit
  * @var int    $order
- * @var string $search_state
  * @var string $search_for
+ * @var string $search_author
+ * @var string $search_status
  */
 #region Nav filters
 $built_vars = $browser->build_vars(20, 2);
 foreach($built_vars as $key => $val) $$key = $val;
 
+# 0: status
+# 1: author
 $where = array();
-if( $account->level < config::MODERATOR_USER_LEVEL ) $where[] = "status <> 'trashed'";
-if( $account->level < config::MODERATOR_USER_LEVEL ) $where[] = "status <> 'hidden'";
-if( $account->level < config::MODERATOR_USER_LEVEL ) $where[] = "
-    (
+
+if( $account->level >= config::MODERATOR_USER_LEVEL )
+{
+    $where[0] = "true";
+    $where[1] = "true";
+    
+    if( ! empty($search_status) ) $where[0] = "status = '$search_status'";
+    
+    if( ! empty($search_author) ) $where[1] = "(
+        id_author = '{$search_author}' or
+        id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
+    )";
+}
+else
+{
+    if( $search_status == "hidden" ) $search_status = "";
+    
+    if( empty($search_status) )
+        $where[0] = "status not in ('trashed', 'hidden')";
+    else
+        $where[0] = "status = '$search_status'";
+    
+    $where[1] = "(
         id_author = '{$account->id_account}' or
         id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
-    )
-    ";
+    )";
+}
 
 $search_for = empty($search_for) ? "" : trim($search_for);
 if( ! empty($search_for) )
@@ -58,22 +80,23 @@ if( ! empty($search_for) )
                 $where_line .= "author_display_name like '%{$this_term}%' or ";
                 $where_line .= "author_email        like '%{$this_term}%' or ";
                 $where_line .= "creation_ip         like '{$this_term}%'  or ";
-                $where_line .= "content             like '%{$this_term}%'    ";
+                $where_line .= "content             like '%{$this_term}%' or ";
             }
         }
-        $where[] = $where_line;
+        $where_line = preg_replace('/ or $/', "", $where_line);
+        $where[]    = "({$where_line})";
     }
     else
     {
         $search_for = trim($search_for);
-        $where[] 
-            = "id_post             =     '{$search_for}'  or "
+        $where[] = "("
+            . "id_post             =     '{$search_for}'  or "
             . "id_comment          =     '{$search_for}'  or "
             . "id_author           =     '{$search_for}'  or "
             . "author_display_name like '%{$search_for}%' or "
             . "author_email        like '%{$search_for}%' or "
             . "creation_ip         like '{$search_for}%'  or "
-            . "content             like '%{$search_for}%'    "
+            . "content             like '%{$search_for}%'    )"
         ;
     }
 }
@@ -96,6 +119,7 @@ switch( $order )
 }
 
 $records = $repository->find($where, $limit, $offset, $sqlorder);
+$query   = $repository->get_last_query();
 $authors = $repository->get_all_authors($records);
 #endregion
 ?>
@@ -153,9 +177,11 @@ if( ! empty($_GET["edit"]) ):
     <form name="filter_form" id="filter_form" action="<?= $_SERVER["PHP_SELF"] ?>?wasuuup=<? echo mt_rand(1, 65535); ?>"
           method="get">
         
-        <input type="hidden" name="mode"   value="set_filter">
-        <input type="hidden" name="order"  value="<?= $order ?>">
-        <input type="hidden" name="offset" value="0">
+        <input type="hidden" name="mode"          value="set_filter">
+        <input type="hidden" name="order"         value="<?= $order ?>">
+        <input type="hidden" name="offset"        value="0">
+        <input type="hidden" name="search_author" value="<?= $search_author ?>">
+        <input type="hidden" name="search_status" value="<?= $search_status ?>">
         
         <span style="float: right;">
             <?= $browser->get_pagination_button("previous", "paginate", $pagination) ?>
@@ -181,6 +207,89 @@ if( ! empty($_GET["edit"]) ):
         <button type="submit"><?= $language->record_nav->buttons->apply ?></button>
         <button type="submit" onclick="reset_filter();"><?= $language->record_nav->buttons->reset ?></button>
     </form>
+    
+    <script type="text/javascript">
+        function set_filter_var(name, val, send)
+        {
+            if( typeof send == 'undefined' ) send = true;
+            
+            var $form = $('#filter_form');
+            $form.find('input[name="' + name + '"]').val(val);
+            if( send ) $form.submit();
+        }
+    </script>
+    
+    <div class="records_browser filter_links" style="margin-top: 10px;">
+        
+        <? if($account->level >= config::MODERATOR_USER_LEVEL): ?>
+            <span class="framed_content <? if($search_author == $account->id_account) echo "state_active" ?> pseudo_link"
+                  onclick="set_filter_var('search_status', '', false); set_filter_var('search_author', '<?= $account->id_account ?>')">
+                <?= $language->mine_sm ?>
+                (<?= number_format($repository->get_record_count(array("
+                    (
+                        id_author = '{$account->id_account}' or
+                        id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
+                    )"))) ?>)
+            </span>
+            <? $where[1] = "true"; ?>
+        <? endif; ?>
+        
+        <? $where_copy = $where; $where_copy[0] = "status = 'published'"; ?>
+        <span class="framed_content <? if($search_status == "published") echo "state_active" ?> pseudo_link"
+              onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'published')">
+            <?= $current_module->language->statuses->published ?>
+            (<?= number_format($repository->get_record_count($where_copy)) ?>)
+        </span>
+        
+        <? $where_copy = $where; $where_copy[0] = "status = 'reviewing'"; 
+           $reviewing = $repository->get_record_count($where_copy); ?>
+        <span class="framed_content <? if($search_status == "reviewing") echo "state_active" ?> <? if($reviewing) echo "state_ko"; ?> pseudo_link"
+              onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'reviewing')">
+            <?= $current_module->language->statuses->reviewing ?>
+            (<?= number_format($reviewing) ?>)
+        </span>
+        
+        <? if($account->level >= config::MODERATOR_USER_LEVEL): ?>
+            <? $where_copy = $where; $where_copy[0] = "status = 'rejected'"; 
+               $rejected = $repository->get_record_count($where_copy); ?>
+            <span class="framed_content <? if($search_status == "rejected") echo "state_active" ?> pseudo_link"
+                  onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'rejected')">
+                <?= $current_module->language->statuses->rejected ?>
+                (<?= number_format($rejected) ?>)
+            </span>
+        <? endif; ?>
+        
+        <? if($account->level >= config::MODERATOR_USER_LEVEL): ?>
+            <? $where_copy = $where; $where_copy[0] = "status = 'spam'"; 
+               $spam = $repository->get_record_count($where_copy); ?>
+            <span class="framed_content <? if($search_status == "spam") echo "state_active" ?> <? if($spam) echo "state_ko"; ?> pseudo_link"
+                  onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'spam')">
+                <?= $current_module->language->statuses->spam ?>
+                (<?= number_format($spam) ?>)
+            </span>
+        <? endif; ?>
+        
+        <? $where_copy = $where; $where_copy[0] = "status = 'trashed'"; ?>
+        <span class="framed_content <? if($search_status == "trashed") echo "state_active" ?> pseudo_link"
+              onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'trashed')">
+            <?= $current_module->language->statuses->trashed ?>
+            (<?= number_format($repository->get_record_count($where_copy)) ?>)
+        </span>
+        
+        <? if($account->level >= config::MODERATOR_USER_LEVEL): ?>
+            <? $where_copy = $where; $where_copy[0] = "status = 'hidden'"; ?>
+            <span class="framed_content <? if($search_status == "hidden") echo "state_active" ?> pseudo_link"
+                  onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'hidden')">
+                <?= $current_module->language->statuses->hidden ?>
+                (<?= number_format($repository->get_record_count($where_copy)) ?>)
+            </span>
+        <? endif; ?>
+        
+        <span class="framed_content pseudo_link" onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', '')">
+            <?= $language->all_m ?>
+        </span>
+        
+    </div>
 </div>
 
 <? if( $record_count == 0 ): ?>
@@ -285,10 +394,12 @@ if( ! empty($_GET["edit"]) ):
                     <hr>
                     <div class="actions">
                         
-                        <a href="<?= $row->get_permalink() ?>" target="_blank">
-                            <span class="fa fa-link"></span>
-                            <?= $language->permalink ?>
-                        </a>
+                        <? if( ! in_array($row->status, array("rejected", "spam", "trashed", "hidden")) ): ?> 
+                            <a href="<?= $row->get_permalink() ?>" target="_blank">
+                                <span class="fa fa-link"></span>
+                                <?= $language->permalink ?>
+                            </a>
+                        <? endif; ?>
                         
                         <?
                         $dialog_title = replace_escaped_vars(
@@ -308,40 +419,29 @@ if( ! empty($_GET["edit"]) ):
                             <?= $current_module->language->record_nav->actions->preview ?>
                         </span>
                         
-                        <? if($account->level >= config::MODERATOR_USER_LEVEL && in_array($row->status, array("reviewing", "spam")) ): ?>
-                            <span class="action pseudo_link greengo" onclick="publish_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
-                                <span class="fa fa-check"></span>
-                                <?= $current_module->language->record_nav->actions->approve ?>
-                            </span>
-                            <span class="action pseudo_link important" onclick="reject_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
-                                <span class="fa fa-times"></span>
-                                <?= $current_module->language->record_nav->actions->reject ?>
-                            </span>
-                        <? endif; ?>
-                        
-                        <? if($account->level >= config::MODERATOR_USER_LEVEL || $row->_can_be_replied ): ?>
-                            <?
-                            $dialog_title = replace_escaped_vars(
-                                $current_module->language->messages->replying,
-                                array('{$id}', '{$post_title}'),
-                                array($row->id_comment, $post->title)
-                            );
-                            ?>
-                            <span class="comment_reply">
-                                <span class="trigger" data-dialog-title="<?= htmlspecialchars($dialog_title) ?>">
-                                    <span class="action pseudo_link" onclick="prepare_comment_reply(this)">
-                                        <span class="fa fa-reply"></span>
-                                        <?= $current_module->language->record_nav->actions->reply ?>
-                                    </span>
-                                    <span class="action pseudo_link" onclick="prepare_comment_reply(this, true)">
-                                        <span class="fa fa-quote-right"></span>
-                                        <?= $current_module->language->record_nav->actions->quote ?>
+                        <? if( ! in_array($row->status, array("rejected", "reviewing", "spam", "trashed")) ): ?>
+                            <? if($account->level >= config::MODERATOR_USER_LEVEL || $row->_can_be_replied ):
+                                $dialog_title = replace_escaped_vars(
+                                    $current_module->language->messages->replying,
+                                    array('{$id}', '{$post_title}'),
+                                    array($row->id_comment, $post->title)
+                                ); ?>
+                                <span class="comment_reply">
+                                    <span class="trigger" data-dialog-title="<?= htmlspecialchars($dialog_title) ?>">
+                                        <span class="action pseudo_link" onclick="prepare_comment_reply(this)">
+                                            <span class="fa fa-reply"></span>
+                                            <?= $current_module->language->record_nav->actions->reply ?>
+                                        </span>
+                                        <span class="action pseudo_link" onclick="prepare_comment_reply(this, true)">
+                                            <span class="fa fa-quote-right"></span>
+                                            <?= $current_module->language->record_nav->actions->quote ?>
+                                        </span>
                                     </span>
                                 </span>
-                            </span>
+                            <? endif; ?>
                         <? endif; ?>
                         
-                        <? if( is_comment_editable($row) ):
+                        <? if( is_comment_editable($row) && ! in_array($row->status, array("rejected", "spam", "trashed")) ):
                             $dialog_title = replace_escaped_vars(
                                 $current_module->language->form->edit,
                                 array('{$id}', '{$post_title}'),
@@ -353,7 +453,25 @@ if( ! empty($_GET["edit"]) ):
                             </span>
                         <? endif; ?>
                         
-                        <? if($row->id_author != $account->id_account && $row->status != "spam"): ?>
+                        <? if( $row->id_author != $account->id_account ): ?>
+                            <? if( $account->level >= config::MODERATOR_USER_LEVEL
+                                   && in_array($row->status, array("reviewing", "spam")) ): ?>
+                                <span class="action pseudo_link greengo" onclick="publish_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                                    <span class="fa fa-check"></span>
+                                    <?= $current_module->language->record_nav->actions->approve ?>
+                                </span>
+                            <? endif; ?>
+                            
+                            <? if( $account->level >= config::MODERATOR_USER_LEVEL
+                                   && in_array($row->status, array("published", "reviewing", "spam")) ): ?>
+                                <span class="action pseudo_link important" onclick="reject_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                                    <span class="fa fa-times"></span>
+                                    <?= $current_module->language->record_nav->actions->reject ?>
+                                </span>
+                            <? endif; ?>
+                        <? endif; ?>
+                        
+                        <? if($row->id_author != $account->id_account && ! in_array($row->status, array("rejected", "spam", "trashed")) ): ?>
                             <span class="action pseudo_link critical" onclick="spam_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
                                 <span class="fa fa-warning"></span>
                                 <?= $current_module->language->record_nav->actions->spam ?>

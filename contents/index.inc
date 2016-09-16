@@ -26,6 +26,8 @@ use hng2_base\config;
         $form.find('select[name="limit"] option[value="20"]').prop('selected', true);
         $form.find('input[name="offset"]').val('0');
         $form.find('input[name="order"]').val('2');
+        $form.find('input[name="search_author"]').val('');
+        $form.find('input[name="search_status"]').val('');
     }
     
     //noinspection JSUnusedGlobalSymbols
