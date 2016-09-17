@@ -4,7 +4,7 @@
  * Called via ajax to avoid huge DOM trees for post replies
  *
  * @package    BardCanvas
- * @subpackage categories
+ * @subpackage comments
  * @author     Alejandro Caballero - lava.caballero@gmail.com
  * 
  * @var template $template

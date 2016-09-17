@@ -1,9 +1,9 @@
 <?php
 /**
- * Comments adder (for users)
+ * Comments toolbox
  *
  * @package    BardCanvas
- * @subpackage categories
+ * @subpackage comments
  * @author     Alejandro Caballero - lava.caballero@gmail.com
  *
  * @var account           $account

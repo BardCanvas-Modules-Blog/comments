@@ -3,7 +3,7 @@
  * Comments header buttons
  *
  * @package    BardCanvas
- * @subpackage commets
+ * @subpackage comments
  * @author     Alejandro Caballero - lava.caballero@gmail.com
  * 
  * @var config   $config

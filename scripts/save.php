@@ -3,7 +3,7 @@
  * Comments saver (for users or mods)
  *
  * @package    BardCanvas
- * @subpackage categories
+ * @subpackage comments
  * @author     Alejandro Caballero - lava.caballero@gmail.com
  * 
  * @var account           $account
