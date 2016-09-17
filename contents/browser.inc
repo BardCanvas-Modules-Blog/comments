@@ -36,33 +36,6 @@ foreach($built_vars as $key => $val) $$key = $val;
 # 1: author
 $where = array();
 
-if( $account->level >= config::MODERATOR_USER_LEVEL )
-{
-    $where[0] = "true";
-    $where[1] = "true";
-    
-    if( ! empty($search_status) ) $where[0] = "status = '$search_status'";
-    
-    if( ! empty($_GET["author"]) ) $where[1] = "(
-        id_author = '{$_GET["author"]}' or
-        id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
-    )";
-}
-else
-{
-    if( $search_status == "hidden" ) $search_status = "";
-    
-    if( empty($search_status) )
-        $where[0] = "status not in ('trashed', 'hidden')";
-    else
-        $where[0] = "status = '$search_status'";
-    
-    $where[1] = "(
-        id_author = '{$account->id_account}' or
-        id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
-    )";
-}
-
 $search_for = empty($search_for) ? "" : trim($search_for);
 if( ! empty($search_for) )
 {
@@ -100,6 +73,28 @@ if( ! empty($search_for) )
             . "content             like '%{$search_for}%'    )"
         ;
     }
+}
+
+if( $account->level < config::MODERATOR_USER_LEVEL )
+{
+    if( $search_status == "hidden" ) $search_status = "";
+    
+    if( empty($search_status) ) $where[] = "status not in ('trashed', 'hidden')";
+    else                        $where[] = "status = '$search_status'";
+    
+    $where[] = "(
+        id_author = '{$account->id_account}' or
+        id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
+    )";
+}
+else
+{
+    if( ! empty($search_status) ) $where[] = "status = '$search_status'";
+    
+    if( ! empty($search_author) ) $where[] = "(
+        id_author = '{$search_author}' or
+        id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
+    )";
 }
 #endregion
 
@@ -173,15 +168,6 @@ if( ! empty($_GET["edit"]) ):
     
     <?= $current_module->language->index->title; ?>
     
-    <?
-    if( ! empty($_GET["author"]) )
-    {
-        $author = new account($_GET["author"]);
-        if( ! $author->_exists ) echo " ~ #{$_GET["author"]}";
-        else                     echo " ~ " . convert_emojis($author->display_name);
-    }
-    ?>
-    
 </h1>
 
 <div class="filtering clearfix">
@@ -207,8 +193,36 @@ if( ! empty($_GET["edit"]) ):
                value="<?= htmlspecialchars($search_for) ?>" size="46"
                placeholder="<?= $current_module->language->record_nav->search_placeholder ?>">
         
+        <? if( $account->level >= config::MODERATOR_USER_LEVEL ): ?>
+            <select name="search_author" onchange="$('#filter_form').submit();">
+                <option <? if( empty($search_author) ) echo "selected"; ?> value="">&lt;<?= $current_module->language->record_nav->filters->from_everyone ?>&gt;</option>
+                <option <? if( $search_author == $account->id_account ) echo "selected"; ?> value="<?= $account->id_account ?>"><?= $current_module->language->record_nav->filters->mine ?></option>
+                <? if( ! empty($search_author) && $search_author != $account->id_account ): $author = new account($search_author); ?>
+                    <option selected value="<?= $search_author ?>"><?= replace_escaped_vars(
+                            $current_module->language->record_nav->filters->from_user,
+                            '{$user}',
+                            $author->_exists ? $author->display_name : $search_author
+                        ) ?></option>
+                <? endif; ?>
+            </select>
+        <? endif; ?>
+        
+        <select name="search_status" onchange="$('#filter_form').submit();">
+            <option <? if($search_status == "")          echo "selected"; ?> value=""         >&lt;<?= $current_module->language->record_nav->filters->any_status ?>&gt;</option>
+            <option <? if($search_status == "published") echo "selected"; ?> value="published"><?= $current_module->language->status_labels->published ?></option>
+            <option <? if($search_status == "reviewing") echo "selected"; ?> value="reviewing"><?= $current_module->language->status_labels->reviewing ?></option>
+            <option <? if($search_status == "rejected")  echo "selected"; ?> value="rejected" ><?= $current_module->language->status_labels->rejected ?></option>
+            <option <? if($search_status == "spam")      echo "selected"; ?> value="spam"     ><?= $current_module->language->status_labels->spam ?></option>
+            <? if( $account->level >= config::MODERATOR_USER_LEVEL ): ?>
+                <option <? if($search_status == "hidden") echo "selected"; ?> value="hidden">
+                    <?= $current_module->language->status_labels->hidden ?>
+                </option>
+            <? endif; ?>
+            <option <? if($search_status == "trashed")   echo "selected"; ?> value="trashed"  ><?= $current_module->language->status_labels->trashed ?></option>
+        </select>
+        
         <?= $language->record_nav->show ?>
-        <select name="limit">
+        <select name="limit" onchange="$('#filter_form').submit();">
             <? foreach(array(5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500) as $recs): ?>
                 <option <? if($limit == $recs) echo "selected" ?> value="<?= $recs ?>"><?= $recs ?></option>
             <? endforeach; ?>
@@ -218,89 +232,6 @@ if( ! empty($_GET["edit"]) ):
         <button type="submit"><?= $language->record_nav->buttons->apply ?></button>
         <button type="submit" onclick="reset_filter();"><?= $language->record_nav->buttons->reset ?></button>
     </form>
-    
-    <script type="text/javascript">
-        function set_filter_var(name, val, send)
-        {
-            if( typeof send == 'undefined' ) send = true;
-            
-            var $form = $('#filter_form');
-            $form.find('input[name="' + name + '"]').val(val);
-            if( send ) $form.submit();
-        }
-    </script>
-    
-    <div class="records_browser filter_links" style="margin-top: 10px;">
-        
-        <? if($account->level >= config::MODERATOR_USER_LEVEL): ?>
-            <span class="framed_content <? if($_GET["author"] == $account->id_account) echo "state_active" ?> pseudo_link"
-                  onclick="set_filter_var('search_status', '', false); set_filter_var('author', '<?= $account->id_account ?>')">
-                <?= $language->mine_sm ?>
-                (<?= number_format($repository->get_record_count(array("
-                    (
-                        id_author = '{$account->id_account}' or
-                        id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
-                    )"))) ?>)
-            </span>
-            <? $where[1] = "true"; ?>
-        <? endif; ?>
-        
-        <? $where_copy = $where; $where_copy[0] = "status = 'published'"; ?>
-        <span class="framed_content <? if($search_status == "published") echo "state_active" ?> pseudo_link"
-              onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'published')">
-            <?= $current_module->language->statuses->published ?>
-            (<?= number_format($repository->get_record_count($where_copy)) ?>)
-        </span>
-        
-        <? $where_copy = $where; $where_copy[0] = "status = 'reviewing'"; 
-           $reviewing = $repository->get_record_count($where_copy); ?>
-        <span class="framed_content <? if($search_status == "reviewing") echo "state_active" ?> <? if($reviewing) echo "state_ko"; ?> pseudo_link"
-              onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'reviewing')">
-            <?= $current_module->language->statuses->reviewing ?>
-            (<?= number_format($reviewing) ?>)
-        </span>
-        
-        <? if($account->level >= config::MODERATOR_USER_LEVEL): ?>
-            <? $where_copy = $where; $where_copy[0] = "status = 'rejected'"; 
-               $rejected = $repository->get_record_count($where_copy); ?>
-            <span class="framed_content <? if($search_status == "rejected") echo "state_active" ?> pseudo_link"
-                  onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'rejected')">
-                <?= $current_module->language->statuses->rejected ?>
-                (<?= number_format($rejected) ?>)
-            </span>
-        <? endif; ?>
-        
-        <? if($account->level >= config::MODERATOR_USER_LEVEL): ?>
-            <? $where_copy = $where; $where_copy[0] = "status = 'spam'"; 
-               $spam = $repository->get_record_count($where_copy); ?>
-            <span class="framed_content <? if($search_status == "spam") echo "state_active" ?> <? if($spam) echo "state_ko"; ?> pseudo_link"
-                  onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'spam')">
-                <?= $current_module->language->statuses->spam ?>
-                (<?= number_format($spam) ?>)
-            </span>
-        <? endif; ?>
-        
-        <? $where_copy = $where; $where_copy[0] = "status = 'trashed'"; ?>
-        <span class="framed_content <? if($search_status == "trashed") echo "state_active" ?> pseudo_link"
-              onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'trashed')">
-            <?= $current_module->language->statuses->trashed ?>
-            (<?= number_format($repository->get_record_count($where_copy)) ?>)
-        </span>
-        
-        <? if($account->level >= config::MODERATOR_USER_LEVEL): ?>
-            <? $where_copy = $where; $where_copy[0] = "status = 'hidden'"; ?>
-            <span class="framed_content <? if($search_status == "hidden") echo "state_active" ?> pseudo_link"
-                  onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'hidden')">
-                <?= $current_module->language->statuses->hidden ?>
-                (<?= number_format($repository->get_record_count($where_copy)) ?>)
-            </span>
-        <? endif; ?>
-        
-        <span class="framed_content pseudo_link" onclick="set_filter_var('author', '', false); set_filter_var('search_status', '')">
-            <?= $language->all_m ?>
-        </span>
-        
-    </div>
 </div>
 
 <? if( $record_count == 0 ): ?>
@@ -386,7 +317,7 @@ if( ! empty($_GET["edit"]) ):
                     <? endif; ?>
                     
                 </td>
-                <td data-for="status"><?= $current_module->language->statuses->{$row->status} ?></td>
+                <td data-for="status"><?= $current_module->language->status_labels->{$row->status} ?></td>
                 <td data-for="details">
                     <? if( $row->_replies_count > 0): ?>
                         <span class="framed_content inlined state_highlight pull-right"><?= replace_escaped_vars(

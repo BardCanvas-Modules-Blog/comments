@@ -44,14 +44,14 @@
         <title>Comentarios</title>
     </index>
     
-    <statuses>
+    <status_labels>
         <published>Publicado</published>
         <reviewing>En revisión</reviewing>
         <rejected>Rechazado</rejected>
         <spam>Spam</spam>
         <hidden>Oculto</hidden>
         <trashed>En papelera</trashed>
-    </statuses>
+    </status_labels>
     
     <record_nav>
         <menu_caption>Comentarios</menu_caption>
@@ -90,6 +90,12 @@
             <trash>Papelera</trash>
             <spam>Spam</spam>
         </actions>
+        <filters>
+            <from_everyone>Por cualquiera</from_everyone>
+            <mine>Míos</mine>
+            <from_user>Por {$user}</from_user>
+            <any_status>Todo</any_status>
+        </filters>
     </record_nav>
     
     <messages>

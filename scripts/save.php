@@ -100,15 +100,15 @@ if( $comment->status == $old_comment->status )
     send_notification($account->id_account, "success", replace_escaped_vars(
         $current_module->language->notifications->saved_ok,
         '{$status}',
-        $current_module->language->statuses->{$comment->status}
+        $current_module->language->status_labels->{$comment->status}
     ));
 else
     send_notification($account->id_account, "success", replace_escaped_vars(
         $current_module->language->notifications->saved_with_status_change,
         array('{$old_status}', '{$new_status}'),
         array(
-            $current_module->language->statuses->{$old_comment->status},
-            $current_module->language->statuses->{$comment->status}
+            $current_module->language->status_labels->{$old_comment->status},
+            $current_module->language->status_labels->{$comment->status}
         )
     ));
 

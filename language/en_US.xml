@@ -44,14 +44,14 @@
         <title>Comments</title>
     </index>
     
-    <statuses>
+    <status_labels>
         <published>Published</published>
         <reviewing>On review</reviewing>
         <rejected>Rejected</rejected>
         <spam>Flagged as Spam</spam>
         <hidden>Hidden</hidden>
         <trashed>Trashed</trashed>
-    </statuses>
+    </status_labels>
     
     <record_nav>
         <menu_caption>Comments</menu_caption>
@@ -90,6 +90,12 @@
             <trash>Trash</trash>
             <spam>Spam</spam>
         </actions>
+        <filters>
+            <from_everyone>By everyone</from_everyone>
+            <mine>Mine</mine>
+            <from_user>By {$user}</from_user>
+            <any_status>All</any_status>
+        </filters>
     </record_nav>
     
     <messages>
