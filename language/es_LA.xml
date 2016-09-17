@@ -163,6 +163,8 @@
             <display_name_exists>Disculpa, pero hay un usuario registrado con un alias similar al que has escrito. Por favor abre sesión o especifica un nombre distinto.</display_name_exists>
             <email_exists>Disculpa, pero hay un usuario registrado con el mismo correo que has especificado. Por favor abre sesión o especifica una dirección de correo distinta.</email_exists>
         </impersonation>
+        <comments_hidden>{$count} comentarios de {$author} han sido ocultados.</comments_hidden>
+        <comments_unhidden>{$count} comentarios de {$author} han sido restaurados.</comments_unhidden>
     </messages>
     
     <notifications>

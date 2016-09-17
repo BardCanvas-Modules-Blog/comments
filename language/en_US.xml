@@ -158,6 +158,8 @@
             <display_name_exists>Sorry, but there's a registered user with a display name like yours. Please login or specify a different name.</display_name_exists>
             <email_exists>Sorry, but there's a registered user with the same email you're specifying. Please login or specify a different email.</email_exists>
         </impersonation>
+        <comments_hidden>{$count} comments from {$author} have been hidden.</comments_hidden>
+        <comments_unhidden>{$count} comments from {$author} have been restored.</comments_unhidden>
     </messages>
     
     <notifications>
