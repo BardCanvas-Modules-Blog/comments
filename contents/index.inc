@@ -26,7 +26,7 @@ use hng2_base\config;
         $form.find('select[name="limit"] option[value="20"]').prop('selected', true);
         $form.find('input[name="offset"]').val('0');
         $form.find('input[name="order"]').val('2');
-        $form.find('input[name="search_author"]').val('');
+        $form.find('input[name="author"]').val('');
         $form.find('input[name="search_status"]').val('');
     }
     
@@ -48,6 +48,7 @@ use hng2_base\config;
     if( ! empty($_GET["reject"]) )       $url .= "&reject={$_GET["reject"]}";
     if( ! empty($_GET["delete"]) )       $url .= "&delete={$_GET["delete"]}";
     if( ! empty($_GET["edit"]) )         $url .= "&edit={$_GET["edit"]}";
+    if( ! empty($_GET["author"]) )       $url .= "&author={$_GET["author"]}";
     ?>
     <div id="comments_browser" class="ajax_record_browser" data-src="<?= $url ?>">
         <div class="framed_content state_highlight" style="padding: 100px 0; text-align: center;">

@@ -17,5 +17,10 @@ use hng2_base\module;
 global $row;
 ?>
 <td nowrap align="right">
-    <?= empty($row->_comments_count) ? "&mdash;" : number_format($row->_comments_count) ?>
+    <?
+    if( empty($row->_comments_count) )
+        echo "&mdash;";
+    else
+        echo "<a href='/comments/?author={$row->id_account}'>" . number_format($row->_comments_count) . "</a>";
+    ?>
 </td>

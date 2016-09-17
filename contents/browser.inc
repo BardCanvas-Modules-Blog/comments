@@ -9,6 +9,7 @@
  * @var config $config
  */
 
+use hng2_base\account;
 use hng2_base\config;
 use hng2_media\media_repository;
 use hng2_modules\comments\comment_record;
@@ -24,10 +25,10 @@ $media_repository = new media_repository();
  * @var int    $limit
  * @var int    $order
  * @var string $search_for
- * @var string $search_author
  * @var string $search_status
  */
 #region Nav filters
+
 $built_vars = $browser->build_vars(20, 2);
 foreach($built_vars as $key => $val) $$key = $val;
 
@@ -42,8 +43,8 @@ if( $account->level >= config::MODERATOR_USER_LEVEL )
     
     if( ! empty($search_status) ) $where[0] = "status = '$search_status'";
     
-    if( ! empty($search_author) ) $where[1] = "(
-        id_author = '{$search_author}' or
+    if( ! empty($_GET["author"]) ) $where[1] = "(
+        id_author = '{$_GET["author"]}' or
         id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
     )";
 }
@@ -171,6 +172,16 @@ if( ! empty($_GET["edit"]) ):
     </button>
     
     <?= $current_module->language->index->title; ?>
+    
+    <?
+    if( ! empty($_GET["author"]) )
+    {
+        $author = new account($_GET["author"]);
+        if( ! $author->_exists ) echo " ~ #{$_GET["author"]}";
+        else                     echo " ~ " . convert_emojis($author->display_name);
+    }
+    ?>
+    
 </h1>
 
 <div class="filtering clearfix">
@@ -180,7 +191,7 @@ if( ! empty($_GET["edit"]) ):
         <input type="hidden" name="mode"          value="set_filter">
         <input type="hidden" name="order"         value="<?= $order ?>">
         <input type="hidden" name="offset"        value="0">
-        <input type="hidden" name="search_author" value="<?= $search_author ?>">
+        <input type="hidden" name="author"        value="<?= $_GET["author"] ?>">
         <input type="hidden" name="search_status" value="<?= $search_status ?>">
         
         <span style="float: right;">
@@ -222,8 +233,8 @@ if( ! empty($_GET["edit"]) ):
     <div class="records_browser filter_links" style="margin-top: 10px;">
         
         <? if($account->level >= config::MODERATOR_USER_LEVEL): ?>
-            <span class="framed_content <? if($search_author == $account->id_account) echo "state_active" ?> pseudo_link"
-                  onclick="set_filter_var('search_status', '', false); set_filter_var('search_author', '<?= $account->id_account ?>')">
+            <span class="framed_content <? if($_GET["author"] == $account->id_account) echo "state_active" ?> pseudo_link"
+                  onclick="set_filter_var('search_status', '', false); set_filter_var('author', '<?= $account->id_account ?>')">
                 <?= $language->mine_sm ?>
                 (<?= number_format($repository->get_record_count(array("
                     (
@@ -236,7 +247,7 @@ if( ! empty($_GET["edit"]) ):
         
         <? $where_copy = $where; $where_copy[0] = "status = 'published'"; ?>
         <span class="framed_content <? if($search_status == "published") echo "state_active" ?> pseudo_link"
-              onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'published')">
+              onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'published')">
             <?= $current_module->language->statuses->published ?>
             (<?= number_format($repository->get_record_count($where_copy)) ?>)
         </span>
@@ -244,7 +255,7 @@ if( ! empty($_GET["edit"]) ):
         <? $where_copy = $where; $where_copy[0] = "status = 'reviewing'"; 
            $reviewing = $repository->get_record_count($where_copy); ?>
         <span class="framed_content <? if($search_status == "reviewing") echo "state_active" ?> <? if($reviewing) echo "state_ko"; ?> pseudo_link"
-              onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'reviewing')">
+              onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'reviewing')">
             <?= $current_module->language->statuses->reviewing ?>
             (<?= number_format($reviewing) ?>)
         </span>
@@ -253,7 +264,7 @@ if( ! empty($_GET["edit"]) ):
             <? $where_copy = $where; $where_copy[0] = "status = 'rejected'"; 
                $rejected = $repository->get_record_count($where_copy); ?>
             <span class="framed_content <? if($search_status == "rejected") echo "state_active" ?> pseudo_link"
-                  onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'rejected')">
+                  onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'rejected')">
                 <?= $current_module->language->statuses->rejected ?>
                 (<?= number_format($rejected) ?>)
             </span>
@@ -263,7 +274,7 @@ if( ! empty($_GET["edit"]) ):
             <? $where_copy = $where; $where_copy[0] = "status = 'spam'"; 
                $spam = $repository->get_record_count($where_copy); ?>
             <span class="framed_content <? if($search_status == "spam") echo "state_active" ?> <? if($spam) echo "state_ko"; ?> pseudo_link"
-                  onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'spam')">
+                  onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'spam')">
                 <?= $current_module->language->statuses->spam ?>
                 (<?= number_format($spam) ?>)
             </span>
@@ -271,7 +282,7 @@ if( ! empty($_GET["edit"]) ):
         
         <? $where_copy = $where; $where_copy[0] = "status = 'trashed'"; ?>
         <span class="framed_content <? if($search_status == "trashed") echo "state_active" ?> pseudo_link"
-              onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'trashed')">
+              onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'trashed')">
             <?= $current_module->language->statuses->trashed ?>
             (<?= number_format($repository->get_record_count($where_copy)) ?>)
         </span>
@@ -279,13 +290,13 @@ if( ! empty($_GET["edit"]) ):
         <? if($account->level >= config::MODERATOR_USER_LEVEL): ?>
             <? $where_copy = $where; $where_copy[0] = "status = 'hidden'"; ?>
             <span class="framed_content <? if($search_status == "hidden") echo "state_active" ?> pseudo_link"
-                  onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', 'hidden')">
+                  onclick="set_filter_var('author', '', false); set_filter_var('search_status', 'hidden')">
                 <?= $current_module->language->statuses->hidden ?>
                 (<?= number_format($repository->get_record_count($where_copy)) ?>)
             </span>
         <? endif; ?>
         
-        <span class="framed_content pseudo_link" onclick="set_filter_var('search_author', '', false); set_filter_var('search_status', '')">
+        <span class="framed_content pseudo_link" onclick="set_filter_var('author', '', false); set_filter_var('search_status', '')">
             <?= $language->all_m ?>
         </span>
         
