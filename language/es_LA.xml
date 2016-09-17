@@ -99,6 +99,7 @@
     </record_nav>
     
     <messages>
+        <pending>Hay {$amount} comentarios marcados para revisión. Da click aquí para revisarlos.</pending>
         <empty_post_id>No has especificado el identificador de la entrada</empty_post_id>
         <post_not_found>La entrada que intentas comentar no existe</post_not_found>
         <post_unavailable>La entrada que intentas comentar no está disponible</post_unavailable>

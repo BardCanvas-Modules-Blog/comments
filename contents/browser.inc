@@ -242,6 +242,23 @@ if( ! empty($_GET["edit"]) ):
     <? return; ?>
 <? endif;  ?>
 
+<?
+if( $account->level >= config::MODERATOR_USER_LEVEL && $search_status != "reviewing" ):
+    $pending = $repository->get_record_count(array("status" => "reviewing"));
+    if( $pending > 0 ):
+        $message = replace_escaped_vars($current_module->language->messages->pending, '{$amount}', $pending);
+        ?>
+        <div class="framed_content state_ko">
+            <span class="pseudo_link" onclick="var $form = $('#filter_form'); reset_filter(); $form.find('select[name=search_status] option[value=reviewing]').prop('selected', true); $form.submit();">
+                <span class="fa fa-warning"></span>
+                <?= $message ?>
+            </span>
+        </div>
+        <?
+    endif;
+endif;
+?>
+
 <div class="table_wrapper">
     <table id="posts_browser_table" class="nav_table evened comment_actions_container">
         
@@ -395,25 +412,25 @@ if( ! empty($_GET["edit"]) ):
                             </span>
                         <? endif; ?>
                         
-                        <? if( $row->id_author != $account->id_account ): ?>
-                            <? if( $account->level >= config::MODERATOR_USER_LEVEL
-                                   && in_array($row->status, array("reviewing", "spam")) ): ?>
-                                <span class="action pseudo_link greengo" onclick="publish_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
-                                    <span class="fa fa-check"></span>
-                                    <?= $current_module->language->record_nav->actions->approve ?>
-                                </span>
-                            <? endif; ?>
-                            
-                            <? if( $account->level >= config::MODERATOR_USER_LEVEL
-                                   && in_array($row->status, array("published", "reviewing", "spam")) ): ?>
-                                <span class="action pseudo_link important" onclick="reject_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
-                                    <span class="fa fa-times"></span>
-                                    <?= $current_module->language->record_nav->actions->reject ?>
-                                </span>
-                            <? endif; ?>
+                        <? if( $account->level >= config::MODERATOR_USER_LEVEL
+                               && in_array($row->status, array("reviewing", "spam")) ): ?>
+                            <span class="action pseudo_link greengo" onclick="publish_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                                <span class="fa fa-check"></span>
+                                <?= $current_module->language->record_nav->actions->approve ?>
+                            </span>
                         <? endif; ?>
                         
-                        <? if($row->id_author != $account->id_account && ! in_array($row->status, array("rejected", "spam", "trashed")) ): ?>
+                        <? if( $account->level >= config::MODERATOR_USER_LEVEL
+                               && in_array($row->status, array("published", "reviewing", "spam")) ): ?>
+                            <span class="action pseudo_link important" onclick="reject_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                                <span class="fa fa-times"></span>
+                                <?= $current_module->language->record_nav->actions->reject ?>
+                            </span>
+                        <? endif; ?>
+                        
+                        <? if( $account->level < config::MODERATOR_USER_LEVEL
+                               && $row->id_author != $account->id_account 
+                               && ! in_array($row->status, array("rejected", "spam", "trashed")) ): ?>
                             <span class="action pseudo_link critical" onclick="spam_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
                                 <span class="fa fa-warning"></span>
                                 <?= $current_module->language->record_nav->actions->spam ?>

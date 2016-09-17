@@ -99,6 +99,7 @@
     </record_nav>
     
     <messages>
+        <pending>There are {$amount} comments flagged for review. Click here to see them.</pending>
         <empty_post_id>No post id has been specified</empty_post_id>
         <post_not_found>The post you're trying to comment doesn't exist</post_not_found>
         <post_unavailable>The post you're trying to comment isn't available</post_unavailable>
