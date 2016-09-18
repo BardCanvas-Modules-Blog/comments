@@ -2,13 +2,13 @@
 function edit_comment(id_comment, dialog_title)
 {
     var url       = $_FULL_ROOT_PATH + '/comments/scripts/render_prefilled_form.php';
-    var form_id   = 'comment_edit_' + parseInt(Math.random() * 1000000000000000);
+    var form_id   = 'comment_edit_' + wasuuup();
     var $target = $('#comments_edit_form');
     $target.dialog('option', 'title', dialog_title);
     
     var params = {
         edit_comment: id_comment,
-        wasuuup:      parseInt(Math.random() * 1000000000000000)
+        wasuuup:      wasuuup()
     };
     
     $target.load(url, params, function()
@@ -83,8 +83,8 @@ function process_comment_edit_submission(response, status, xhr, $form)
         href  = parts[0];
     }
     
-    if( href.indexOf('?') < 0 ) href = href + '?wasuuup=' + parseInt(Math.random() * 1000000000000000) + '@';
-    else                        href = href + '&wasuuup=' + parseInt(Math.random() * 1000000000000000) + '@';
+    if( href.indexOf('?') < 0 ) href = href + '?wasuuup=' + wasuuup() + '@';
+    else                        href = href + '&wasuuup=' + wasuuup() + '@';
     
     href = href + '#comment_' + comment_id;
     
@@ -109,7 +109,7 @@ function change_comment_status(id_comment, new_state, callback)
             + '?action=change_status'
             + '&id_comment=' + id_comment
             + '&new_status=' + new_state
-            + '&wasuuup='    + parseInt(Math.random() * 1000000000000000)
+            + '&wasuuup='    + wasuuup()
         ;
     
     $trigger.block(blockUI_medium_params);

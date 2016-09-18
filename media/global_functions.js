@@ -12,7 +12,7 @@ function prepare_comment_reply(trigger, quote_parent)
     var parent_id = $trigger.closest('.comment_entry').attr('data-id-comment');
     var url       = $_FULL_ROOT_PATH + '/comments/scripts/render_prefilled_form.php';
     var id_post   = $trigger.closest('.comment_entry').attr('data-post-id');
-    var form_id   = 'comment_reply_' + parseInt(Math.random() * 1000000000000000);
+    var form_id   = 'comment_reply_' + wasuuup();
     
     var $target;
     if( comment_reply_management_type == 'inline' )
@@ -29,7 +29,7 @@ function prepare_comment_reply(trigger, quote_parent)
     var params = {
         parent_id: parent_id,
         quote:     quote_parent ? 'true' : 'false',
-        wasuuup:   parseInt(Math.random() * 1000000000000000)
+        wasuuup:   wasuuup()
     };
     
     $trigger.block(blockUI_smallest_params);
@@ -146,8 +146,8 @@ function process_comment_submission(response, status, xhr, $form)
         href  = parts[0];
     }
     
-    if( href.indexOf('?') < 0 ) href = href + '?wasuuup=' + parseInt(Math.random() * 1000000000000000) + '@';
-    else                        href = href + '&wasuuup=' + parseInt(Math.random() * 1000000000000000) + '@';
+    if( href.indexOf('?') < 0 ) href = href + '?wasuuup=' + wasuuup() + '@';
+    else                        href = href + '&wasuuup=' + wasuuup() + '@';
     
     href = href + '#comment_' + comment_id;
     
