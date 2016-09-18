@@ -54,7 +54,8 @@ class comment_record extends abstract_record
     
     public function set_new_id()
     {
-        $this->id_comment = uniqid();
+        list($sec, $usec) = explode(".", microtime(true));
+        $this->id_comment = "1040" . $sec . sprintf("%05.0f", $usec) . mt_rand(1000, 9999);;
     }
     
     public function set_from_object($object_or_array)
