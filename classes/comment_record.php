@@ -54,7 +54,7 @@ class comment_record extends abstract_record
     
     public function set_new_id()
     {
-        $this->id_comment = make_unique_id("41");
+        $this->id_comment = make_unique_id("C");
     }
     
     public function set_from_object($object_or_array)
