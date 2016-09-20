@@ -78,5 +78,5 @@ else
 
 $this_module  = $current_module;
 $template->set("ajax_calling", true);
-include ABSPATH . "/comments/extenders/post_form.inc";
+include ROOTPATH . "/comments/extenders/post_form.inc";
 die();

@@ -24,7 +24,7 @@ use hng2_modules\posts\post_record;
 
 global $post, $template, $language, $settings, $account;
 
-if( ! function_exists("recaptcha_get_html") ) include_once ABSPATH . "/lib/recaptcha-php-1.11/recaptchalib.php";
+if( ! function_exists("recaptcha_get_html") ) include_once ROOTPATH . "/lib/recaptcha-php-1.11/recaptchalib.php";
 
 $action = "add.php";
 
