@@ -19,6 +19,14 @@ use hng2_base\module;
 use hng2_modules\posts\post_record;
 
 global $post, $template, $language, $settings, $account;
+
+$allow_new_comments = true;
+$days = $settings->get("modules:comments.disable_new_after");
+if( ! empty($days) && ! empty($post->publishing_date) && $post->publishing_date != "0000-00-00 00:00:00" )
+{
+    $boundary = date("Y-m-d H:i:s", strtotime("$post->publishing_date + $days days"));
+    if( date("Y-m-d H:i:s") > $boundary ) $allow_new_comments = false;
+}
 ?>
 
 <? include "{$template->abspath}/segments/comments_for_single_post.inc"; ?>
@@ -35,7 +43,7 @@ global $post, $template, $language, $settings, $account;
     <? return; ?>
 <? endif; ?>
 
-<? if( $post->allow_comments == 0 ) return; ?>
+<? if( $post->allow_comments == 0 || ! $allow_new_comments ) return; ?>
 
 <div id="post_new_comment_form" class="content_frame">
     <h1><?= $this_module->language->leave_a_comment ?></h1>
