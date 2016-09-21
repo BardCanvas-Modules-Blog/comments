@@ -65,5 +65,5 @@ use hng2_base\config;
 <div id="reply_target" style="display: none;"></div>
 <div id="post_comment_target" style="display: none;"></div>
 
-<div id="comments_edit_form" style="display: none;" data-title-template="<?= $current_module->language->form->edit ?>"></div>
+<div id="comments_edit_form" style="display: none;" data-title-template="<?= htmlspecialchars($current_module->language->form->edit) ?>"></div>
 <div id="comments_edit_target" style="display: none;"></div>
