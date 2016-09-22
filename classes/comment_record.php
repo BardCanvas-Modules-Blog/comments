@@ -9,12 +9,12 @@ use hng2_repository\abstract_record;
 
 class comment_record extends abstract_record
 {
-    public $id_post            ; # varchar(32) not null default '',
-    public $id_comment         ; # varchar(32) not null default '',
-    public $parent_comment     ; # varchar(32) not null default '',
+    public $id_post            ; # bigint unsigned not null default 0,
+    public $id_comment         ; # bigint unsigned not null default 0,
+    public $parent_comment     ; # bigint unsigned not null default 0,
     public $indent_level       ; # tinyint unsigned not null default 0,
     
-    public $id_author          ; # varchar(32) not null default '',
+    public $id_author          ; # bigint unsigned not null default 0,
     public $author_display_name; # varchar(100) not null default '',
     public $author_email       ; # varchar(100) not null default '',
     public $author_url         ; # varchar(100) not null default '',
@@ -54,7 +54,7 @@ class comment_record extends abstract_record
     
     public function set_new_id()
     {
-        $this->id_comment = make_unique_id("C");
+        $this->id_comment = make_unique_id("60");
     }
     
     public function set_from_object($object_or_array)

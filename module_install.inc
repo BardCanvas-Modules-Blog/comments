@@ -20,12 +20,12 @@ $tables = array(
     "comments" => "
         create table if not exists comments (
             
-            id_post             varchar(32) not null default '',
-            id_comment          varchar(32) not null default '',
-            parent_comment      varchar(32) not null default '',
+            id_post             bigint unsigned not null default 0,
+            id_comment          bigint unsigned not null default 0,
+            parent_comment      bigint unsigned not null default 0,
             indent_level        tinyint unsigned not null default 0,
             
-            id_author           varchar(32) not null default '',
+            id_author           bigint unsigned not null default 0,
             author_display_name varchar(100) not null default '',
             author_email        varchar(100) not null default '',
             author_url          varchar(100) not null default '',
@@ -52,8 +52,8 @@ $tables = array(
     "comment_media" => "
         create table if not exists comment_media (
             
-            id_comment     varchar(32) not null default '',
-            id_media       varchar(32) not null default '',
+            id_comment     bigint unsigned not null default 0,
+            id_media       bigint unsigned not null default 0,
             date_attached  datetime,
             order_attached double unsigned not null default 0,
             
@@ -64,7 +64,7 @@ $tables = array(
     "comment_tags" => "
         create table if not exists comment_tags (
             
-            id_comment     varchar(32) not null default '',
+            id_comment     bigint unsigned not null default 0,
             tag            varchar(100) not null default '',
             date_attached  datetime,
             order_attached double unsigned not null default 0,
@@ -76,8 +76,8 @@ $tables = array(
     "comment_mentions" => "
         create table if not exists comment_mentions (
             
-            id_comment     varchar(32) not null default '',
-            id_account     varchar(32) not null default '',
+            id_comment     bigint unsigned not null default 0,
+            id_account     bigint unsigned not null default 0,
             date_attached  datetime,
             order_attached double unsigned not null default 0,
             

@@ -316,7 +316,7 @@ class comments_repository extends abstract_repository
      *
      * @return array
      */
-    private function build_tree(array $elements, $parent_id = "", $path = "")
+    private function build_tree(array $elements, $parent_id = "0", $path = "")
     {
         $branch = array();
         
