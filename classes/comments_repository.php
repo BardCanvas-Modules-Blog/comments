@@ -523,6 +523,8 @@ class comments_repository extends abstract_repository
      */
     public function get_all_authors(array $records)
     {
+        if( empty($records) ) return array();
+        
         $author_ids = array();
         foreach($records as $record)
             if( ! empty($record->id_author))
