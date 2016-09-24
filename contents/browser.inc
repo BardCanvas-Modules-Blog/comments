@@ -48,13 +48,19 @@ if( ! empty($search_for) )
             $this_term = trim($this_term);
             if( ! empty($this_term) )
             {
-                $where_line .= "id_post             =     '{$this_term}'  or ";
-                $where_line .= "id_comment          =     '{$this_term}'  or ";
-                $where_line .= "id_author           =     '{$this_term}'  or ";
-                $where_line .= "author_display_name like '%{$this_term}%' or ";
-                $where_line .= "author_email        like '%{$this_term}%' or ";
-                $where_line .= "creation_ip         like '{$this_term}%'  or ";
-                $where_line .= "content             like '%{$this_term}%' or ";
+                if( is_numeric($this_term) )
+                {
+                    $where_line .= "id_post             =     '{$this_term}'  or ";
+                    $where_line .= "id_comment          =     '{$this_term}'  or ";
+                    $where_line .= "id_author           =     '{$this_term}'  or ";
+                }
+                else
+                {
+                    $where_line .= "author_display_name like '%{$this_term}%' or ";
+                    $where_line .= "author_email        like '%{$this_term}%' or ";
+                    $where_line .= "creation_ip         like '{$this_term}%'  or ";
+                    $where_line .= "content             like '%{$this_term}%' or ";
+                }
             }
         }
         $where_line = preg_replace('/ or $/', "", $where_line);
@@ -63,15 +69,19 @@ if( ! empty($search_for) )
     else
     {
         $search_for = trim($search_for);
-        $where[] = "("
-            . "id_post             =     '{$search_for}'  or "
-            . "id_comment          =     '{$search_for}'  or "
-            . "id_author           =     '{$search_for}'  or "
-            . "author_display_name like '%{$search_for}%' or "
-            . "author_email        like '%{$search_for}%' or "
-            . "creation_ip         like '{$search_for}%'  or "
-            . "content             like '%{$search_for}%'    )"
-        ;
+        if( is_numeric($search_for))
+            $where[] = "("
+                . "id_post             =     '{$search_for}'  or "
+                . "id_comment          =     '{$search_for}'  or "
+                . "id_author           =     '{$search_for}'     )"
+            ;
+        else
+            $where[] = "("
+                . "author_display_name like '%{$search_for}%' or "
+                . "author_email        like '%{$search_for}%' or "
+                . "creation_ip         like '{$search_for}%'  or "
+                . "content             like '%{$search_for}%'    )"
+            ;
     }
 }
 
