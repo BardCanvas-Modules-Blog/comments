@@ -50,8 +50,12 @@ foreach($records as $row)
     $item              = new item();
     $item->title       = make_excerpt_of(html_entity_decode($row->content, null, "UTF-8"));
     $item->link        = "{$config->full_root_url}/{$row->id_post}#comment_{$row->id_comment}";
-    $item->description = strip_tags(html_entity_decode($row->content, null, "UTF-8"));
+    $item->description = strip_tags(html_entity_decode($row->content, null, "UTF-8"), 250);
     $item->guid        = "{$config->full_root_url}/{$row->id_post}#comment_{$row->id_comment}";
+    
+    $author         = $row->get_author();
+    $item->author   = empty($row->id_author) ? $row->author_email : $author->id_account;
+    $item->pubDate  = gmdate('D, d M Y H:i:s T', strtotime($row->creation_date) );
     
     $channel->items[] = $item;
 }
