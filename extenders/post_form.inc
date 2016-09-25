@@ -87,7 +87,7 @@ if( ! empty($_COOKIE["{$config->website_key}_comments_au"]) )
         
         <div class="field recaptcha_target" id="recaptcha_<?= uniqid() ?>"
               data-public-key="<?= $settings->get("engine.recaptcha_public_key") ?>">
-            <? if( ! $template->get("ajax_calling") ) echo recaptcha_get_html($settings->get("engine.recaptcha_public_key")); ?>
+            <? if( ! $template->get("ajax_calling") ) echo recaptcha_get_html($settings->get("engine.recaptcha_public_key"), null, $_SERVER["HTTPS"]); ?>
         </div>
     
     <? endif; ?>
