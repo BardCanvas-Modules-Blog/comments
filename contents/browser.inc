@@ -447,13 +447,12 @@ endif;
                             </span>
                         <? endif; ?>
                         
-                        <? if($row->status != "trashed"): ?>
-                            <? if($row->id_author == $account->id_account || $account->level >= config::MODERATOR_USER_LEVEL): ?>
-                                <span class="action pseudo_link critical" onclick="delete_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
-                                    <span class="fa fa-trash"></span>
-                                    <?= $current_module->language->record_nav->actions->trash ?>
-                                </span>
-                            <? endif; ?>
+                        <? if( $row->can_be_deleted() ): ?>
+                            <span class="action pseudo_link critical"
+                                  onclick="if( confirm('<?= $language->confirm_action ?>') ) delete_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                                <span class="fa fa-trash"></span>
+                                <?= $current_module->language->record_nav->actions->trash ?>
+                            </span>
                         <? endif; ?>
                     </div>
                 </td>
