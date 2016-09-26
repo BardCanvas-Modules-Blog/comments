@@ -57,7 +57,7 @@ foreach($records as $record)
             $author,
             $record->get_permalink(),
             make_excerpt_of($record->content),
-            $record->creation_date == "0000-00-00 00:00:00" ? "&mdash;" : get_minimized_date($record->creation_date),
+            $record->creation_date == "0000-00-00 00:00:00" ? "&mdash;" : time_mini_string($record->creation_date),
             $this_module->language->status_labels->{$record->status},
         )
     );
