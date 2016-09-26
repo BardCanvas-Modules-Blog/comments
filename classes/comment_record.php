@@ -3,6 +3,7 @@ namespace hng2_modules\comments;
 
 use hng2_base\account_record;
 use hng2_base\accounts_repository;
+use hng2_base\config;
 use hng2_modules\posts\post_record;
 use hng2_modules\posts\posts_repository;
 use hng2_repository\abstract_record;
@@ -118,6 +119,13 @@ class comment_record extends abstract_record
         global $config, $modules;
         
         $contents = $this->content;
+        
+        $contents = preg_replace(
+            '@\b(https?://([-\w\.]+[-\w])+(:\d+)?(/([\%\w/_\.#-]*(\?\S+)?[^\.\s])?)?)\b@',
+            '<a href="$1" target="_blank">$1</a>',
+            $contents
+        );
+        
         $contents = convert_emojis($contents);
         $contents = autolink_hash_tags($contents, "{$config->full_root_path}/tag/", "/comments");
         
@@ -165,5 +173,17 @@ class comment_record extends abstract_record
         unset($list[$key]);
         
         return $list;
+    }
+    
+    public function can_be_deleted()
+    {
+        global $account;
+        
+        if( $account->level >= config::MODERATOR_USER_LEVEL ) return true;
+        if( $account->level <= config::NEWCOMER_USER_LEVEL ) return false;
+        if( $account->id_account != $this->id_author ) return false;
+        if( $this->_replies_count > 0 ) return false;
+        
+        return true;
     }
 }
