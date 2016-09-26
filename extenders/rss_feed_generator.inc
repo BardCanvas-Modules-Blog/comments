@@ -48,7 +48,7 @@ if( count($records) == 0 ) return;
 foreach($records as $row)
 {
     $item              = new item();
-    $item->title       = make_excerpt_of(html_entity_decode($row->content, null, "UTF-8"));
+    $item->title       = make_excerpt_of(strip_tags(html_entity_decode($row->content, null, "UTF-8")));
     $item->link        = "{$config->full_root_url}/{$row->id_post}#comment_{$row->id_comment}";
     $item->description = strip_tags(html_entity_decode($row->content, null, "UTF-8"), 250);
     $item->guid        = "{$config->full_root_url}/{$row->id_post}#comment_{$row->id_comment}";
