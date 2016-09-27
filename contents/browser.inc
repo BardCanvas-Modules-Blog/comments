@@ -319,7 +319,7 @@ endif;
                             <?= $author->get_processed_display_name() ?>
                         </a><br>
                         <? if( $account->id_account != $author->id_account ): ?>
-                            <span class="pseudo_link" onclick="send_pm(this, '<?= $author->user_name ?>', '<?= replace_escaped_vars($language->contact->pm->send_to, '{$recipient}', htmlspecialchars($author->display_name)) ?>')"
+                            <span class="pseudo_link" onclick="send_pm(this, '<?= $author->user_name ?>', '<?= htmlspecialchars($author->display_name) ?>')"
                                   title="<?= replace_escaped_vars( $language->contact->pm->title, '{$website_name}', $settings->get("engine.website_name") ) ?>">
                                 <span class="fa fa-inbox fa-fw"></span>
                                 <?= $language->contact->pm->caption ?>
