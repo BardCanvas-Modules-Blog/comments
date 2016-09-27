@@ -120,11 +120,11 @@ class comment_record extends abstract_record
         
         $contents = $this->content;
         
-        $contents = preg_replace(
-            '@\b(https?://([-\w\.]+[-\w])+(:\d+)?(/([\%\w/_\.#-]*(\?\S+)?[^\.\s])?)?)\b@',
-            '<a href="$1" target="_blank">$1</a>',
-            $contents
-        );
+        //$contents = preg_replace(
+        //    '@\b(https?://([-\w\.]+[-\w])+(:\d+)?(/([\%\w/_\.#-]*(\?\S+)?[^\.\s])?)?)\b@',
+        //    '<a href="$1" target="_blank">$1</a>',
+        //    $contents
+        //);
         
         $contents = convert_emojis($contents);
         $contents = autolink_hash_tags($contents, "{$config->full_root_path}/tag/", "/comments");
