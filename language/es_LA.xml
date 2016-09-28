@@ -89,6 +89,7 @@
             <edit>Editar</edit>
             <trash>Papelera</trash>
             <spam>Spam</spam>
+            <untrash_for_review>Recuperar para revisión</untrash_for_review>
         </actions>
         <filters>
             <from_everyone>Por cualquiera</from_everyone>
@@ -99,6 +100,13 @@
     </record_nav>
     
     <messages>
+        <untrash_for_review_confirmation><![CDATA[
+            El comentario será sacado de la papelera y será marcado para revisión
+            sin enviar ninguna notificación, entonces se abrirá en modo de edición,
+            pero si cancelas la edición, el comentario no será regresado a la papelera.
+             
+            ¿Deseas continuar?
+        ]]></untrash_for_review_confirmation>
         <pending>Hay {$amount} comentarios marcados para revisión. Da click aquí para revisarlos.</pending>
         <empty_post_id>No has especificado el identificador de la entrada</empty_post_id>
         <post_not_found>La entrada que intentas comentar no existe</post_not_found>

@@ -33,6 +33,33 @@ use hng2_base\config;
         $form.find('select[name="search_status"] option:first').prop('selected', true);
     }
     
+    function untrash_for_review(id_comment)
+    {
+        var message = $('#untrash_for_review_confirmation').text();
+        if( ! confirm(message) ) return;
+        
+        var url = $_FULL_ROOT_PATH + '/comments/scripts/toolbox.php';
+        var params = {
+            action:     'untrash_for_review',
+            id_comment: id_comment,
+            wasuuup:    wasuuup()
+        };
+        
+        $.blockUI(blockUI_default_params);
+        $.get(url, params, function(response)
+        {
+            if( response != 'OK' )
+            {
+                alert(response);
+                $.unblockUI();
+        
+                return;
+            }
+            
+            location.href = $_FULL_ROOT_PATH + '/comments/?search_for=' + id_comment + '&edit=' + id_comment;
+        });
+    }
+    
     //noinspection JSUnusedGlobalSymbols
     function paginate(value)
     {
@@ -52,6 +79,7 @@ use hng2_base\config;
     if( ! empty($_GET["delete"]) )       $url .= "&delete={$_GET["delete"]}";
     if( ! empty($_GET["edit"]) )         $url .= "&edit={$_GET["edit"]}";
     if( ! empty($_GET["author"]) )       $url .= "&search_author={$_GET["author"]}";
+    if( ! empty($_GET["search_for"]) )   $url .= "&search_for=" . urlencode(stripslashes($_GET["search_for"]));
     ?>
     <div id="comments_browser" class="ajax_record_browser" data-src="<?= $url ?>">
         <div class="framed_content state_highlight" style="padding: 100px 0; text-align: center;">
@@ -67,3 +95,5 @@ use hng2_base\config;
 
 <div id="comments_edit_form" style="display: none;" data-title-template="<?= htmlspecialchars($current_module->language->form->edit) ?>"></div>
 <div id="comments_edit_target" style="display: none;"></div>
+
+<div id="untrash_for_review_confirmation" style="display: none;"><?= unindent($current_module->language->messages->untrash_for_review_confirmation) ?></div>

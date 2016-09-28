@@ -11,7 +11,7 @@
  * @var \SimpleXMLElement $language
  * 
  * $_GET params:
- * @param string "action"     change_status|preview
+ * @param string "action"     change_status|preview|untrash_for_review
  * @param string "new_status" trashed|published|rejected
  * @param string "id_comment"
  */
@@ -27,7 +27,7 @@ header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
 include "../../includes/bootstrap.inc";
 
-if( ! in_array($_GET["action"], array("change_status", "preview")) ) die($current_module->language->messages->toolbox->invalid_action);
+if( ! in_array($_GET["action"], array("change_status", "preview", "untrash_for_review")) ) die($current_module->language->messages->toolbox->invalid_action);
 
 if( empty($_GET["id_comment"]) ) die($current_module->language->messages->missing_comment_id);
 
@@ -241,6 +241,19 @@ if($_GET["action"] == "change_status")
             break;
         }
     }
+}
+
+if($_GET["action"] == "untrash_for_review")
+{
+    if($account->level < config::MODERATOR_USER_LEVEL)
+        die($current_module->language->messages->toolbox->action_not_allowed);
+    
+    if( $comment->status == "published" ) die("OK");
+    if( $comment->status == "reviewing" ) die("OK");
+    
+    $res = $repository->change_status($comment->id_comment, "reviewing");
+    
+    die("OK");
 }
 
 if($_GET["action"] == "preview")

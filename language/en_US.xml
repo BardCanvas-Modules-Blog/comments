@@ -89,6 +89,7 @@
             <edit>Edit</edit>
             <trash>Trash</trash>
             <spam>Spam</spam>
+            <untrash_for_review>Untrash for review</untrash_for_review>
         </actions>
         <filters>
             <from_everyone>By everyone</from_everyone>
@@ -99,6 +100,13 @@
     </record_nav>
     
     <messages>
+        <untrash_for_review_confirmation><![CDATA[
+            The comment will be taken out and will be flagged for reviewing
+            without sending any notification, then the editing mode will be launched,
+            but if you cancel the edition, the comment wont be taken back to the trash can.
+             
+            Do you want to continue?
+        ]]></untrash_for_review_confirmation>
         <pending>There are {$amount} comments flagged for review. Click here to see them.</pending>
         <empty_post_id>No post id has been specified</empty_post_id>
         <post_not_found>The post you're trying to comment doesn't exist</post_not_found>

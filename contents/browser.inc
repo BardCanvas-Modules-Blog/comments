@@ -99,7 +99,8 @@ if( $account->level < config::MODERATOR_USER_LEVEL )
 }
 else
 {
-    if( ! empty($search_status) ) $where[] = "status = '$search_status'";
+    if( empty($search_status) ) $where[] = "status not in ('trashed', 'hidden')";
+    else                        $where[] = "status = '$search_status'";
     
     if( ! empty($search_author) ) $where[] = "(
         id_author = '{$search_author}' or
@@ -304,8 +305,10 @@ endif;
             $post       = $row->get_post();
             $post_url   = $post->get_permalink();
             $post_title = $post->get_processed_title(false);
+    
+            $status_class = $row->status == "trashed" ? "deleted" : "";
             ?>
-            <tr class="comment_item comment_entry" data-record-id="<?= $row->id_comment ?>"
+            <tr class="comment_item comment_entry <?= $status_class ?>" data-record-id="<?= $row->id_comment ?>"
                 data-id-comment="<?= $row->id_comment ?>" data-post-id="<?= $row->id_post ?>">
                 <td data-for="sent_date">
                     <?= time_elapsed_string($row->creation_date) ?>
@@ -446,22 +449,56 @@ endif;
                                 <?= $current_module->language->record_nav->actions->spam ?>
                             </span>
                         <? endif; ?>
-                        
-                        <? if( $row->can_be_deleted() ): ?>
+    
+                        <? if( $row->can_be_deleted() && $row->status != "trashed" ): ?>
                             <span class="action pseudo_link critical"
                                   onclick="if( confirm('<?= $language->confirm_action ?>') ) delete_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
                                 <span class="fa fa-trash"></span>
                                 <?= $current_module->language->record_nav->actions->trash ?>
                             </span>
                         <? endif; ?>
+                        
+                        <? if( $row->status == "trashed" && $account->level >= config::MODERATOR_USER_LEVEL ): ?>
+                            <span class="action pseudo_link" onclick="untrash_for_review('<?= $row->id_comment ?>')">
+                                <span class="fa fa-refresh fa-fw"></span>
+                                <?= $current_module->language->record_nav->actions->untrash_for_review ?>
+                            </span>
+                        <? endif; ?>
+                        
                     </div>
                 </td>
                 <td data-for="in_reply_to">
                     <? render_in_reply_to_link($row); ?>
                 </td>
                 <td data-for="sent_from">
-                    <?= $row->creation_ip ?><br>
-                    <?= $row->creation_location ?><br>
+                    <span>
+                        <span class="fa fa-cloud fa-fw"></span>
+                        <?= $row->creation_ip ?>
+                    </span><br>
+                    
+                    <?
+                    $parts   = explode("; ", $row->creation_location);
+                    $isp      = array_pop($parts);
+                    $country  = array_pop($parts);
+                    $city     = implode("; ", $parts);
+                    if( $city != "N/A; N/A") : ?>
+                        <span>
+                            <span class="fa fa-map-marker fa-fw"></span>
+                            <?= $city ?>
+                        </span><br>
+                    <? endif; ?>
+                    <? if($country != "N/A"): ?>
+                        <span>
+                            <span class="fa fa-globe fa-fw"></span>
+                            <?= $country ?>
+                        </span><br>
+                    <? endif; ?>
+                    <? if($isp != "N/A"): ?>
+                        <span>
+                            <span class="fa fa-building fa-fw"></span>
+                            <?= $isp ?>
+                        </span><br>
+                    <? endif; ?>
                 </td>
             </tr>
         <? endforeach; ?>
