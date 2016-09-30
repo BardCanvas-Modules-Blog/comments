@@ -22,11 +22,15 @@ global $config, $template;
 
 $tag        = $template->get("current_tag");
 $repository = new comments_repository();
-$comments   = $repository->lookup(array(
+$count      = $repository->get_record_count(array(
     "id_comment in (select id_comment from comment_tags where comment_tags.tag = '$tag')"
 ));
 
-if( count($comments) == 0 ) return;
+if( $count == 0 ) return;
+
+$comments = $repository->lookup(array(
+    "id_comment in (select id_comment from comment_tags where comment_tags.tag = '$tag')"
+), 30);
 
 $collection = array();
 
@@ -52,10 +56,11 @@ foreach($comments as $comment)
         "type"      => "",
         "url"       => "{$config->full_root_url}/{$post->id_post}#comment_{$comment->id_comment}",
         "title"     => $title,
-        "excerpt"   => $excerpt,
+        "excerpt"   => "[".time_today_string($comment->creation_date)."] " . $excerpt,
         "thumbnail" => ""
     ));
 }
 
 $key = trim($this_module->language->extenders->search_by_tag_builder->collection_heading);
 $config->globals["search_by_tag_collections"][$key] = $collection;
+$config->globals["search_by_tag_counts"][$key]      = $count;
