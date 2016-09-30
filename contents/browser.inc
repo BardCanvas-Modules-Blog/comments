@@ -310,8 +310,9 @@ endif;
             ?>
             <tr class="comment_item comment_entry <?= $status_class ?>" data-record-id="<?= $row->id_comment ?>"
                 data-id-comment="<?= $row->id_comment ?>" data-post-id="<?= $row->id_post ?>">
-                <td data-for="sent_date">
-                    <?= time_elapsed_string($row->creation_date) ?>
+                <td data-for="sent_date" nowrap>
+                    <?= time_today_string($row->creation_date) ?><br>
+                    (<?= time_elapsed_string($row->creation_date) ?>)
                 </td>
                 <td data-for="sent_by" nowrap>
                     <? if( ! empty($author) ): ?>
