@@ -72,6 +72,7 @@ $parent = $repository->get($comment->parent_comment);
 if( ! empty($comment->parent_comment) && is_null($parent) )
     die($current_module->language->messages->parent_not_found);
 $comment->indent_level = $parent->indent_level + 1;
+$comment->parent_author = $parent->id_author;
 
 if( $account->_exists )
 {

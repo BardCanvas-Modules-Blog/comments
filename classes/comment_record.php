@@ -13,6 +13,7 @@ class comment_record extends abstract_record
     public $id_post            ; # bigint unsigned not null default 0,
     public $id_comment         ; # bigint unsigned not null default 0,
     public $parent_comment     ; # bigint unsigned not null default 0,
+    public $parent_author      ; # bigint unsigned not null default 0,
     public $indent_level       ; # tinyint unsigned not null default 0,
     
     public $id_author          ; # bigint unsigned not null default 0,

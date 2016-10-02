@@ -23,6 +23,7 @@ $tables = array(
             id_post             bigint unsigned not null default 0,
             id_comment          bigint unsigned not null default 0,
             parent_comment      bigint unsigned not null default 0,
+            parent_author       bigint unsigned not null default 0,
             indent_level        tinyint unsigned not null default 0,
             
             id_author           bigint unsigned not null default 0,
@@ -41,11 +42,12 @@ $tables = array(
             karma               int not null default 0,
             last_update         datetime default null,
             
-            primary key           ( id_comment ),
-            index   comments_tree ( id_comment, parent_comment ),
-            index   by_author     ( id_author ),
-            index   by_post       ( id_post, status ),
-            index   by_ip         ( creation_ip(7) )
+            primary key              ( id_comment ),
+            index   comments_tree    ( id_comment, parent_comment ),
+            index   by_author        ( id_author ),
+            index   by_post          ( id_post, status ),
+            index   by_ip            ( creation_ip(7) ),
+            index   by_parent_author ( parent_author )
             
         ) engine=InnoDB default charset=utf8mb4 collate='utf8mb4_unicode_ci'
     ",

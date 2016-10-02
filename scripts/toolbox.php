@@ -12,7 +12,7 @@
  * 
  * $_GET params:
  * @param string "action"     change_status|preview|untrash_for_review
- * @param string "new_status" trashed|published|rejected
+ * @param string "new_status" trashed|published|rejected|spam|hidden
  * @param string "id_comment"
  */
 
@@ -40,7 +40,7 @@ if( is_null($comment) ) die($current_module->language->messages->comment_not_fou
 
 if($_GET["action"] == "change_status")
 {
-    if( ! in_array($_GET["new_status"], array("trashed", "published", "rejected", "spam")) )
+    if( ! in_array($_GET["new_status"], array("trashed", "published", "rejected", "spam", "hidden")) )
         die($current_module->language->messages->toolbox->invalid_status);
     
     switch( $_GET["new_status"] )
@@ -236,6 +236,26 @@ if($_GET["action"] == "change_status")
             
             $repository->set_tags(array(), $comment->id_comment);
             $repository->set_media_items(array(), $comment->id_comment);
+            
+            die("OK");
+            break;
+        }
+        case "hidden":
+        {
+            if($account->level < config::MODERATOR_USER_LEVEL)
+                die($current_module->language->messages->toolbox->action_not_allowed);
+            
+            if( $comment->status == "hidden" ) die("OK");
+            
+            $res = $repository->change_status($comment->id_comment, "hidden");
+            if( empty($res) ) die("OK");
+            
+            $posts_repository->update_comments_count($comment->id_post);
+            
+            //$repository->set_tags(array(), $comment->id_comment);
+            //$deletions = $repository->set_media_items(array(), $comment->id_comment);
+            //if( is_array($media_deletions) && ! empty($media_deletions) )
+            //    $media_repository->delete_multiple_if_unused($media_deletions);
             
             die("OK");
             break;

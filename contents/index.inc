@@ -97,3 +97,105 @@ use hng2_base\config;
 <div id="comments_edit_target" style="display: none;"></div>
 
 <div id="untrash_for_review_confirmation" style="display: none;"><?= unindent($current_module->language->messages->untrash_for_review_confirmation) ?></div>
+
+<!-- Multi-record actions -->
+<script type="text/javascript">
+    
+    function toggle_record_selections(trigger)
+    {
+        var $trigger = $(trigger);
+        var $targets = $trigger.closest('table').find('input.record_selector');
+        
+        if( $trigger.is(':checked') ) $targets.prop('checked', true);
+        else                          $targets.prop('checked', false);
+    }
+    
+    var total_multirecord_action_threads     = 0;
+    var processed_multirecord_action_threads = 0;
+    var multirecord_action_threads_interval  = null;
+    
+    function launch_multirecord_actions(trigger, action)
+    {
+        var $trigger = $(trigger);
+        var $targets = $trigger.closest('.table_wrapper').find('input.record_selector:checked');
+        
+        var targets_count = $targets.length;
+        if( targets_count == 0 )
+        {
+            var message = $('#multirecord_actions_none_selected').text();
+            alert(message);
+            return;
+        }
+        
+        var action_caption = $trigger.text().trim();
+        
+        var confirmation = $('#multirecord_actions_confirmation').text();
+        confirmation = confirmation.replace(/\{\$amount\}/g,   targets_count);
+        confirmation = confirmation.replace(/\{\$new_flag\}/g, action_caption);
+        
+        if( ! confirm(confirmation) ) return;
+        
+        total_multirecord_action_threads     = targets_count;
+        processed_multirecord_action_threads = 0;
+        $trigger.closest('.multi_record_actions').block(blockUI_smallest_params);
+        
+        multirecord_action_threads_interval = setInterval('check_multirecord_threads()', 500);
+        
+        $targets.each(function()
+        {
+            var $this      = $(this);
+            var $container = $this.closest('tr');
+            var id         = $this.val();
+            
+            launch_multirecord_action(action, id, $container);
+        });
+    }
+    
+    function check_multirecord_threads()
+    {
+        console.log( 'threads: ', processed_multirecord_action_threads, ' / ',  total_multirecord_action_threads);
+        
+        if( processed_multirecord_action_threads < total_multirecord_action_threads ) return;
+        
+        clearInterval(multirecord_action_threads_interval);
+        
+        var message = $('#multirecord_actions_all_done').text();
+        alert(message);
+        
+        $('.multirecord_actions_table_refresher').click();
+    }
+    
+    function launch_multirecord_action(action, id, $container)
+    {
+        var url    = $_FULL_ROOT_PATH + '/comments/scripts/toolbox.php';
+        var params = {
+            action:     'change_status',
+            id_comment: id,
+            new_status: action,
+            wasuuup:    wasuuup()
+        };
+        
+        $container.block(blockUI_smaller_params);
+        $.get(url, params, function(response)
+        {
+            if( response != 'OK' )
+            {
+                throw_notification(response, 'error');
+                $container.unblock();
+                processed_multirecord_action_threads++;
+                
+                return;
+            }
+            
+            $container.unblock().fadeOut('fast', function()
+            {
+                $(this).remove();
+                processed_multirecord_action_threads++;
+            });
+        });
+    }
+    
+</script>
+<div id="multirecord_actions_confirmation"  style="display: none;"><?= unindent($current_module->language->multi_actions->confirmation) ?></div>
+<div id="multirecord_actions_none_selected" style="display: none;"><?= unindent($current_module->language->multi_actions->none_selected) ?></div>
+<div id="multirecord_actions_all_done"      style="display: none;"><?= unindent($current_module->language->multi_actions->done) ?></div>

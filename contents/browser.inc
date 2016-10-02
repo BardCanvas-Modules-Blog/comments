@@ -93,8 +93,7 @@ if( $account->level < config::MODERATOR_USER_LEVEL )
     else                        $where[] = "status = '$search_status'";
     
     $where[] = "(
-        id_author = '{$account->id_account}' or
-        id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
+        id_author = '{$account->id_account}' or parent_author = '{$account->id_account}'
     )";
 }
 else
@@ -103,8 +102,7 @@ else
     else                        $where[] = "status = '$search_status'";
     
     if( ! empty($search_author) ) $where[] = "(
-        id_author = '{$search_author}' or
-        id_author in (select c2.id_author from comments as c2 where c2.id_comment = comments.parent_comment)
+        id_author = '{$search_author}' or parent_author = '{$search_author}'
     )";
 }
 #endregion
@@ -172,7 +170,8 @@ if( ! empty($_GET["edit"]) ):
 <? endif; ?>
 
 <h1 class="clearfix">
-    <button id="refresh_commments_browser" class="pull-right" onclick="paginate(<?= $offset ?>)">
+    <button id="refresh_commments_browser" class="pull-right multirecord_actions_table_refresher"
+            onclick="paginate(<?= $offset ?>)">
         <span class="fa fa-refresh"></span>
         <?= $language->refresh ?>
     </button>
@@ -232,6 +231,8 @@ if( ! empty($_GET["edit"]) ):
             <option <? if($search_status == "trashed")   echo "selected"; ?> value="trashed"  ><?= $current_module->language->status_labels->trashed ?></option>
         </select>
         
+        <br>
+        
         <?= $language->record_nav->show ?>
         <select name="limit" onchange="$('#filter_form').submit();">
             <? foreach(array(5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500) as $recs): ?>
@@ -271,10 +272,35 @@ endif;
 ?>
 
 <div class="table_wrapper">
+    
+    <div class="multi_record_actions" style="font-family: arial, helvetica, sans-serif; margin-bottom: 5px;">
+        <span class="fixed_font">&nbsp;┌──</span>
+        <button onclick="launch_multirecord_actions(this, 'trashed')">
+            <?= $current_module->language->multi_actions->trash ?>
+        </button>
+        <? if( $account->level >= config::MODERATOR_USER_LEVEL ): ?>
+            <button onclick="launch_multirecord_actions(this, 'hidden')">
+                <?= $current_module->language->multi_actions->hide ?>
+            </button>
+            <button onclick="launch_multirecord_actions(this, 'spam')">
+                <?= $current_module->language->multi_actions->spam ?>
+            </button>
+            <button onclick="launch_multirecord_actions(this, 'rejected')">
+                <?= $current_module->language->multi_actions->reject ?>
+            </button>
+            <button onclick="launch_multirecord_actions(this, 'published')">
+                <?= $current_module->language->multi_actions->publish ?>
+            </button>
+        <? endif; ?>
+    </div>
+    
     <table id="posts_browser_table" class="nav_table evened comment_actions_container">
         
         <thead>
         <tr>
+            <th nowrap>
+                <input type="checkbox" name="record_selections_trigger" onchange="toggle_record_selections(this)">
+            </th>
             <? foreach( $browser->build_table_header($current_module->language->record_nav->columns) as $this_cell ): ?>
                 <th align="<?= $this_cell->xalign ?>" <? if( $this_cell->xnowrap == true ) echo "nowrap "; ?>
                     <? if( ! empty($this_cell->xwidth) ) echo "width='$this_cell->xwidth' "; ?> class="<?= $this_cell->xclass ?>"><?
@@ -305,11 +331,14 @@ endif;
             $post       = $row->get_post();
             $post_url   = $post->get_permalink();
             $post_title = $post->get_processed_title(false);
-    
+            
             $status_class = $row->status == "trashed" ? "deleted" : "";
             ?>
             <tr class="comment_item comment_entry <?= $status_class ?>" data-record-id="<?= $row->id_comment ?>"
                 data-id-comment="<?= $row->id_comment ?>" data-post-id="<?= $row->id_post ?>">
+                <td nowrap>
+                    <input type="checkbox" class="record_selector" name="record_selections[]" value="<?= $row->id_comment ?>">
+                </td>
                 <td data-for="sent_date" nowrap>
                     <?= time_today_string($row->creation_date) ?><br>
                     (<?= time_elapsed_string($row->creation_date) ?>)
@@ -350,6 +379,11 @@ endif;
                 </td>
                 <td data-for="status"><?= $current_module->language->status_labels->{$row->status} ?></td>
                 <td data-for="details">
+                    
+                    <div class="pseudo_link clipboard-copy" data-clipboard-text="<?= $row->id_comment ?>">
+                        <code>#<?= $row->id_comment ?><span class="fa fa-copy fa-fw"></span></code>
+                    </div>
+                    
                     <? if( $row->_replies_count > 0): ?>
                         <span class="framed_content inlined state_highlight pull-right"><?= replace_escaped_vars(
                                 $current_module->language->record_nav->columns->details->replies,
@@ -514,7 +548,7 @@ endif;
 <?
 function render_in_reply_to_link($row)
 {
-    global $post_url, $post_title, $repository, $current_module;
+    global $post_url, $post_title, $repository, $current_module, $account;
     
     $post_link  = "
         <a href='$post_url' target='_blank'>
@@ -534,6 +568,10 @@ function render_in_reply_to_link($row)
             echo $current_module->language->messages->parent_not_found;
         else
             echo  "{$post_link}<br>"
+                # ( $account->level < config::MODERATOR_USER_LEVEL ? "" 
+                #   : "<code class=\"pseudo_link clipboard-copy\" 
+                #            data-clipboard-text=\"{$row->parent_comment}\">#{$row->parent_comment}<span
+                #            class=\"fa fa-copy fa-fw\"></span></code> " )
                 . "<a href='$post_url#comment_{$parent->id_comment}' target='_blank'>"
                 . "<span class='fa fa-comment-o'></span> "
                 . make_excerpt_of($parent->content, 100)

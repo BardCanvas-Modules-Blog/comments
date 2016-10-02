@@ -98,6 +98,7 @@ class comments_repository extends abstract_repository
                 id_post             ,
                 id_comment          ,
                 parent_comment      ,
+                parent_author       ,
                 indent_level        ,
                 
                 id_author           ,
@@ -118,6 +119,7 @@ class comments_repository extends abstract_repository
                 '{$obj->id_post             }',
                 '{$obj->id_comment          }',
                 '{$obj->parent_comment      }',
+                '{$obj->parent_author       }',
                 '{$obj->indent_level        }',
                 
                 '{$obj->id_author           }',

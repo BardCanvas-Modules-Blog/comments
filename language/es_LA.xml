@@ -360,4 +360,25 @@
         ]]></principal_data>
     </gallery_addons>
     
+    <multi_actions>
+        <trash>A papelera</trash>
+        <hide>Ocultar</hide>
+        <publish>Aprobar</publish>
+        <spam>Spam</spam>
+        <reject>Rechazar</reject>
+        <confirmation><![CDATA[
+            {$amount} elementos serán cambiados a "{$new_flag}".
+             
+            • Elementos previamente marcados igual serán ignorados.
+            • Se procesarán en paralelo y serán removidos de la lista.
+            • No te salgas de esta página mientras se procesan las solicitudes.
+            • Una vez terminadas se te notificará y se refrescará el navegador.
+            • Esta acción no se puede deshacer.
+             
+            ¿Deseas continuar?
+        ]]></confirmation>
+        <none_selected>Selecciona al menos una entrada para lleva a cabo la acción elegida.</none_selected>
+        <done>Todas las solicitudes han sido procesadas. El navegador de registos se actualizará ahora.</done>
+    </multi_actions>
+    
 </language>

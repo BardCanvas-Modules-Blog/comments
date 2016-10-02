@@ -352,4 +352,25 @@
         ]]></principal_data>
     </gallery_addons>
     
+    <multi_actions>
+        <trash>Trash</trash>
+        <hide>Hide</hide>
+        <publish>Approve</publish>
+        <spam>Spam</spam>
+        <reject>Reject</reject>
+        <confirmation><![CDATA[
+            {$amount} elements will be changed to "{$new_flag}".
+             
+            • All those with the same flag will be ignored.
+            • All will be processed in parallel and will be removed from view.
+            • Don't navigate out of this page until all requests are fulfilled.
+            • Once finished, you'll be notified and the browser will be refreshed.
+            • This cannot be undone.
+             
+            Do you want to continue?
+        ]]></confirmation>
+        <none_selected>Selecciona al menos una entrada para lleva a cabo la acción elegida.</none_selected>
+        <done>Todas las solicitudes han sido procesadas. El navegador de registos se actualizará ahora.</done>
+    </multi_actions>
+    
 </language>
