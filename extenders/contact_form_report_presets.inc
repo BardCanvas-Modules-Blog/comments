@@ -71,15 +71,14 @@ $config->globals["@contact:subject"] = replace_escaped_vars(
     array($comment->id_comment, $post->title, $post->author_display_name)
 );
 
-$comment_author = $comment->get_author();
-$author_name    = is_null($comment_author) ? $comment->author_display_name : $comment_author->get_processed_display_name();
-
 $config->globals["@contact:content"] = replace_escaped_vars(
     $this_module->language->reporting->content,
     array('{$comment_author}', '{$date}', '{$comment}', '{$permalink}'),
     array(
-        $author_name,
-        $post->creation_date . " (" . time_elapsed_string($post->creation_date). ")",
+        empty($comment->author_display_name)
+            ? $comment->get_author()->get_processed_display_name()
+            : $comment->author_display_name,
+        $comment->creation_date . " (" . time_elapsed_string($comment->creation_date). ")",
         $comment->content,
         $comment->get_permalink(true)
     )
