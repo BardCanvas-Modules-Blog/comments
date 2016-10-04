@@ -59,6 +59,7 @@ if( ! empty($search_for) )
                     $where_line .= "author_display_name like '%{$this_term}%' or ";
                     $where_line .= "author_email        like '%{$this_term}%' or ";
                     $where_line .= "creation_ip         like '{$this_term}%'  or ";
+                    $where_line .= "creation_location   like '%{$this_term}%' or ";
                     $where_line .= "content             like '%{$this_term}%' or ";
                 }
             }
@@ -80,6 +81,7 @@ if( ! empty($search_for) )
                 . "author_display_name like '%{$search_for}%' or "
                 . "author_email        like '%{$search_for}%' or "
                 . "creation_ip         like '{$search_for}%'  or "
+                . "creation_location   like '%{$search_for}%' or "
                 . "content             like '%{$search_for}%'    )"
             ;
     }
@@ -506,7 +508,7 @@ endif;
                     <? render_in_reply_to_link($row); ?>
                 </td>
                 <td data-for="sent_from">
-                    <span>
+                    <span class="nowrap">
                         <span class="fa fa-cloud fa-fw"></span>
                         <?= $row->creation_ip ?>
                     </span><br>
