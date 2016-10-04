@@ -58,7 +58,7 @@ if($_GET["action"] == "change_status")
             
             $posts_repository->update_comments_count($comment->id_post);
             
-            $cuser_link   = "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
+            $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
             $post_title   = $post->title;
             $comment_link = $post->get_permalink(true) . "#comment_" . $comment->id_comment;
@@ -66,7 +66,7 @@ if($_GET["action"] == "change_status")
             $author       = $comment->get_author();
             $author_link  = empty($comment->id_author)
                           ? $comment->author_display_name
-                          : "<a href='{$config->full_root_url}/user/{$author->user_name}'>{$author->display_name}</a>";
+                          : $author->display_name; # "<a href='{$config->full_root_url}/user/{$author->user_name}'>{$author->display_name}</a>";
             
             send_notification($account->id_account, "success", replace_escaped_vars(
                 $current_module->language->messages->toolbox->published_ok,
@@ -118,8 +118,8 @@ if($_GET["action"] == "change_status")
             if( empty($res) ) die("OK");
             
             $posts_repository->update_comments_count($comment->id_post);
-            
-            $cuser_link   = "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
+    
+            $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
             $post_title   = $post->title;
             $comment_link = $post->get_permalink(true) . "#comment_" . $comment->id_comment;
@@ -127,7 +127,7 @@ if($_GET["action"] == "change_status")
             $author       = $comment->get_author();
             $author_link  = empty($comment->id_author)
                           ? $comment->author_display_name
-                          : "<a href='{$config->full_root_url}/user/{$author->user_name}'>{$author->display_name}</a>";
+                          : $author->display_name; # "<a href='{$config->full_root_url}/user/{$author->user_name}'>{$author->display_name}</a>";
             
             send_notification($account->id_account, "success", replace_escaped_vars(
                 $current_module->language->messages->toolbox->rejected_ok,
@@ -159,16 +159,16 @@ if($_GET["action"] == "change_status")
             if( empty($res) ) die("OK");
             
             $posts_repository->update_comments_count($comment->id_post);
-            
-            $cuser_link   = "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
+    
+            $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
             $post_title   = $post->title;
             $comment_link = $post->get_permalink(true) . "#comment_" . $comment->id_comment;
             
             $author       = $comment->get_author();
             $author_link  = empty($comment->id_author)
-                ? $comment->author_display_name
-                : "<a href='{$config->full_root_url}/user/{$author->user_name}'>{$author->display_name}</a>";
+                          ? $comment->author_display_name
+                          : $author->display_name; # "<a href='{$config->full_root_url}/user/{$author->user_name}'>{$author->display_name}</a>";
             
             if($comment->id_author != $account->id_account)
                 # Notification to mod/admin deleting the comment
@@ -209,16 +209,16 @@ if($_GET["action"] == "change_status")
             if( empty($res) ) die("OK");
             
             $posts_repository->update_comments_count($comment->id_post);
-            
-            $cuser_link   = "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
+    
+            $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
             $post_title   = $post->title;
             $comment_link = $post->get_permalink(true) . "#comment_" . $comment->id_comment;
             
             $author       = $comment->get_author();
             $author_link  = empty($comment->id_author)
-                ? $comment->author_display_name
-                : "<a href='{$config->full_root_url}/user/{$author->user_name}'>{$author->display_name}</a>";
+                          ? $comment->author_display_name
+                          : $author->display_name; # "<a href='{$config->full_root_url}/user/{$author->user_name}'>{$author->display_name}</a>";
             
             if( $comment->id_author != $account->id_account )
                 send_notification($account->id_account, "success", replace_escaped_vars(
