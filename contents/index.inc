@@ -30,7 +30,7 @@ use hng2_base\config;
         $select = $form.find('select[name="search_author"]');
         if( $select.length > 0 ) $select.find('option:first').prop('selected', true);
         
-        $form.find('select[name="search_status"] option:first').prop('selected', true);
+        $form.find('input[name="search_status"][value=""]').prop('checked', true);
     }
     
     function untrash_for_review(id_comment)

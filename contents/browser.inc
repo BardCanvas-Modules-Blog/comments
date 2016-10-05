@@ -182,6 +182,20 @@ if( ! empty($_GET["edit"]) ):
 </h1>
 
 <div class="filtering clearfix">
+    
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $('#filter_form').keypress(function(e) {
+                if( (e.keyCode == 13) && (e.target.type != "textarea") )
+                {
+                    e.preventDefault();
+                    $(this).submit();
+                }
+            });
+        });
+    </script>
+    
     <form name="filter_form" id="filter_form" action="<?= $_SERVER["PHP_SELF"] ?>?wasuuup=<? echo mt_rand(1, 65535); ?>"
           method="get">
         
@@ -218,32 +232,65 @@ if( ! empty($_GET["edit"]) ):
             </select>
         <? endif; ?>
         
-        <select name="search_status" onchange="$('#filter_form').submit();">
-            <option <? if($search_status == "")          echo "selected"; ?> value=""         >&lt;<?= $current_module->language->record_nav->filters->any_status ?>&gt;</option>
-            <option <? if($search_status == "published") echo "selected"; ?> value="published"><?= $current_module->language->status_labels->published ?></option>
-            <option <? if($search_status == "reviewing") echo "selected"; ?> value="reviewing"><?= $current_module->language->status_labels->reviewing ?></option>
-            <option <? if($search_status == "rejected")  echo "selected"; ?> value="rejected" ><?= $current_module->language->status_labels->rejected ?></option>
-            <option <? if($search_status == "spam")      echo "selected"; ?> value="spam"     ><?= $current_module->language->status_labels->spam ?></option>
+        <span class="inline-block">
+            <?= $language->record_nav->show ?>
+            <select name="limit" onchange="$('#filter_form').submit();">
+                <? foreach(array(5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500) as $recs): ?>
+                    <option <? if($limit == $recs) echo "selected" ?> value="<?= $recs ?>"><?= $recs ?></option>
+                <? endforeach; ?>
+            </select>
+            <?= $language->record_nav->recs_per_page ?>
+            
+            <button type="submit"><?= $language->record_nav->buttons->apply ?></button>
+            <button onclick="reset_filter();"><?= $language->record_nav->buttons->reset ?></button>
+        </span>
+    
+        <div class="framed_radios" style="margin: 5px 0 0 0;">
+            <label class="framed_content inlined <? if($search_status == "") echo "state_active"; ?>">
+                <input type="radio" name="search_status" <? if($search_status == "") echo "checked"; ?> value=""
+                       onchange="$('#filter_form').submit()">
+                <?= $current_module->language->record_nav->filters->any_status ?>
+            </label>
+            
+            <label class="framed_content inlined <? if($search_status == "published") echo "state_active"; ?>">
+                <input type="radio" name="search_status" <? if($search_status == "published") echo "checked"; ?> value="published"
+                       onchange="$('#filter_form').submit()">
+                <?= $current_module->language->status_labels->published ?>
+            </label>
+            
+            <label class="framed_content inlined <? if($search_status == "reviewing") echo "state_active"; ?>">
+                <input type="radio" name="search_status" <? if($search_status == "reviewing") echo "checked"; ?> value="reviewing"
+                       onchange="$('#filter_form').submit()">
+                <?= $current_module->language->status_labels->reviewing ?>
+            </label>
+            
+            <label class="framed_content inlined <? if($search_status == "rejected") echo "state_active"; ?>">
+                <input type="radio" name="search_status" <? if($search_status == "rejected") echo "checked"; ?> value="rejected"
+                       onchange="$('#filter_form').submit()">
+                <?= $current_module->language->status_labels->rejected ?>
+            </label>
+            
+            <label class="framed_content inlined <? if($search_status == "spam") echo "state_active"; ?>">
+                <input type="radio" name="search_status" <? if($search_status == "spam") echo "checked"; ?> value="spam"
+                       onchange="$('#filter_form').submit()">
+                <?= $current_module->language->status_labels->spam ?>
+            </label>
+            
             <? if( $account->level >= config::MODERATOR_USER_LEVEL ): ?>
-                <option <? if($search_status == "hidden") echo "selected"; ?> value="hidden">
+                <label class="framed_content inlined <? if($search_status == "hidden") echo "state_active"; ?>">
+                    <input type="radio" name="search_status" <? if($search_status == "hidden") echo "checked"; ?> value="hidden"
+                           onchange="$('#filter_form').submit()">
                     <?= $current_module->language->status_labels->hidden ?>
-                </option>
+                </label>
             <? endif; ?>
-            <option <? if($search_status == "trashed")   echo "selected"; ?> value="trashed"  ><?= $current_module->language->status_labels->trashed ?></option>
-        </select>
-        
-        <br>
-        
-        <?= $language->record_nav->show ?>
-        <select name="limit" onchange="$('#filter_form').submit();">
-            <? foreach(array(5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500) as $recs): ?>
-                <option <? if($limit == $recs) echo "selected" ?> value="<?= $recs ?>"><?= $recs ?></option>
-            <? endforeach; ?>
-        </select>
-        <?= $language->record_nav->recs_per_page ?>
-        
-        <button type="submit"><?= $language->record_nav->buttons->apply ?></button>
-        <button type="submit" onclick="reset_filter();"><?= $language->record_nav->buttons->reset ?></button>
+            
+            <label class="framed_content inlined <? if($search_status == "trashed") echo "state_active"; ?>">
+                <input type="radio" name="search_status" <? if($search_status == "trashed") echo "checked"; ?> value="trashed"
+                       onchange="$('#filter_form').submit()">
+                <?= $current_module->language->status_labels->trashed ?>
+            </label>
+            
+        </div>
     </form>
 </div>
 
