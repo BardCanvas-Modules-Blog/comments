@@ -100,8 +100,7 @@ if( $account->level < config::MODERATOR_USER_LEVEL )
 }
 else
 {
-    if( empty($search_status) ) $where[] = "status not in ('trashed', 'hidden')";
-    else                        $where[] = "status = '$search_status'";
+    if( ! empty($search_status) ) $where[] = "status = '$search_status'";
     
     if( ! empty($search_author) ) $where[] = "(
         id_author = '{$search_author}' or parent_author = '{$search_author}'
