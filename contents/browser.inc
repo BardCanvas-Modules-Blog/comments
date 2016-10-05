@@ -215,7 +215,7 @@ if( ! empty($_GET["edit"]) ):
         
         <?= $language->record_nav->search ?>
         <input type="text" name="search_for"
-               value="<?= htmlspecialchars($search_for) ?>" size="46"
+               value="<?= htmlspecialchars($search_for) ?>" size="37"
                placeholder="<?= $current_module->language->record_nav->search_placeholder ?>">
         
         <? if( $account->level >= config::MODERATOR_USER_LEVEL ): ?>
@@ -349,7 +349,8 @@ endif;
             <th nowrap>
                 <input type="checkbox" name="record_selections_trigger" onchange="toggle_record_selections(this)">
             </th>
-            <? foreach( $browser->build_table_header($current_module->language->record_nav->columns) as $this_cell ): ?>
+            <? foreach( $browser->build_table_header($current_module->language->record_nav->columns) as $name => $this_cell ):
+                if( $name == "sent_from" && $account->level < config::MODERATOR_USER_LEVEL ) continue; ?>
                 <th align="<?= $this_cell->xalign ?>" <? if( $this_cell->xnowrap == true ) echo "nowrap "; ?>
                     <? if( ! empty($this_cell->xwidth) ) echo "width='$this_cell->xwidth' "; ?> class="<?= $this_cell->xclass ?>"><?
                     if( $this_cell->sort_asc->enabled == true ) echo "<img
@@ -387,7 +388,7 @@ endif;
                 <td nowrap>
                     <input type="checkbox" class="record_selector" name="record_selections[]" value="<?= $row->id_comment ?>">
                 </td>
-                <td data-for="sent_date" nowrap>
+                <td data-for="sent_date">
                     <?= time_today_string($row->creation_date) ?><br>
                     (<?= time_elapsed_string($row->creation_date) ?>)
                 </td>
@@ -553,36 +554,38 @@ endif;
                 <td data-for="in_reply_to">
                     <? render_in_reply_to_link($row); ?>
                 </td>
-                <td data-for="sent_from">
-                    <span class="nowrap">
-                        <span class="fa fa-cloud fa-fw"></span>
-                        <?= $row->creation_ip ?>
-                    </span><br>
-                    
-                    <?
-                    $parts   = explode("; ", $row->creation_location);
-                    $isp      = array_pop($parts);
-                    $country  = array_pop($parts);
-                    $city     = implode("; ", $parts);
-                    if( $city != "N/A; N/A") : ?>
-                        <span>
-                            <span class="fa fa-map-marker fa-fw"></span>
-                            <?= $city ?>
+                <? if( $account->level >= config::MODERATOR_USER_LEVEL): ?>
+                    <td data-for="sent_from">
+                        <span class="nowrap">
+                            <span class="fa fa-cloud fa-fw"></span>
+                            <?= $row->creation_ip ?>
                         </span><br>
-                    <? endif; ?>
-                    <? if($country != "N/A"): ?>
-                        <span>
-                            <span class="fa fa-globe fa-fw"></span>
-                            <?= $country ?>
-                        </span><br>
-                    <? endif; ?>
-                    <? if($isp != "N/A"): ?>
-                        <span>
-                            <span class="fa fa-building fa-fw"></span>
-                            <?= $isp ?>
-                        </span><br>
-                    <? endif; ?>
-                </td>
+                        
+                        <?
+                        $parts   = explode("; ", $row->creation_location);
+                        $isp      = array_pop($parts);
+                        $country  = array_pop($parts);
+                        $city     = implode("; ", $parts);
+                        if( $city != "N/A; N/A") : ?>
+                            <span>
+                                <span class="fa fa-map-marker fa-fw"></span>
+                                <?= $city ?>
+                            </span><br>
+                        <? endif; ?>
+                        <? if($country != "N/A"): ?>
+                            <span>
+                                <span class="fa fa-globe fa-fw"></span>
+                                <?= $country ?>
+                            </span><br>
+                        <? endif; ?>
+                        <? if($isp != "N/A"): ?>
+                            <span>
+                                <span class="fa fa-building fa-fw"></span>
+                                <?= $isp ?>
+                            </span><br>
+                        <? endif; ?>
+                    </td>
+                <? endif; ?>
             </tr>
         <? endforeach; ?>
         </tbody>

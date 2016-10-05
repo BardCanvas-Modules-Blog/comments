@@ -69,6 +69,33 @@ use hng2_base\config;
     }
 </script>
 
+<style type="text/css">
+    @media all and (max-width: 768px)
+    {
+        /* Author */
+        #posts_browser_table tr th:nth-child(3) { display: none; }
+        #posts_browser_table tr td:nth-child(3) { display: none; }
+        /* State */
+        #posts_browser_table tr th:nth-child(4) { display: none; }
+        #posts_browser_table tr td:nth-child(4) { display: none; }
+    }
+    @media all and (max-width: 425px)
+    {
+        /* Author */
+        #posts_browser_table tr th:nth-child(3) { display: none; }
+        #posts_browser_table tr td:nth-child(3) { display: none; }
+        /* State */
+        #posts_browser_table tr th:nth-child(4) { display: none; }
+        #posts_browser_table tr td:nth-child(4) { display: none; }
+        /* In reply to */
+        #posts_browser_table tr th:nth-child(6) { display: none; }
+        #posts_browser_table tr td:nth-child(6) { display: none; }
+        /* Sent from */
+        #posts_browser_table tr th:nth-child(7) { display: none; }
+        #posts_browser_table tr td:nth-child(7) { display: none; }
+    }
+</style>
+
 <div id="main_workarea">
     
     <?
