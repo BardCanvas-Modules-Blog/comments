@@ -101,10 +101,7 @@ if( $account->level < config::MODERATOR_USER_LEVEL )
 else
 {
     if( ! empty($search_status) ) $where[] = "status = '$search_status'";
-    
-    if( ! empty($search_author) ) $where[] = "(
-        id_author = '{$search_author}' or parent_author = '{$search_author}'
-    )";
+    if( ! empty($search_author) ) $where[] = "( id_author = '{$search_author}' or parent_author = '{$search_author}' )";
 }
 #endregion
 
@@ -244,7 +241,7 @@ if( ! empty($_GET["edit"]) ):
             <button type="submit"><?= $language->record_nav->buttons->apply ?></button>
             <button onclick="reset_filter();"><?= $language->record_nav->buttons->reset ?></button>
         </span>
-    
+        
         <div class="framed_radios" style="margin: 5px 0 0 0;">
             <label class="framed_content inlined <? if($search_status == "") echo "state_active"; ?>">
                 <input type="radio" name="search_status" <? if($search_status == "") echo "checked"; ?> value=""
@@ -309,7 +306,7 @@ if( $account->level >= config::MODERATOR_USER_LEVEL && $search_status != "review
         $message = replace_escaped_vars($current_module->language->messages->pending, '{$amount}', $pending);
         ?>
         <div class="framed_content state_ko">
-            <span class="pseudo_link" onclick="var $form = $('#filter_form'); reset_filter(); $form.find('select[name=search_status] option[value=reviewing]').prop('selected', true); $form.submit();">
+            <span class="pseudo_link" onclick="var $form = $('#filter_form'); reset_filter(); $form.find('input[name=search_status][value=reviewing]').prop('checked', true); $form.submit();">
                 <span class="fa fa-warning"></span>
                 <?= $message ?>
             </span>
