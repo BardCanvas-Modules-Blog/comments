@@ -19,6 +19,7 @@ use hng2_base\module;
 use hng2_base\settings;
 use hng2_modules\comments\comment_record;
 use hng2_modules\comments\comments_repository;
+use hng2_modules\comments\toolbox;
 use hng2_modules\posts\posts_repository;
 
 header("Content-Type: text/plain; charset=utf-8");
@@ -30,6 +31,7 @@ if( empty($_POST["id_post"]) ) die($current_module->language->messages->empty_po
 
 $posts_repository = new posts_repository();
 $post = $posts_repository->get($_POST["id_post"]);
+$toolbox = new toolbox();
 
 if( is_null($post) ) die($current_module->language->messages->post_not_found);
 if( $post->status != "published" ) die($current_module->language->messages->post_unavailable);
@@ -178,7 +180,7 @@ if( empty($min_level) ) $min_level = config::MODERATOR_USER_LEVEL;
 if( $account->level < $min_level )
 {
     // Spam filters: links
-    $links = $settings->get("module:comments.flag_for_review_on_link_amount");
+    $links = $settings->get("modules:comments.flag_for_review_on_link_amount");
     if( empty($links) ) $links = 2;
     $pattern = '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i';
     preg_match_all($pattern, $comment->content, $matches);
@@ -192,10 +194,11 @@ if( $account->level < $min_level )
         if( count($matches) >= $links )
         {
             $comment->status = "reviewing";
-            if( count($media_items) ) $repository->set_media_items($media_items, $comment->id_comment);
-            if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
+            # if( count($media_items) ) $repository->set_media_items($media_items, $comment->id_comment);
+            # if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
             $repository->save($comment);
             $current_module->load_extensions("add_comment", "after_saving_for_review");
+            $toolbox->trigger_notifications_after_saving_for_review($comment);
             
             if( $account->_exists )
             {
@@ -217,5 +220,6 @@ if( count($media_items) ) $repository->set_media_items($media_items, $comment->i
 if( ! empty($tags) ) $repository->set_tags($tags, $comment->id_comment);
 $repository->save($comment);
 $current_module->load_extensions("add_comment", "after_saving");
+$toolbox->trigger_notifications_after_saving("add", $comment);
 $posts_repository->update_comments_count($comment->id_post);
 echo "OK:{$comment->id_comment}";

@@ -373,4 +373,212 @@
         <done>Todas las solicitudes han sido procesadas. El navegador de registos se actualizará ahora.</done>
     </multi_actions>
     
+    <email_templates>
+        <comment_added>
+            <for_author>
+                <subject>A comment has been submitted to your post titled "{$title}" on {$website_name}</subject>
+                <body><![CDATA[
+                    <p>Greetings, {$author}! {$comment_sender} has commented on your post
+                    <a href="{$post_link}">{$post_title}</a>:</p>
+                    
+                    <blockquote style="background-color: whitesmoke; color: black; border-left: 5px solid silver; padding: 10px;">
+                        {$comment}
+                    </blockquote>
+                    
+                    <p><i>Note: actual content may differ due to email limitations.</i></p>
+                    
+                    <p><b style="color: red;">Do not reply to this email!</b> Click on any of the next actions:</p>
+                    <ul>
+                        <li><a href="{$reply_url}"><b>Reply</b></a> to {$comment_sender}.</li>
+                        <li><a href="{$report_url}"><b>Report</b></a> as spam or inappropiate.</li>
+                        <li><a href="{$preferences}"><b>Edit your preferences</b></a> to disable these notifications.</li>
+                        <li><a href="{$blacklist_email}"><b>Blacklist this email address</b></a> so no emails from us are sent to it.</li>
+                    </ul>
+                    
+                    <p>Regards,<br>
+                    {$website_name}</p>
+                ]]></body>
+            </for_author>
+            <for_mods>
+                <subject>[{$website_name}/Moderators] Comment submitted to {$author}'s post "{$title}"</subject>
+                <body><![CDATA[
+                    <p>{$comment_sender} has commented on {$author}'s post
+                    <a href="{$post_link}">{$post_title}</a>:</p>
+                    
+                    <blockquote style="background-color: whitesmoke; color: black; border-left: 5px solid silver; padding: 10px;">
+                        {$comment}
+                    </blockquote>
+                    
+                    <p><i>Note: actual content may differ due to email limitations.</i></p>
+                    
+                    <p>Available mod/admin actions:</p>
+                    <ul>
+                        <li>Add a <a href="{$reply_url}"><b>reply</b></a> to the comment.</li>
+                        <li><a href="{$flag_url}"><b>Flag</b></a> as spam or inappropiate.</li>
+                        <li><a href="{$reject_url}"><b style="color: maroon;">Reject</b></a> the comment.</li>
+                        <li><a href="{$trash_url}"><b style="color: maroon;">Delete it</b></a> (send it to the trash can).</li>
+                        <li><a href="{$preferences}"><b>Edit your preferences</b></a> to disable these notifications.</li>
+                    </ul>
+                    
+                    <p>Regards,<br>
+                    {$website_name}</p>
+                ]]></body>
+            </for_mods>
+            <for_review>
+                <subject>[{$website_name}/Moderators] Please review the comment submitted to {$author}'s post "{$title}"</subject>
+                <body><![CDATA[
+                    <p>{$comment_sender} has commented on {$author}'s post
+                    <a href="{$post_link}">{$post_title}</a>, but the comment was automatically
+                    flagged for review:</p>
+                    
+                    <blockquote style="background-color: whitesmoke; color: black; border-left: 5px solid silver; padding: 10px;">
+                        {$comment}
+                    </blockquote>
+                    
+                    <p><i>Note: actual content may differ due to email limitations.</i></p>
+                    
+                    <p>Available mod/admin actions:</p>
+                    <ul>
+                        <li><a href="{$approve_url}"><b style="color: green;">Approve</b></a> the comment.</li>
+                        <li><a href="{$reject_url}"><b style="color: maroon;">Reject</b></a> the comment.</li>
+                        <li><a href="{$trash_url}"><b style="color: maroon;">Delete it</b></a> (send it to the trash can).</li>
+                        <li>Add a <a href="{$reply_url}"><b>reply</b></a> to the comment.</li>
+                        <li><a href="{$preferences}"><b>Edit your preferences</b></a> to disable these notifications.</li>
+                    </ul>
+                    
+                    <p>Regards,<br>
+                    {$website_name}</p>
+                ]]></body>
+            </for_review>
+        </comment_added>
+        <comment_replied>
+            <for_parent_author>
+                <subject>Someone has replied to your comment on {$post_author}'s post "{$post_title}"</subject>
+                <body><![CDATA[
+                    <p>Greetings, {$parent_author}! {$comment_sender} has replied to your comment on
+                    {$post_author} post <a href="{$post_link}">{$post_title}</a>:</p>
+                    
+                    <p>Excerpt of your comment:</p>
+                    <blockquote style="background-color: whitesmoke; color: black; border-left: 5px solid silver; padding: 10px;">
+                        {$parent_excerpt}
+                    </blockquote>
+                    
+                    <p>{$comment_sender}'s reply:</p>
+                    <blockquote style="background-color: whitesmoke; color: black; border-left: 5px solid silver; padding: 10px;">
+                        {$comment}
+                    </blockquote>
+                    
+                    <p><i>Note: actual content may differ due to email limitations.</i></p>
+                    
+                    <p><b style="color: red;">Do not reply to this email!</b> Click on any of the next actions:</p>
+                    <ul>
+                        <li><a href="{$reply_url}"><b>Reply</b></a> to {$comment_sender}.</li>
+                        <li><a href="{$report_url}"><b>Report</b></a> as spam or inappropiate.</li>
+                        <li><a href="{$preferences}"><b>Edit your preferences</b></a> to disable these notifications.</li>
+                        <li><a href="{$blacklist_email}"><b>Blacklist this email address</b></a> so no emails from us are sent to it.</li>
+                    </ul>
+                    
+                    <p>Regards,<br>
+                    {$website_name}</p>
+                ]]></body>
+            </for_parent_author>
+            <for_mods>
+                <subject>[{$website_name}/Moderators] Comment reply submitted on {$post_author}'s post "{$post_title}"</subject>
+                <body><![CDATA[
+                    <p>{$comment_sender} has replied to {$parent_author}'s comment on {$post_author}'s post
+                    <a href="{$post_link}">{$post_title}</a>.</p>
+                    
+                    <p>Excerpt of {$parent_author}'s comment:</p>
+                    <blockquote style="background-color: whitesmoke; color: black; border-left: 5px solid silver; padding: 10px;">
+                        {$parent_excerpt}
+                    </blockquote>
+                    
+                    <p>{$comment_sender}'s reply:</p>
+                    <blockquote style="background-color: whitesmoke; color: black; border-left: 5px solid silver; padding: 10px;">
+                        {$comment}
+                    </blockquote>
+                    
+                    <p><i>Note: actual content may differ due to email limitations.</i></p>
+                    
+                    <p>Available mod/admin actions:</p>
+                    <ul>
+                        <li>Add a <a href="{$reply_url}"><b>reply</b></a> to the comment.</li>
+                        <li><a href="{$flag_url}"><b>Flag</b></a> as spam or inappropiate.</li>
+                        <li><a href="{$reject_url}"><b style="color: maroon;">Reject</b></a> the comment.</li>
+                        <li><a href="{$trash_url}"><b style="color: maroon;">Delete it</b></a> (send it to the trash can).</li>
+                        <li><a href="{$preferences}"><b>Edit your preferences</b></a> to disable these notifications.</li>
+                    </ul>
+                    
+                    <p>Regards,<br>
+                    {$website_name}</p>
+                ]]></body>
+            </for_mods>
+            <for_review>
+                <subject>[{$website_name}/Moderators] Please review the reply submitted on {$post_author}'s post "{$post_title}"</subject>
+                <body><![CDATA[
+                    <p>{$comment_sender} has replied to {$parent_author}'s comment on {$post_author}'s post
+                    <a href="{$post_link}">{$post_title}</a>, but the comment was automatically
+                    flagged for review.</p>
+                    
+                    <p>Excerpt of {$parent_author}'s comment:</p>
+                    <blockquote style="background-color: whitesmoke; color: black; border-left: 5px solid silver; padding: 10px;">
+                        {$parent_excerpt}
+                    </blockquote>
+                    
+                    <p>{$comment_sender}'s reply:</p>
+                    <blockquote style="background-color: whitesmoke; color: black; border-left: 5px solid silver; padding: 10px;">
+                        {$comment}
+                    </blockquote>
+                    
+                    <p><i>Note: actual content may differ due to email limitations.</i></p>
+                    
+                    <p>Available mod/admin actions:</p>
+                    <ul>
+                        <li><a href="{$approve_url}"><b style="color: green;">Approve</b></a> the comment.</li>
+                        <li><a href="{$reject_url}"><b style="color: maroon;">Reject</b></a> the comment.</li>
+                        <li><a href="{$trash_url}"><b style="color: maroon;">Delete it</b></a> (send it to the trash can).</li>
+                        <li>Add a <a href="{$reply_url}"><b>reply</b></a> to the comment.</li>
+                        <li><a href="{$preferences}"><b>Edit your preferences</b></a> to disable these notifications.</li>
+                    </ul>
+                    
+                    <p>Regards,<br>
+                    {$website_name}</p>
+                ]]></body>
+            </for_review>
+        </comment_replied>
+    </email_templates>
+    
+    <engine_prefs>
+        <title>Comment notifications</title>
+        
+        <specs key="email_on_post_comments" selector_default="true">
+            <title>Email me on post comments</title>
+            <description><![CDATA[
+                Receive an email when someone else comments your post (it doesn't apply to replies)
+            ]]></description>
+            <type>boolean</type>
+        </specs>
+        <specs key="email_on_comment_replies" selector_default="true">
+            <title>Email me on comment replies</title>
+            <description><![CDATA[
+                Receive an email when someone else replies your comments
+            ]]></description>
+            <type>boolean</type>
+        </specs>
+        
+        <!-- The next ones are for mods and up -->
+        <specs key="moderator_emails_for_comments" selector_default="true" min_account_level="200">
+            <title>Email me when new comments are added</title>
+            <description><![CDATA[
+                <span class="framed_content inlined state_highlight">
+                    <span class="fa fa-info-circle"></span>
+                    Mods/admins only
+                </span>
+                Receive an email with the comment and the context.
+                Applies to comments from everyone except your own.
+            ]]></description>
+            <type>boolean</type>
+        </specs>
+    </engine_prefs>
+    
 </language>

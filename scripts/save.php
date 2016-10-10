@@ -19,6 +19,7 @@ use hng2_base\account;
 use hng2_base\config;
 use hng2_base\settings;
 use hng2_modules\comments\comments_repository;
+use hng2_modules\comments\toolbox;
 use hng2_modules\posts\posts_repository;
 
 header("Content-Type: text/plain; charset=utf-8");
@@ -51,7 +52,7 @@ if( empty($min_level) ) $min_level = config::MODERATOR_USER_LEVEL;
 if( $account->level < $min_level )
 {
     // Spam filters: links
-    $links = $settings->get("module:comments.flag_for_review_on_link_amount");
+    $links = $settings->get("modules:comments.flag_for_review_on_link_amount");
     if( empty($links) ) $links = 2;
     $pattern = '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i';
     preg_match_all($pattern, $comment->content, $matches);
@@ -118,4 +119,6 @@ if( $old_comment->status != $comment->status )
     $posts_repository->update_comments_count($comment->id_post);
 }
 
+$toolbox = new toolbox();
+$toolbox->trigger_notifications_after_saving("save", $comment);
 echo "OK:{$comment->id_comment}";
