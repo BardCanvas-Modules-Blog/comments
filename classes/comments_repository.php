@@ -284,7 +284,35 @@ class comments_repository extends abstract_repository
         $tree  = $this->build_tree($comments);
         $final = $this->flatten_tree($tree);
         
+        $this->preload_authors($final);
+        
         return array($find_params, $comments_count, $final, $pagination);
+    }
+    
+    /**
+     * @param comment_record[] $comments
+     */
+    private function preload_authors(array &$comments)
+    {
+        global $modules, $config;
+        
+        $author_ids = array();
+        foreach( $comments as $item )
+            if( ! empty($item->id_author) )
+                $author_ids[] = $item->id_author;
+        
+        if( count($author_ids) > 0 )
+        {
+            $author_ids         = array_unique($author_ids);
+            $authors_repository = new accounts_repository();
+            $authors            = $authors_repository->get_multiple($author_ids);
+            
+            foreach( $comments as $index => &$item )
+                $item->set_author($authors[$item->id_author]);
+        }
+        
+        $config->globals["author_ids"] = $author_ids;
+        $modules["comments"]->load_extensions("comments_repository_class", "preload_authors");
     }
     
     /**
