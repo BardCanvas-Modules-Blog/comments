@@ -21,6 +21,8 @@ class toolbox
         $mem_ttl = 60*60;
         if( time() > strtotime("$comment->creation_date + $mem_ttl seconds") ) return;
         
+        if( empty($post) ) $post = $comment->get_post();
+        
         $post_author    = $post->get_author();
         $comment_author = $comment->get_author();
         
