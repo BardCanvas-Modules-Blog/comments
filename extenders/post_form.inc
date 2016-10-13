@@ -51,6 +51,7 @@ if( ! empty($_COOKIE["{$config->website_key}_comments_au"]) )
     <input type="hidden" name="id_comment"     value="<?= $template->get("id_comment") ?>">
     <input type="hidden" name="id_post"        value="<?= $post->id_post ?>">
     <input type="hidden" name="parent_comment" value="<?= $template->get("parent_comment") ?>">
+    <input type="hidden" name="prevent_reopen" value="true">
     
     <div class="field tinymce_container">
         <textarea name="content" class="tinymce"><?= $template->get("prefilled_comment_content") ?></textarea>
