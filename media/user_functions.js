@@ -91,19 +91,21 @@ function process_comment_edit_submission(response, status, xhr, $form)
     location.href = href;
 }
 
-function spam_comment(id_comment, callback)
+function spam_comment(id_comment, callback, trigger)
 {
-    change_comment_status(id_comment, 'spam', callback)
+    change_comment_status(id_comment, 'spam', callback, trigger)
 }
 
-function delete_comment(id_comment, callback)
+function delete_comment(id_comment, callback, trigger)
 {
-    change_comment_status(id_comment, 'trashed', callback)
+    change_comment_status(id_comment, 'trashed', callback, trigger)
 }
 
-function change_comment_status(id_comment, new_state, callback)
+function change_comment_status(id_comment, new_state, callback, trigger)
 {
-    var $trigger = $('.comment_actions_container .comment_item[data-record-id="' + id_comment +'"]');
+    var $trigger;
+    if( trigger ) $trigger = $(trigger);
+    else          $trigger = $('.comment_actions_container .comment_item[data-record-id="' + id_comment +'"]');
     
     var url = $_FULL_ROOT_PATH + '/comments/scripts/toolbox.php'
             + '?action=change_status'
@@ -112,7 +114,7 @@ function change_comment_status(id_comment, new_state, callback)
             + '&wasuuup='    + wasuuup()
         ;
     
-    $trigger.block(blockUI_medium_params);
+    $trigger.block(blockUI_smallest_params);
     $.get(url, function(response)
     {
         if( response != 'OK' )
