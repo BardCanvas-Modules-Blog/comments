@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module>
     
-    <version>1.7.5</version>
+    <version>1.8</version>
     <group>BardCanvas</group>
     
     <working_flags>
@@ -15,6 +15,7 @@
         <bootstrap>functions.inc</bootstrap>
         <rss_feed_generator handle_pattern="^comments$">extenders/rss_feed_generator.inc</rss_feed_generator>
         <media_repository_delete_multiple_if_unused>extenders/media_repository_delete_multiple_if_unused.inc</media_repository_delete_multiple_if_unused>
+        <media_repository_empty_trash>extenders/media_repository_empty_trash.inc</media_repository_empty_trash>
     </php_includes>
     
     <template_includes>
@@ -55,6 +56,9 @@
                 <!-- This one is called after building collections in the repository: -->
                 <indexes_after_excerpt>extenders/comments_for_post_in_index.inc</indexes_after_excerpt>
             </front>
+            <posts_repository_class>
+                <empty_trash>extenders/posts_repository_empty_trash.inc</empty_trash>
+            </posts_repository_class>
         </posts>
         <search>
             <tags_cloud_widget>

@@ -595,4 +595,17 @@
         </specs>
     </engine_prefs>
     
+    <empty_trash>
+        <caption>Empty...</caption>
+        <confirmation><![CDATA[
+            Warning: emptying the comments trash may take several seconds.
+            Once started, the process can't be interrupted,
+            and it can't be undone.
+             
+            All records older than 7 days will be deleted.
+             
+            Do you want to continue?
+        ]]></confirmation>
+    </empty_trash>
+    
 </language>

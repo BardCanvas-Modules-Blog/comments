@@ -601,4 +601,17 @@
         </specs>
     </engine_prefs>
     
+    <empty_trash>
+        <caption>Vaciar...</caption>
+        <confirmation><![CDATA[
+            Advertencia: el vaciado de la papelera de comentarios puede
+            tomar varios segundos. Una vez comenzado, no puede detenerse,
+            y sus efectos no se pueden deshacer.
+             
+            Los registros con una antiguedad mayor a 7 días serán eliminados.
+             
+            ¿Deseas continuar?
+        ]]></confirmation>
+    </empty_trash>
+    
 </language>

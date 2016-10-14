@@ -11,7 +11,7 @@
  * @var \SimpleXMLElement $language
  * 
  * $_GET params:
- * @param string "action"     change_status|preview|untrash_for_review
+ * @param string "action"     change_status|preview|untrash_for_review|empty_trash
  * @param string "new_status" trashed|published|rejected|spam|hidden
  * @param string "id_comment"
  */
@@ -27,13 +27,22 @@ header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
 include "../../includes/bootstrap.inc";
 
-if( ! in_array($_GET["action"], array("change_status", "preview", "untrash_for_review")) ) die($current_module->language->messages->toolbox->invalid_action);
+if( ! in_array($_GET["action"], array("change_status", "preview", "untrash_for_review", "empty_trash")) )
+    die($current_module->language->messages->toolbox->invalid_action);
 
-if( empty($_GET["id_comment"]) ) die($current_module->language->messages->missing_comment_id);
+if( $_GET["action"] != "empty_trash" && empty($_GET["id_comment"]) )
+    die($current_module->language->messages->missing_comment_id);
 
 $media_repository = new media_repository();
 $posts_repository = new posts_repository();
 $repository       = new comments_repository();
+
+if($_GET["action"] == "empty_trash")
+{
+    if( ! $account->_is_admin ) die($current_module->language->messages->toolbox->action_not_allowed);
+    $repository->empty_trash();
+    die("OK");
+}
 
 $comment = $repository->get($_GET["id_comment"]);
 if( is_null($comment) ) die($current_module->language->messages->comment_not_found);

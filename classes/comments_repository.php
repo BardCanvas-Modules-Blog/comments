@@ -599,4 +599,37 @@ class comments_repository extends abstract_repository
         $this->last_query = $database->get_last_query();
         return $database->exec($query);
     }
+    
+    public function empty_trash()
+    {
+        global $database;
+        
+        $boundary = date("Y-m-d 00:00:00", strtotime("today - 7 days"));
+        
+        $database->exec("
+          delete from comment_mentions where id_comment in (
+            select id_comment from comments where status = 'trashed'
+            and creation_date < '$boundary'
+          )
+        ");
+        
+        $database->exec("
+          delete from comment_tags where id_comment in (
+            select id_comment from comments where status = 'trashed'
+            and creation_date < '$boundary'
+          )
+        ");
+        
+        $database->exec("
+          delete from comment_media where id_comment in (
+            select id_comment from comments where status = 'trashed'
+            and creation_date < '$boundary'
+          )
+        ");
+        
+        $database->exec("
+          delete from comments where status = 'trashed'
+          and creation_date < '$boundary'
+        ");
+    }
 }

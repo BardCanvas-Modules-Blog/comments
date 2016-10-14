@@ -287,6 +287,13 @@ if( ! empty($_GET["edit"]) ):
                 <?= $current_module->language->status_labels->trashed ?>
             </label>
             
+            <? if($account->_is_admin && $search_status == "trashed"): ?>
+                <button onclick="empty_trash(); return false;" style="font-size: 12pt; padding: 5px;">
+                    <span class="fa fa-trash"></span>
+                    <?= $current_module->language->empty_trash->caption ?>
+                </button>
+            <? endif; ?>
+            
         </div>
     </form>
 </div>
