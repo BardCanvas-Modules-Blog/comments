@@ -163,8 +163,22 @@
             ]]></deleted_from_others>
             <spammed_ok><![CDATA[
                 Comment #{$id} by {$author} has been flagged as spam.
-                A notification has been sent to the moderators.
+                A notification has been sent to the moderators.<br>
+                <a class="critical">
+                    <span class="fa fa-warning"></span>
+                    <b>Important:</b> any abuse of this tool will be sanctioned.
+                </a>
             ]]></spammed_ok>
+            <spammed_for_author><![CDATA[
+                Your comment <a href="{$link}">#{$id}</a> on the post titled
+                <a class="greengo">«{$post_title}»</a>
+                has been flagged as spam/unwanted by <a class="alternate">{$reporter}</a>.<br>
+                The comment has been hidden from public view and a notification
+                has been sent to moderators.
+                Once the review process ends, the message may be taken back
+                or trashed with or without further notifications to you.<br>
+                If you feel this is a mistake or an abuse, please contact us.
+            ]]></spammed_for_author>
         </toolbox>
         <previewing>Previewing comment #{$id} on post "{$post_title}"</previewing>
         <replying>Replying to comment #{$id} on post "{$post_title}"</replying>

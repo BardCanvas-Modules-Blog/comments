@@ -209,7 +209,7 @@ if($_GET["action"] == "change_status")
             if( empty($res) ) die("OK");
             
             $posts_repository->update_comments_count($comment->id_post);
-    
+            
             $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
             $post_title   = $post->title;
@@ -221,17 +221,25 @@ if($_GET["action"] == "change_status")
                           : $author->display_name; # "<a href='{$config->full_root_url}/user/{$author->user_name}'>{$author->display_name}</a>";
             
             if( $comment->id_author != $account->id_account )
+            {
                 send_notification($account->id_account, "success", replace_escaped_vars(
                     $current_module->language->messages->toolbox->spammed_ok,
                     array('{$id}', '{$author}', '{$link}'),
                     array($comment->id_comment, $author_link, $comment_link)
                 ));
+                
+                send_notification($comment->id_author, "warning", replace_escaped_vars(
+                    $current_module->language->messages->toolbox->spammed_for_author,
+                    array('{$link}', '{$id}', '{$post_title}', '{$reporter}'),
+                    array($comment_link, $comment->id_comment, $post_title, $account->display_name)
+                ));
+            }
             
             if( $account->level < config::MODERATOR_USER_LEVEL )
                 broadcast_to_moderators("information", replace_escaped_vars(
                     $current_module->language->notifications->spammed,
                     array('{$author}', '{$id}', '{$user}', '{$post_title}', '{$link}'),
-                    array($author_link, $comment->id, $cuser_link, $post_title, $comment_link)
+                    array($author_link, $comment->id_comment, $cuser_link, $post_title, $comment_link)
                 ));
             
             $repository->set_tags(array(), $comment->id_comment);

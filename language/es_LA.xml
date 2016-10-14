@@ -168,8 +168,22 @@
             ]]></deleted_from_others>
             <spammed_ok><![CDATA[
                 El comentario #{$id} de {$author} se ha marcado como spam.
-                Se ha notificado a los mods/admins.
+                Se ha notificado a los mods/admins.<br>
+                <a class="critical">
+                    <span class="fa fa-warning"></span>
+                    <b>Importante:</b> el abuso en el uso de esta herramienta será sancionado.
+                </a>
             ]]></spammed_ok>
+            <spammed_for_author><![CDATA[
+                Tu comentario <a href="{$link}">#{$id}</a> en la entrada titulada
+                <a class="greengo">«{$post_title}»</a>
+                ha sido marcado como spam/basura por <a class="alternate">{$reporter}</a>.<br>
+                El comentario ha sido ocultado de la vista pública y una notificación
+                se ha enviado a los moderadores.
+                Una vez que se revise, el mensaje puede ser restaurado o borrado
+                con o sin notificaciones posteriores<br>
+                Si crees que esto es un error o un abuso, por favor repórtalo.
+            ]]></spammed_for_author>
         </toolbox>
         <previewing>Vista previa de comentario #{$id} en entrada "{$post_title}"</previewing>
         <replying>Respondiendo a comentario #{$id} en entrada "{$post_title}"</replying>
