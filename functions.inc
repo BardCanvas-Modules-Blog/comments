@@ -9,6 +9,7 @@ function is_comment_editable(comment_record $comment)
     
     if(empty($account->id_account)) return false;
     if($account->level >= config::MODERATOR_USER_LEVEL ) return true;
+    if($comment->id_author != $account->level) return false;
     
     $time = $settings->get("modules:comments.time_allowed_for_editing_after_submission");
     if( empty($time) ) return true;
