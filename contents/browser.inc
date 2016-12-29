@@ -558,7 +558,7 @@ endif;
                 <td data-for="in_reply_to">
                     <? render_in_reply_to_link($row); ?>
                 </td>
-                <? if( $account->level >= config::MODERATOR_USER_LEVEL): ?>
+                <? if( ! empty($row->creation_ip) && $account->level >= config::MODERATOR_USER_LEVEL): ?>
                     <td data-for="sent_from">
                         <span class="nowrap">
                             <span class="fa fa-cloud fa-fw"></span>

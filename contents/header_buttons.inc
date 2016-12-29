@@ -27,5 +27,6 @@ $template->add_menu_item(
     <a class='main_menu_item {$added_class}' data-module='comments' href='{$config->full_root_path}/comments/'>
         $icon {$this_module->language->record_nav->menu_caption}
     </a>
-    "
+    ",
+    120
 );
