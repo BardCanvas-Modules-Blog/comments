@@ -455,7 +455,7 @@ endif;
                     <div class="actions">
                         
                         <? if( ! in_array($row->status, array("rejected", "spam", "trashed", "hidden")) ): ?> 
-                            <a href="<?= $row->get_permalink() ?>" target="_blank">
+                            <a class="comment_action_permalink" href="<?= $row->get_permalink() ?>" target="_blank">
                                 <span class="fa fa-link"></span>
                                 <?= $language->permalink ?>
                             </a>
@@ -474,7 +474,7 @@ endif;
                             . "&wasuuup=" . md5(mt_rand(1, 65535))
                         ;
                         ?>
-                        <span class="action pseudo_link" onclick="show_ajax_dialog('<?= htmlspecialchars($dialog_title) ?>', '<?= $url ?>', false)">
+                        <span class="action pseudo_link comment_action_preview" onclick="show_ajax_dialog('<?= htmlspecialchars($dialog_title) ?>', '<?= $url ?>', false)">
                             <span class="fa fa-search"></span>
                             <?= $current_module->language->record_nav->actions->preview ?>
                         </span>
@@ -507,7 +507,7 @@ endif;
                                 array('{$id}', '{$post_title}'),
                                 array($row->id_comment, $post->title)
                             ); ?>
-                            <span class="action pseudo_link" onclick="edit_comment('<?= $row->id_comment ?>', '<?= htmlspecialchars($dialog_title) ?>')">
+                            <span class="action pseudo_link comment_action_edit" onclick="edit_comment('<?= $row->id_comment ?>', '<?= htmlspecialchars($dialog_title) ?>')">
                                 <span class="fa fa-pencil"></span>
                                 <?= $current_module->language->record_nav->actions->edit ?>
                             </span>
@@ -515,7 +515,7 @@ endif;
                         
                         <? if( $account->level >= config::MODERATOR_USER_LEVEL
                                && in_array($row->status, array("reviewing", "spam")) ): ?>
-                            <span class="action pseudo_link greengo" onclick="publish_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                            <span class="action pseudo_link comment_action_approve greengo" onclick="publish_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
                                 <span class="fa fa-check"></span>
                                 <?= $current_module->language->record_nav->actions->approve ?>
                             </span>
@@ -523,7 +523,7 @@ endif;
                         
                         <? if( $account->level >= config::MODERATOR_USER_LEVEL
                                && in_array($row->status, array("published", "reviewing", "spam")) ): ?>
-                            <span class="action pseudo_link important" onclick="reject_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                            <span class="action pseudo_link comment_action_reject important" onclick="reject_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
                                 <span class="fa fa-times"></span>
                                 <?= $current_module->language->record_nav->actions->reject ?>
                             </span>
@@ -532,14 +532,14 @@ endif;
                         <? if( $account->level < config::MODERATOR_USER_LEVEL
                                && $row->id_author != $account->id_account 
                                && ! in_array($row->status, array("rejected", "spam", "trashed")) ): ?>
-                            <span class="action pseudo_link critical" onclick="spam_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
+                            <span class="action pseudo_link comment_action_flag_as_spam critical" onclick="spam_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
                                 <span class="fa fa-warning"></span>
                                 <?= $current_module->language->record_nav->actions->spam ?>
                             </span>
                         <? endif; ?>
     
                         <? if( $row->can_be_deleted() && $row->status != "trashed" ): ?>
-                            <span class="action pseudo_link critical"
+                            <span class="action pseudo_link comment_action_trash critical"
                                   onclick="if( confirm('<?= $language->confirm_action ?>') ) delete_comment('<?= $row->id_comment ?>', function() { $('#refresh_commments_browser').click(); })">
                                 <span class="fa fa-trash"></span>
                                 <?= $current_module->language->record_nav->actions->trash ?>
@@ -547,7 +547,7 @@ endif;
                         <? endif; ?>
                         
                         <? if( $row->status == "trashed" && $account->level >= config::MODERATOR_USER_LEVEL ): ?>
-                            <span class="action pseudo_link" onclick="untrash_for_review('<?= $row->id_comment ?>')">
+                            <span class="action comment_action_untrash pseudo_link" onclick="untrash_for_review('<?= $row->id_comment ?>')">
                                 <span class="fa fa-refresh fa-fw"></span>
                                 <?= $current_module->language->record_nav->actions->untrash_for_review ?>
                             </span>
