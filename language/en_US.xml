@@ -388,6 +388,10 @@
     </multi_actions>
     
     <email_templates>
+        <blacklist_email_link><![CDATA[
+            <li><a href="{$url}"><b>Blacklist this email address</b></a> so no emails from us are sent to it.</li>
+        ]]></blacklist_email_link>
+        
         <comment_added>
             <for_author>
                 <subject>A comment has been submitted to your post titled "{$title}" on {$website_name}</subject>
@@ -406,7 +410,7 @@
                         <li><a href="{$reply_url}"><b>Reply</b></a> to {$comment_sender}.</li>
                         <li><a href="{$report_url}"><b>Report</b></a> as spam or inappropiate.</li>
                         <li><a href="{$preferences}"><b>Edit your preferences</b></a> to disable these notifications.</li>
-                        <li><a href="{$blacklist_email}"><b>Blacklist this email address</b></a> so no emails from us are sent to it.</li>
+                        {$blacklist_email_link}
                     </ul>
                     
                     <p>Regards,<br>
@@ -489,7 +493,7 @@
                         <li><a href="{$reply_url}"><b>Reply</b></a> to {$comment_sender}.</li>
                         <li><a href="{$report_url}"><b>Report</b></a> as spam or inappropiate.</li>
                         <li><a href="{$preferences}"><b>Edit your preferences</b></a> to disable these notifications.</li>
-                        <li><a href="{$blacklist_email}"><b>Blacklist this email address</b></a> so no emails from us are sent to it.</li>
+                        {$blacklist_email_link}
                     </ul>
                     
                     <p>Regards,<br>

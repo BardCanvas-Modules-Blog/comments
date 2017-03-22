@@ -98,7 +98,7 @@ class toolbox
      */
     private function notify_post_author_on_comment_submission($post_author, $comment_author)
     {
-        global $config, $current_module, $settings, $post, $comment;
+        global $config, $current_module, $settings, $post, $comment, $modules;
         
         if( $comment_author->id_account == $post_author->id_account ) return;
         
@@ -114,6 +114,15 @@ class toolbox
             )
         );
         
+        $blacklist_email_link = "";
+        if( $modules["security"]->enabled )
+            $blacklist_email_link = replace_escaped_vars(
+                $current_module->language->email_templates->blacklist_email_link,
+                '{$url}',
+                "{$config->full_root_url}/security/scripts/blacklist_email.php?address="
+                . urlencode(encrypt($post_author->email, $config->encryption_key))
+            );
+        
         $body = replace_escaped_vars(
             $current_module->language->email_templates->comment_added->for_author->body,
             array(
@@ -123,7 +132,7 @@ class toolbox
                 '{$comment}',
                 '{$reply_url}',
                 '{$report_url}',
-                '{$blacklist_email}',
+                '{$blacklist_email_link}',
                 '{$preferences}',
                 '{$website_name}',
                 '{$post_link}',
@@ -137,8 +146,7 @@ class toolbox
                 $comment->content,
                 "{$config->full_root_url}/{$post->id_post}?reply_to={$comment->id_comment}#comment_{$comment->id_comment}",
                 "{$config->full_root_url}/contact/?action=report&type=comment&id={$comment->id_comment}",
-                "{$config->full_root_url}/security/scripts/blacklist_email.php?address="
-                . urlencode(encrypt($post_author->email, $config->encryption_key)),
+                $blacklist_email_link,
                 "{$config->full_root_url}/accounts/preferences.php",
                 $settings->get("engine.website_name"),
                 "{$config->full_root_url}/{$post->id_post}",
@@ -280,7 +288,7 @@ class toolbox
      */
     private function notify_parent_author_on_comment_reply($parent_comment, $parent_author, $post_author, $comment_author)
     {
-        global $config, $current_module, $settings, $post, $comment;
+        global $config, $current_module, $settings, $post, $comment, $modules;
         
         if( $comment_author->id_account == $parent_author->id_account ) return;
         
@@ -296,6 +304,15 @@ class toolbox
             )
         );
         
+        $blacklist_email_link = "";
+        if( $modules["security"]->enabled )
+            $blacklist_email_link = replace_escaped_vars(
+                $current_module->language->email_templates->blacklist_email_link,
+                '{$url}',
+                "{$config->full_root_url}/security/scripts/blacklist_email.php?address="
+                . urlencode(encrypt($post_author->email, $config->encryption_key))
+            );
+        
         $body = replace_escaped_vars(
             $current_module->language->email_templates->comment_replied->for_parent_author->body,
             array(
@@ -308,7 +325,7 @@ class toolbox
                 '{$comment}',
                 '{$reply_url}',
                 '{$report_url}',
-                '{$blacklist_email}',
+                '{$blacklist_email_link}',
                 '{$preferences}',
                 '{$website_name}',
             ),
@@ -324,8 +341,7 @@ class toolbox
                 $comment->content,
                 "{$config->full_root_url}/{$post->id_post}?reply_to={$comment->id_comment}#comment_{$comment->id_comment}",
                 "{$config->full_root_url}/contact/?action=report&type=comment&id={$comment->id_comment}",
-                "{$config->full_root_url}/security/scripts/blacklist_email.php?address="
-                . urlencode(encrypt($parent_author->email, $config->encryption_key)),
+                $blacklist_email_link,
                 "{$config->full_root_url}/accounts/preferences.php",
                 $settings->get("engine.website_name"),
             )

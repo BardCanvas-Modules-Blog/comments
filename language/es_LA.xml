@@ -396,6 +396,10 @@
     </multi_actions>
     
     <email_templates>
+        <blacklist_email_link><![CDATA[
+                <li><a href="{$url}"><b>Bloquear tu dirección de correo</b></a> para que no recibas más mensajes de nuestro sitio.</li>
+            ]]></blacklist_email_link>
+        
         <comment_added>
             <for_author>
                 <subject>Se ha registrado un comentario en tu entrada titulada "{$title}" en {$website_name}</subject>
@@ -414,7 +418,7 @@
                         <li><a href="{$reply_url}"><b>Responder</b></a> a {$comment_sender}.</li>
                         <li><a href="{$report_url}"><b>Reportar</b></a> como spam o inapropiado.</li>
                         <li><a href="{$preferences}"><b>Editar tus preferencias</b></a> para desactivar estas notificaciones.</li>
-                        <li><a href="{$blacklist_email}"><b>Bloquear tu dirección de correo</b></a> para que no recibas más mensajes de nuestro sitio.</li>
+                        {$blacklist_email_link}
                     </ul>
                     
                     <p>Atentamente,<br>
@@ -495,7 +499,7 @@
                         <li><a href="{$reply_url}"><b>Responder</b></a> a {$comment_sender}.</li>
                         <li><a href="{$report_url}"><b>Reportar</b></a> como spam o inapropiado.</li>
                         <li><a href="{$preferences}"><b>Editar tus preferencias</b></a> para desactivar estas notificaciones.</li>
-                        <li><a href="{$blacklist_email}"><b>Bloquear tu dirección de correo</b></a> para que no recibas más mensajes de nuestro sitio.</li>
+                        {$blacklist_email_link}
                     </ul>
                     
                     <p>Atentamente,<br>
