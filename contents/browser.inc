@@ -124,6 +124,9 @@ switch( $order )
 $records = $repository->find($where, $limit, $offset, $sqlorder);
 $query   = $repository->get_last_query();
 $authors = $repository->get_all_authors($records);
+
+$per_column_function_hooks = array();
+$current_module->load_extensions("browser", "per_record_function_hooks");
 #endregion
 ?>
 
@@ -588,6 +591,12 @@ endif;
                                 <?= $isp ?>
                             </span><br>
                         <? endif; ?>
+                        
+                        <?
+                        if( ! empty($per_column_function_hooks["sent_from_info"]) )
+                            foreach($per_column_function_hooks["sent_from_info"] as $function)
+                                if( function_exists($function) ) $function($row);
+                        ?>
                     </td>
                 <? endif; ?>
             </tr>
