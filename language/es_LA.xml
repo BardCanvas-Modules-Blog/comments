@@ -323,6 +323,15 @@
             ]]></description>
             <type>number</type>
         </specs>
+        <specs key="use_triklet_for_reporting">
+            <title>Usar el módulo de Triklet para reportar comentarios?</title>
+            <description><![CDATA[
+                Si el módulo Triklet está instalado y activo y esta opción está puesta a "Sí",
+                los usuarios conectados que den click al vínculo "reportar comentario" serán redireccionados
+                a la forma de composición de nuevo ticket en vez de ir a la forma de contacto.
+            ]]></description>
+            <type>yes/no</type>
+        </specs>
     </settings_data>
     
     <rss_feed_generator>
