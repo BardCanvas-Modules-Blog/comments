@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module>
     
-    <version>1.8.7</version>
+    <version>1.8.8</version>
     <group>modules_blog</group>
     
     <working_flags>
@@ -69,6 +69,9 @@
             </search_by_tag>
         </search>
         <contact>
+            <index>
+                <pre_start>extenders/contact_index_pre_start.inc</pre_start>
+            </index>
             <form>
                 <presets>extenders/contact_form_report_presets.inc</presets>
             </form>
@@ -93,6 +96,11 @@
                 <principal_data_addons priority="100">extenders/gallery/principal_data_addons.inc</principal_data_addons>
             </records_browser>
         </gallery>
+        <triklet>
+            <home_form>
+                <presets>extenders/triklet_form_report_presets.inc</presets>
+            </home_form>
+        </triklet>
     </extends_to>
     
 </module>
