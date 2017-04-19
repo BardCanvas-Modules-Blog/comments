@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.8.9] - 2017-04-19
+
+- Removed propagated media deletions when trashing comments.
+
 ## [1.8.8] - 2017-04-11
 
 - Added extenders for reporting comments to tickets instead of the contact form
