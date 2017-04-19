@@ -204,8 +204,8 @@ if($_GET["action"] == "change_status")
             
             $repository->set_tags(array(), $comment->id_comment);
             $deletions = $repository->set_media_items(array(), $comment->id_comment);
-            if( is_array($media_deletions) && ! empty($media_deletions) )
-                $media_repository->delete_multiple_if_unused($media_deletions);
+            //if( is_array($media_deletions) && ! empty($media_deletions) )
+            //    $media_repository->delete_multiple_if_unused($media_deletions);
             
             die("OK");
             break;
