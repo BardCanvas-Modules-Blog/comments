@@ -69,8 +69,8 @@ if($_GET["action"] == "change_status")
             
             $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
-            $post_title   = $post->title;
-            $comment_link = $post->get_permalink(true) . "#comment_" . $comment->id_comment;
+            $post_title   = is_null($post) ? "N/A" : $post->title;
+            $comment_link = is_null($post) ? "" : ($post->get_permalink(true) . "#comment_" . $comment->id_comment);
             
             $author       = $comment->get_author();
             $author_link  = empty($comment->id_author)
@@ -130,8 +130,8 @@ if($_GET["action"] == "change_status")
     
             $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
-            $post_title   = $post->title;
-            $comment_link = $post->get_permalink(true) . "#comment_" . $comment->id_comment;
+            $post_title   = is_null($post) ? "N/A" : $post->title;
+            $comment_link = is_null($post) ? "" : ($post->get_permalink(true) . "#comment_" . $comment->id_comment);
             
             $author       = $comment->get_author();
             $author_link  = empty($comment->id_author)
@@ -171,8 +171,8 @@ if($_GET["action"] == "change_status")
     
             $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
-            $post_title   = $post->title;
-            $comment_link = $post->get_permalink(true) . "#comment_" . $comment->id_comment;
+            $post_title   = is_null($post) ? "N/A" : $post->title;
+            $comment_link = is_null($post) ? "" : ($post->get_permalink(true) . "#comment_" . $comment->id_comment);
             
             $author       = $comment->get_author();
             $author_link  = empty($comment->id_author)
@@ -221,8 +221,8 @@ if($_GET["action"] == "change_status")
             
             $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
             $post         = $comment->get_post();
-            $post_title   = $post->title;
-            $comment_link = $post->get_permalink(true) . "#comment_" . $comment->id_comment;
+            $post_title   = is_null($post) ? "N/A" : $post->title;
+            $comment_link = is_null($post) ? "" : ($post->get_permalink(true) . "#comment_" . $comment->id_comment);
             
             $author       = $comment->get_author();
             $author_link  = empty($comment->id_author)

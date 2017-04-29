@@ -385,8 +385,8 @@ endif;
             $author_email = empty($row->id_author) ? $row->author_email        : $author->email;
             
             $post       = $row->get_post();
-            $post_url   = $post->get_permalink();
-            $post_title = $post->get_processed_title(false);
+            $post_url   = is_null($post) ? ""    : $post->get_permalink();
+            $post_title = is_null($post) ? "N/A" : $post->get_processed_title(false);
             
             $status_class = $row->status == "trashed" ? "deleted" : "";
             ?>
