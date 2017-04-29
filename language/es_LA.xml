@@ -57,6 +57,7 @@
         <menu_caption>Comentarios</menu_caption>
         <columns>
             <sent_date>
+                <layout xnowrap="true" />
                 <caption>Enviado</caption>
                 <order_asc  id="1">Ordenar por fecha de envío ascendente</order_asc>
                 <order_desc id="2">Ordenar por fecha de envío descendente</order_desc>

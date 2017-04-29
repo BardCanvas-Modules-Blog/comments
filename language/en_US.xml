@@ -57,6 +57,7 @@
         <menu_caption>Comments</menu_caption>
         <columns>
             <sent_date>
+                <layout xnowrap="true" />
                 <caption>Sent</caption>
                 <order_asc  id="1">Order by sent date ascending</order_asc>
                 <order_desc id="2">Order by sent date descending</order_desc>
