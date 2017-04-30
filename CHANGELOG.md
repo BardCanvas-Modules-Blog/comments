@@ -1,6 +1,11 @@
 
 # Comments Module Change Log
 
+## [1.8.10] - 2017-04-29
+
+- Added checks to avoid errors by comments on deleted posts on the toolbox and the browser.
+- Minimal fixes.
+
 ## [1.8.9] - 2017-04-19
 
 - Removed propagated media deletions when trashing comments.
