@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.8.11] - 2017-05-01
+
+- Fixed error thrown when comments contained quotes when checking against user limits.
+
 ## [1.8.10] - 2017-04-29
 
 - Added checks to avoid errors by comments on deleted posts on the toolbox and the browser.
