@@ -116,7 +116,7 @@ if( $account->level < config::MODERATOR_USER_LEVEL && $interval > 0 )
     $boundary = date("Y-m-d H:i:s", strtotime("now - $interval minutes"));
     $params = array(
         "id_author" => $comment->id_author,
-        "content"   => $comment->content,
+        "content"   => addslashes($comment->content),
         "creation_date >= '{$boundary}'"
     );
     
