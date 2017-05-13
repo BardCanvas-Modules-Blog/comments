@@ -222,6 +222,17 @@
     
     <settings_data>
         <title>Comments</title>
+        <specs key="avoid_anonymous">
+            <title>Avoid anonymous comments</title>
+            <description><![CDATA[
+                Enable this option if you want to allow commenting only to registered users
+                with an open session.<br>
+                <i class="fa fa-info-circle"></i>
+                <b>Note:</b> any module that extends the comments module and relies on interaction
+                with comments and commenters may be affected by this switch.
+            ]]></description>
+            <type>boolean</type>
+        </specs>
         <specs key="items_per_page">
             <title>Amount to show on single posts</title>
             <description><![CDATA[

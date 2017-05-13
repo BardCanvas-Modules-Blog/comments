@@ -21,11 +21,18 @@ use hng2_modules\posts\post_record;
 global $post, $template, $language, $settings, $account;
 
 $allow_new_comments = true;
-$days = $settings->get("modules:comments.disable_new_after");
-if( ! empty($days) && ! empty($post->publishing_date) && $post->publishing_date != "0000-00-00 00:00:00" )
+if( $settings->get("modules:comments.avoid_anonymous") == "true" )
 {
-    $boundary = date("Y-m-d H:i:s", strtotime("$post->publishing_date + $days days"));
-    if( date("Y-m-d H:i:s") > $boundary ) $allow_new_comments = false;
+    $allow_new_comments = false;
+}
+else
+{
+    $days = $settings->get("modules:comments.disable_new_after");
+    if( ! empty($days) && ! empty($post->publishing_date) && $post->publishing_date != "0000-00-00 00:00:00" )
+    {
+        $boundary = date("Y-m-d H:i:s", strtotime("$post->publishing_date + $days days"));
+        if( date("Y-m-d H:i:s") > $boundary ) $allow_new_comments = false;
+    }
 }
 ?>
 

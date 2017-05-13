@@ -227,6 +227,17 @@
     
     <settings_data>
         <title>Comentarios</title>
+        <specs key="avoid_anonymous">
+            <title>Impedir comentarios anónimos</title>
+            <description><![CDATA[
+                Activa esta opción si sólo permitirás que los usuarios registrados
+                con una sesión abierta puedan enviar comentarios.<br>
+                <i class="fa fa-info-circle"></i>
+                <b>Nota:</b> cualquier módulo que extienda el módulo de comentarios y dependa de la interacción
+                con comentarios y comentadores puede ser afectado por este interruptor.
+            ]]></description>
+            <type>boolean</type>
+        </specs>
         <specs key="items_per_page">
             <title>Cantidad a mostrar en entradas</title>
             <description><![CDATA[
