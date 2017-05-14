@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.9.0] - 2017-05-136
+
+- Added switch to avoid comments from anonymous users.
+
 ## [1.8.11] - 2017-05-01
 
 - Fixed error thrown when comments contained quotes when checking against user limits.
