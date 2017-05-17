@@ -195,6 +195,11 @@
         </impersonation>
         <comments_hidden>{$count} comentarios de {$author} han sido ocultados.</comments_hidden>
         <comments_unhidden>{$count} comentarios de {$author} han sido restaurados.</comments_unhidden>
+        <anonymous_cant_comment>Lo sentimos, pero necesitas estar registrado en nuestro sitio y tener una sesión abierta si deseas dejar comentarios</anonymous_cant_comment>
+        <register_to_comment><![CDATA[
+            ¡Necesitas tener una cuenta registrada si deseas dejar tus comentarios en esta o cualquier otra entrada!<br>
+            <a href="/accounts/register.php">¡Da click aquí para registrarte ahora!</a>
+        ]]></register_to_comment>
     </messages>
     
     <notifications>

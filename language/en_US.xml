@@ -190,6 +190,11 @@
         </impersonation>
         <comments_hidden>{$count} comments from {$author} have been hidden.</comments_hidden>
         <comments_unhidden>{$count} comments from {$author} have been restored.</comments_unhidden>
+        <anonymous_cant_comment>Sorry, but you need to be registered with us and have an open session in order to leave comments</anonymous_cant_comment>
+        <register_to_comment><![CDATA[
+            You need to register an account if you want to leave comments on this or any other post!<br>
+            <a href="/accounts/register.php">Click here to register now!</a>
+        ]]></register_to_comment>
     </messages>
     
     <notifications>
