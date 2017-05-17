@@ -1,7 +1,11 @@
 
 # Comments Module Change Log
 
-## [1.9.0] - 2017-05-136
+## [1.9.1] - 2017-05-17
+
+- Fixes and additions to anonymous restrictions.
+
+## [1.9.0] - 2017-05-16
 
 - Added switch to avoid comments from anonymous users.
 
