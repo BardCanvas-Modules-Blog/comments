@@ -21,7 +21,7 @@ use hng2_modules\posts\post_record;
 global $post, $template, $language, $settings, $account;
 
 $allow_new_comments = true;
-if( $settings->get("modules:comments.avoid_anonymous") == "true" )
+if( $settings->get("modules:comments.avoid_anonymous") == "true" && ! $account->_exists )
 {
     $allow_new_comments = false;
 }
@@ -50,7 +50,21 @@ else
     <? return; ?>
 <? endif; ?>
 
-<? if( $post->allow_comments == 0 || ! $allow_new_comments ) return; ?>
+<?
+if( $post->allow_comments == 0 || ! $allow_new_comments )
+{
+    if( ! $account->_exists
+        && $settings->get("modules:comments.avoid_anonymous") == "true"
+        && $settings->get("modules:accounts.register_enabled") == "true" ) echo "
+        <div class='content_frame framed_content state_highlight aligncenter' style='padding: 20px'>
+            <i class='fa fa-info-circle'></i>
+            {$this_module->language->messages->register_to_comment}
+        </div>
+    ";
+    
+    return;
+}
+?>
 
 <div id="post_new_comment_form" class="content_frame">
     <h1><?= $this_module->language->leave_a_comment ?></h1>
