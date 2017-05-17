@@ -44,6 +44,9 @@ if( empty($_POST["content"]) ) die($current_module->language->messages->empty_me
 
 if( ! $account->_exists )
 {
+    if( $settings->get("modules:comments.avoid_anonymous") == "true" )
+        die($current_module->language->messages->anonymous_cant_comment);
+    
     if( empty($_POST["author_display_name"]) ) die($current_module->language->messages->empty_name);
     if( empty($_POST["author_email"]) )        die($current_module->language->messages->invalid_email);
     
