@@ -1,6 +1,13 @@
 
 # Comments Module Change Log
 
+## [1.10.0] - 2017-05-20
+
+- Added extension points on the toolbox.
+- Added missing parameter for Triklet redirector.
+- Added extension points on the browser.
+- Added helper method to repository class.
+
 ## [1.9.1] - 2017-05-17
 
 - Fixes and additions to anonymous restrictions.
