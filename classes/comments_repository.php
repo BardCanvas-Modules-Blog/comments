@@ -632,4 +632,26 @@ class comments_repository extends abstract_repository
           and creation_date < '$boundary'
         ");
     }
+    
+    /**
+     * @param array $ids
+     *
+     * @return comment_record[]
+     */
+    public function get_multiple(array $ids)
+    {
+        if( count($ids) == 0 ) return array();
+        
+        $prepared_ids = array();
+        foreach($ids as $id) $prepared_ids[] = "'$id'";
+        $prepared_ids = implode(", ", $prepared_ids);
+        
+        $res = $this->find(array("id_comment in ($prepared_ids)"), 0, 0, "");
+        if( count($res) == 0 ) return array();
+        
+        $return = array();
+        foreach($res as $comment) $return[$comment->id_comment] = $comment;
+        
+        return $return;
+    }
 }
