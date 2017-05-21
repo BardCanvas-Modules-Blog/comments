@@ -23,6 +23,6 @@ if( ! $account->_exists ) return;
 if( ! isset($modules["triklet"]) ) return;
 if( $settings->get("modules:comments.use_triklet_for_reporting") != "true" ) return;
 
-$url = "{$modules["triklet"]->get_url()}/?action={$_GET["action"]}&type={$_GET["type"]}&id={$_GET["id"]}&hide_welcome=true#triklet_ticket_form";
+$url = "{$modules["triklet"]->get_url()}/?action={$_GET["action"]}&type={$_GET["type"]}&id={$_GET["id"]}&hide_welcome=true&show_form=true#triklet_ticket_form";
 header("Location: $url");
 die("<a href='$url'>{$language->click_here_to_continue}</a>");
