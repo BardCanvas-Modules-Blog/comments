@@ -460,6 +460,12 @@ endif;
                     
                     <? render_comment_attached_media($row); ?>
                     
+                    <?
+                    if( ! empty($per_column_function_hooks["extra_details"]) )
+                        foreach($per_column_function_hooks["extra_details"] as $function)
+                            if( function_exists($function) ) $function($row);
+                    ?>
+                    
                     <hr>
                     <div class="actions">
                         
