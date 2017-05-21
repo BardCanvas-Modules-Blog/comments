@@ -9,6 +9,7 @@
  * @var account           $account
  * @var settings          $settings
  * @var \SimpleXMLElement $language
+ * @var module            $current_module
  * 
  * $_GET params:
  * @param string "action"     change_status|preview|untrash_for_review|empty_trash
@@ -18,6 +19,7 @@
 
 use hng2_base\account;
 use hng2_base\config;
+use hng2_base\module;
 use hng2_base\settings;
 use hng2_media\media_repository;
 use hng2_modules\comments\comments_repository;
@@ -65,6 +67,7 @@ if($_GET["action"] == "change_status")
             
             if( empty($res) ) die("OK");
             
+            $current_module->load_extensions("toolbox", "after_publishing");
             $posts_repository->update_comments_count($comment->id_post);
             
             $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
@@ -126,6 +129,7 @@ if($_GET["action"] == "change_status")
             $res = $repository->change_status($comment->id_comment, "rejected");
             if( empty($res) ) die("OK");
             
+            $current_module->load_extensions("toolbox", "after_rejecting");
             $posts_repository->update_comments_count($comment->id_post);
     
             $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
@@ -167,6 +171,7 @@ if($_GET["action"] == "change_status")
             $res = $repository->change_status($comment->id_comment, "trashed");
             if( empty($res) ) die("OK");
             
+            $current_module->load_extensions("toolbox", "after_trashing");
             $posts_repository->update_comments_count($comment->id_post);
     
             $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
@@ -217,6 +222,7 @@ if($_GET["action"] == "change_status")
             $res = $repository->change_status($comment->id_comment, "spam");
             if( empty($res) ) die("OK");
             
+            $current_module->load_extensions("toolbox", "after_flagging_as_spam");
             $posts_repository->update_comments_count($comment->id_post);
             
             $cuser_link   = $account->display_name; # "<a href='{$config->full_root_url}/user/{$account->user_name}'>{$account->display_name}</a>";
@@ -267,6 +273,7 @@ if($_GET["action"] == "change_status")
             $res = $repository->change_status($comment->id_comment, "hidden");
             if( empty($res) ) die("OK");
             
+            $current_module->load_extensions("toolbox", "after_hiding");
             $posts_repository->update_comments_count($comment->id_post);
             
             //$repository->set_tags(array(), $comment->id_comment);
@@ -289,6 +296,7 @@ if($_GET["action"] == "untrash_for_review")
     if( $comment->status == "reviewing" ) die("OK");
     
     $res = $repository->change_status($comment->id_comment, "reviewing");
+    $current_module->load_extensions("toolbox", "after_untrashing_for_review");
     
     die("OK");
 }
