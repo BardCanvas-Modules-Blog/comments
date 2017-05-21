@@ -179,6 +179,7 @@ if( ! empty($_GET["edit"]) ):
     
     <?= $current_module->language->index->title; ?>
     
+    <? $current_module->load_extensions("browser", "main_actions"); ?>
 </h1>
 
 <div class="filtering clearfix">
@@ -399,7 +400,7 @@ endif;
                     <?= time_today_string($row->creation_date) ?><br>
                     (<?= time_elapsed_string($row->creation_date) ?>)
                 </td>
-                <td data-for="sent_by" nowrap>
+                <td data-for="sent_by">
                     <? if( ! empty($author) ): ?>
                         
                         <a class="user_display_name" data-user-level="<?= $author->level ?>"
@@ -412,9 +413,14 @@ endif;
                                   title="<?= replace_escaped_vars( $language->contact->pm->title, '{$website_name}', $settings->get("engine.website_name") ) ?>">
                                 <span class="fa fa-inbox fa-fw"></span>
                                 <?= $language->contact->pm->caption ?>
-                            </span>
+                            </span><br>
                         <? endif; ?>
                         
+                        <?
+                        if( ! empty($per_column_function_hooks["author_info"]) )
+                            foreach($per_column_function_hooks["author_info"] as $function)
+                                if( function_exists($function) ) $function($row, $author);
+                        ?>
                     <? else: ?>
                         
                         <div class="principal_data"><?= convert_emojis($author_name) ?></div>
@@ -556,6 +562,11 @@ endif;
                             </span>
                         <? endif; ?>
                         
+                        <?
+                        if( ! empty($per_column_function_hooks["actions"]) )
+                            foreach($per_column_function_hooks["actions"] as $function)
+                                if( function_exists($function) ) $function($row);
+                        ?>
                     </div>
                 </td>
                 <td data-for="in_reply_to">

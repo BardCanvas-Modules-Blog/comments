@@ -41,6 +41,7 @@
         Saving comments: before saving, after saving.
         Comment Record Class: Get Processed Content.
         Toolbox: After Publishing, After rejecting, After trashing, After flagging as spam, After hiding, After untrashing for review.
+        Browser: Main actions
     ]]></extension_areas_info>
     
     <extends_to>
