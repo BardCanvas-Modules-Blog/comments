@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.10.1] - 2017-05-23
+
+- Added per column function hook for extra details. 
+
 ## [1.10.0] - 2017-05-20
 
 - Added extension points on the toolbox.
