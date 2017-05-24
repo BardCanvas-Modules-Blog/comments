@@ -602,7 +602,7 @@ class comments_repository extends abstract_repository
     
     public function empty_trash()
     {
-        global $database;
+        global $database, $modules;
         
         $boundary = date("Y-m-d 00:00:00", strtotime("today - 7 days"));
         
@@ -626,6 +626,8 @@ class comments_repository extends abstract_repository
             and creation_date < '$boundary'
           )
         ");
+        
+        $modules["comments"]->load_extensions("comments_repository_class", "empty_trash");
         
         $database->exec("
           delete from comments where status = 'trashed'
