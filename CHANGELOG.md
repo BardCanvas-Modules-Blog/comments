@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.10.2] - 2017-05-25
+
+- Added extension point before emptying the trash.
+
 ## [1.10.1] - 2017-05-23
 
 - Added per column function hook for extra details. 
