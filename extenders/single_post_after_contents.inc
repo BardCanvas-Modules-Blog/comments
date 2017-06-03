@@ -15,13 +15,14 @@
  * @var module $current_module posts
  */
 
+use hng2_base\config;
 use hng2_base\module;
 use hng2_modules\posts\post_record;
 
 global $post, $template, $language, $settings, $account;
 
 $allow_new_comments = true;
-if( $settings->get("modules:comments.avoid_anonymous") == "true" && ! $account->_exists )
+if( $settings->get("modules:comments.avoid_anonymous") == "true" && $account->level < config::NEWCOMER_USER_LEVEL )
 {
     $allow_new_comments = false;
 }
