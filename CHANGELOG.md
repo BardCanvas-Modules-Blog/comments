@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.10.3] - 2017-06-08
+
+- Improved checks to prevent guests from commenting
+
 ## [1.10.2] - 2017-05-25
 
 - Added extension point before emptying the trash.
