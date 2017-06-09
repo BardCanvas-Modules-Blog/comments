@@ -35,23 +35,9 @@ else
         if( date("Y-m-d H:i:s") > $boundary ) $allow_new_comments = false;
     }
 }
-?>
 
-<? include "{$template->abspath}/segments/comments_for_single_post.inc"; ?>
+include "{$template->abspath}/segments/comments_for_single_post.inc";
 
-<? if( $settings->get("engine.recaptcha_public_key") == "" ): ?>
-    
-    <div class="content_frame">
-        <div class="framed_content state_ko">
-            <span class="fa fa-warning"></span>
-            <?= $language->captcha_not_configured ?>
-        </div>
-    </div>
-    
-    <? return; ?>
-<? endif; ?>
-
-<?
 if( $post->allow_comments == 0 || ! $allow_new_comments )
 {
     if( ! $account->_exists

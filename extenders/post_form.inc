@@ -24,7 +24,9 @@ use hng2_modules\posts\post_record;
 
 global $post, $template, $language, $settings, $account;
 
-if( ! function_exists("recaptcha_get_html") ) include_once ROOTPATH . "/lib/recaptcha-php-1.11/recaptchalib.php";
+if( $settings->get("engine.recaptcha_private_key") != "" && $settings->get("engine.recaptcha_public_key") )
+    if( ! function_exists("recaptcha_get_html") )
+        include_once ROOTPATH . "/lib/recaptcha-php-1.11/recaptchalib.php";
 
 $action = "add.php";
 
@@ -86,11 +88,13 @@ if( ! empty($_COOKIE["{$config->website_key}_comments_au"]) )
             </div>
         </div>
         
-        <div class="field recaptcha_target" id="recaptcha_<?= uniqid() ?>"
-              data-public-key="<?= $settings->get("engine.recaptcha_public_key") ?>">
-            <? if( ! $template->get("ajax_calling") ) echo recaptcha_get_html($settings->get("engine.recaptcha_public_key"), null, $_SERVER["HTTPS"]); ?>
-        </div>
-    
+        <? if( $settings->get("engine.recaptcha_private_key") != "" && $settings->get("engine.recaptcha_public_key") ): ?>
+            <div class="field recaptcha_target" id="recaptcha_<?= uniqid() ?>"
+                  data-public-key="<?= $settings->get("engine.recaptcha_public_key") ?>">
+                <? if( ! $template->get("ajax_calling") ) echo recaptcha_get_html($settings->get("engine.recaptcha_public_key"), null, $_SERVER["HTTPS"]); ?>
+            </div>
+        <? endif; ?>
+        
     <? endif; ?>
     
     <p>

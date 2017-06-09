@@ -100,15 +100,16 @@ if( ! $account->_exists )
     if( $accounts_repository->get_record_count(array("alt_email" => $comment->author_email)) > 0 )
         die($current_module->language->messages->impersonation->email_exists);
     
-    if( $settings->get("engine.recaptcha_private_key") == "" ) die( $language->captcha_not_configured );
-    
-    $res = recaptcha_check_answer(
-        $settings->get("engine.recaptcha_private_key"),
-        get_remote_address(),
-        $_POST["recaptcha_challenge_field"],
-        $_POST["recaptcha_response_field"]
-    );
-    if( ! $res->is_valid ) die( $current_module->language->messages->invalid_captcha );
+    if( $settings->get("engine.recaptcha_private_key") != "" && $settings->get("engine.recaptcha_public_key") )
+    {
+        $res = recaptcha_check_answer(
+            $settings->get("engine.recaptcha_private_key"),
+            get_remote_address(),
+            $_POST["recaptcha_challenge_field"],
+            $_POST["recaptcha_response_field"]
+        );
+        if( ! $res->is_valid ) die( $current_module->language->messages->invalid_captcha );
+    }
 }
 
 // Double submission check
