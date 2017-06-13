@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.11.0] - 2017-06-12
+
+- Removed mandatory captcha usage.
+
 ## [1.10.3] - 2017-06-08
 
 - Improved checks to prevent guests from commenting
