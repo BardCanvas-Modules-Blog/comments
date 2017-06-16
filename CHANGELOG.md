@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.11.1] - 2017-06-16
+
+- Added extension points to the repository.
+
 ## [1.11.0] - 2017-06-12
 
 - Removed mandatory captcha usage.
