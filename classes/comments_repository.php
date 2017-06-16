@@ -209,11 +209,11 @@ class comments_repository extends abstract_repository
     /**
      * @param array $post_ids
      * 
-     * @return array two dimensions: id_post, id_comment
+     * @return comment_record[][] two dimensions: id_post, id_comment
      */
     public function get_for_multiple_posts(array $post_ids)
     {
-        global $settings, $database;
+        global $settings, $database, $config, $modules;
         
         if( empty($post_ids) ) return array();
         
@@ -260,6 +260,14 @@ class comments_repository extends abstract_repository
                     if( isset($authors[$comment->id_author]) )
                         $return[$post_id][$comment_id]->set_author($authors[$comment->id_author]);
         }
+        
+        # Faking this call for caching and stuff
+        $config->globals["author_ids"] = $author_ids;
+        $modules["comments"]->load_extensions("comments_repository_class", "preload_authors");
+        
+        # Content extenders for caching
+        $config->globals["multiple_post_comments"] = $return;
+        $modules["comments"]->load_extensions("comments_repository_class", "get_for_multiple_posts");
         
         return $return;
     }
