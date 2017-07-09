@@ -208,10 +208,11 @@ class comments_repository extends abstract_repository
     
     /**
      * @param array $post_ids
-     * 
+     * @param int   $limit
+     *
      * @return comment_record[][] two dimensions: id_post, id_comment
      */
-    public function get_for_multiple_posts(array $post_ids)
+    public function get_for_multiple_posts(array $post_ids, $limit = 0)
     {
         global $settings, $database, $config, $modules;
         
@@ -221,7 +222,7 @@ class comments_repository extends abstract_repository
         $queries    = array();
         $author_ids = array();
         
-        $limit  = $settings->get("modules:comments.items_per_index_entry");
+        if( empty($limit) ) $limit  = $settings->get("modules:comments.items_per_index_entry");
         if( empty($limit) ) $limit = 10;
         
         foreach($post_ids as $post_id)
