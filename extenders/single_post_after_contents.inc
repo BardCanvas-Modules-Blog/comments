@@ -19,7 +19,10 @@ use hng2_base\config;
 use hng2_base\module;
 use hng2_modules\posts\post_record;
 
-global $post, $template, $language, $settings, $account;
+global $post, $template, $language, $settings, $account, $config;
+
+# If someone is overriding us...
+if( $config->globals["modules:comments.avoid_extension:posts/front/single_post_after_contents"] ) return;
 
 $allow_new_comments = true;
 if( $settings->get("modules:comments.avoid_anonymous") == "true" && $account->level < config::NEWCOMER_USER_LEVEL )
