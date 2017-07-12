@@ -1,6 +1,11 @@
 
 # Comments Module Change Log
 
+## [1.11.2] - 2017-07-11
+
+- Added overriding checkpoint on `single_post_after_contents` extender.
+- Other minor additions.
+
 ## [1.11.1] - 2017-06-16
 
 - Added extension points to the repository.
