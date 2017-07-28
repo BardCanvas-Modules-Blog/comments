@@ -24,8 +24,14 @@ global $post, $template, $language, $settings, $account, $config;
 # If someone is overriding us...
 if( $config->globals["modules:comments.avoid_extension:posts/front/single_post_after_contents"] ) return;
 
+if( $post->status != "published" && $post->comments_count == 0 ) return;
+
 $allow_new_comments = true;
-if( $settings->get("modules:comments.avoid_anonymous") == "true" && $account->level < config::NEWCOMER_USER_LEVEL )
+if( $post->status != "published" )
+{
+    $allow_new_comments = false;
+}
+elseif( $settings->get("modules:comments.avoid_anonymous") == "true" && $account->level < config::NEWCOMER_USER_LEVEL )
 {
     $allow_new_comments = false;
 }
@@ -40,6 +46,7 @@ else
 }
 
 include "{$template->abspath}/segments/comments_for_single_post.inc";
+
 
 if( $post->allow_comments == 0 || ! $allow_new_comments )
 {
