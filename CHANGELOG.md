@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.11.3] - 2017-07-29
+
+- Added check to avoid rendering in unpublished posts.
+
 ## [1.11.2] - 2017-07-11
 
 - Added overriding checkpoint on `single_post_after_contents` extender.
