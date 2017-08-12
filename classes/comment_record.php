@@ -128,7 +128,7 @@ class comment_record extends abstract_record
         );
         
         $contents = convert_emojis($contents);
-        $contents = autolink_hash_tags($contents, "{$config->full_root_path}/tag/", "/comments");
+        $contents = autolink_hash_tags($contents, "{$config->full_root_path}/tag/", "");
         
         $config->globals["processing_contents"] = $contents;
         $modules["comments"]->load_extensions("comment_record_class", "get_processed_content");
