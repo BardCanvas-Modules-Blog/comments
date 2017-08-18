@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.11.4] - 2017-08-18
+
+- Fixed issue with hashtags autolinking.
+
 ## [1.11.3] - 2017-07-29
 
 - Added check to avoid rendering in unpublished posts.
