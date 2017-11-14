@@ -332,7 +332,7 @@
             ]]></description>
             <type>number</type>
         </specs>
-        <specs key="use_triklet_for_reporting">
+        <specs key="use_triklet_for_reporting" required_modules="triklet">
             <title>Use Triklet module for reporting comments?</title>
             <description><![CDATA[
                 If the Triklet module is installed and enabled and this option is set to "Yes",

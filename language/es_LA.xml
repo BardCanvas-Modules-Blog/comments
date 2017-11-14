@@ -340,7 +340,7 @@
             ]]></description>
             <type>number</type>
         </specs>
-        <specs key="use_triklet_for_reporting">
+        <specs key="use_triklet_for_reporting" required_modules="triklet">
             <title>Usar el módulo de Triklet para reportar comentarios?</title>
             <description><![CDATA[
                 Si el módulo Triklet está instalado y activo y esta opción está puesta a "Sí",
