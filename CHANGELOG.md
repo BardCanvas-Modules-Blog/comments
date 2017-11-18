@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.11.5] - 2017-11-18
+
+- Added filters for settings that depend on other modules.
+
 ## [1.11.4] - 2017-08-18
 
 - Fixed issue with hashtags autolinking.
