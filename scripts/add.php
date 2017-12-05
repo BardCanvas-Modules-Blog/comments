@@ -226,4 +226,6 @@ $repository->save($comment);
 $current_module->load_extensions("add_comment", "after_saving");
 $toolbox->trigger_notifications_after_saving("add", $comment);
 $posts_repository->update_comments_count($comment->id_post);
+
+if($_REQUEST["raw_success_confirmation"] == "true") die("OK");
 echo "OK:{$comment->id_comment}";
