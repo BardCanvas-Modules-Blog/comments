@@ -11,8 +11,8 @@
  * @var \SimpleXMLElement $language
  * 
  * $_POST fields:
- * @param id_post
- * @param content
+ * @param string "id_comment"
+ * @param string "content"
  */
 
 use hng2_base\account;
