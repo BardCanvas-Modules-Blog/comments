@@ -1,6 +1,11 @@
 
 # Comments Module Change Log
 
+## [1.11.6] - 2017-12-14
+
+- Changed some visibility on some repository class methods to allow access by extender classes.
+- Added check on comment addition to support remote post.
+
 ## [1.11.5] - 2017-11-18
 
 - Added filters for settings that depend on other modules.
