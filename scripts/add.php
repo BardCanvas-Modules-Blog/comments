@@ -171,6 +171,8 @@ if(
     $comment->content = str_replace("#$featured_posts_tag", $featured_posts_tag, $comment->content);
 }
 
+$current_module->load_extensions("add_comment", "before_extracting_media_items");
+
 $media_items = array();
 if( function_exists("extract_media_items") )
 {

@@ -37,7 +37,7 @@
     </template_includes>
     
     <extension_areas_info><![CDATA[
-        Adding comments: before saving, after saving.
+        Adding comments: before extracting media items, after saving for review, before saving, after saving.
         Saving comments: before saving, after saving.
         Comments repository class: preload authors, get for multiple posts, empty trash.
         Comment Record Class: Get Processed Content.
