@@ -40,7 +40,8 @@ if( $post->visibility == "private" && $account->id_account != $post->id_author )
 if( $post->visibility == "level_based" && $account->level < $post->author_level )
     die($current_module->language->messages->unable_to_comment);
 
-if( empty($_POST["content"]) ) die($current_module->language->messages->empty_message);
+if( empty($_POST["content"]) && empty($_POST["embedded_attachments"]) )
+    die($current_module->language->messages->empty_message);
 
 if( $settings->get("modules:comments.avoid_anonymous") == "true" && $account->level < config::NEWCOMER_USER_LEVEL )
     die($current_module->language->messages->anonymous_cant_comment);
