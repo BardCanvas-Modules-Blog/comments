@@ -1,6 +1,12 @@
 
 # Comments Module Change Log
 
+## [1.11.7] - 2017-12-18
+
+- Added extension point on the comment addition script.
+- Added missing module infos.
+- Added check on comment saving to allow empty messages but attached reaction images.
+
 ## [1.11.6] - 2017-12-14
 
 - Changed some visibility on some repository class methods to allow access by extender classes.
