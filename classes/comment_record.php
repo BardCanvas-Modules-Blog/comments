@@ -126,8 +126,15 @@ class comment_record extends abstract_record
             '<p><a href="$1" target="_blank">$1</a></p>',
             $contents
         );
-        
+    
+        $contents = convert_shortcodes($contents);
         $contents = convert_emojis($contents);
+        
+        $previous_setting = $config->globals["modules:gallery.avoid_images_autolinking"];
+        $config->globals["modules:gallery.avoid_images_autolinking"] = true;
+        $contents = convert_media_tags($contents);
+        $config->globals["modules:gallery.avoid_images_autolinking"] = $previous_setting;
+        
         $contents = autolink_hash_tags($contents, "{$config->full_root_path}/tag/", "");
         
         $config->globals["processing_contents"] = $contents;
