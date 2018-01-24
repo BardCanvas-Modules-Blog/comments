@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.11.8] - 2018-01-24
+
+- Added support for shortcode and media tag conversion calls in contents.
+
 ## [1.11.7] - 2017-12-18
 
 - Added extension point on the comment addition script.
