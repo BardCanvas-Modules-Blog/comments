@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.0] - 2018-03-16
+
+- Upgraded Google ReCaptcha lib to v2.
+
 ## [1.11.8] - 2018-01-24
 
 - Added support for shortcode and media tag conversion calls in contents.
