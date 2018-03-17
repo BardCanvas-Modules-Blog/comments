@@ -25,7 +25,6 @@ use hng2_modules\posts\posts_repository;
 header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
 include "../../includes/bootstrap.inc";
-include "../../lib/recaptcha-php-1.11/recaptchalib.php";
 
 if( empty($_POST["id_post"]) ) die($current_module->language->messages->empty_post_id);
 
@@ -103,13 +102,32 @@ if( ! $account->_exists )
     
     if( $settings->get("engine.recaptcha_private_key") != "" && $settings->get("engine.recaptcha_public_key") )
     {
-        $res = recaptcha_check_answer(
-            $settings->get("engine.recaptcha_private_key"),
-            get_remote_address(),
-            $_POST["recaptcha_challenge_field"],
-            $_POST["recaptcha_response_field"]
-        );
-        if( ! $res->is_valid ) die( $current_module->language->messages->invalid_captcha );
+        if( ! isset($_POST['g-recaptcha-response']) )
+            die($current_module->language->messages->invalid_captcha);
+        
+        $cap = trim(stripslashes($_POST['g-recaptcha-response']));
+        $ch  = curl_init("https://www.google.com/recaptcha/api/siteverify?secret={$settings->get("engine.recaptcha_private_key")}&response={$cap}");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $res = curl_exec($ch);
+        
+        if( curl_error($ch) )
+            die(replace_escaped_objects(
+                $current_module->language->messages->captcha_api_error,
+                array('{$error}' => curl_error($ch))
+            ));
+        
+        $obj = json_decode($res);
+        if( empty($obj) )
+            die(replace_escaped_objects(
+                $current_module->language->messages->captcha_api_error,
+                array('{$error}' => print_r($res))
+            ));
+        
+        if( ! $obj->success )
+            die($current_module->language->messages->invalid_captcha);
+        
+        curl_close($ch);
     }
 }
 

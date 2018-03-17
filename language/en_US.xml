@@ -134,7 +134,8 @@
         </comment_cannot_be_edited>
         <empty_name>Please type your name/alias</empty_name>
         <invalid_email>Please type a valid email</invalid_email>
-        <invalid_captcha>Invalid captcha input. Please try again.</invalid_captcha>
+        <invalid_captcha>Invalid captcha. Please try again.</invalid_captcha>
+        <captcha_api_error>Couldn't verify Captcha: {$error}</captcha_api_error>
         <already_sent>You already sent that comment within the last minutes.</already_sent>
         <sending_too_fast>You're sending comments too fast. Please wait {$time}.</sending_too_fast>
         <parent_not_found>The parent comment can't be found. It should have been deleted.</parent_not_found>

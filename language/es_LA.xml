@@ -136,7 +136,8 @@
         </comment_cannot_be_edited>
         <empty_name>Por favor escribe tu nombre o alias</empty_name>
         <invalid_email>Por favor escribe una dirección de correo válida</invalid_email>
-        <invalid_captcha>Clave de captcha inválida. Intenta de nuevo.</invalid_captcha>
+        <invalid_captcha>Captcha inválido. Intenta de nuevo.</invalid_captcha>
+        <captcha_api_error>No se ha logrado validar el Captcha: {$error}</captcha_api_error>
         <already_sent>Ya se ha registrado el comentario en el transcurso de los últimos minutos.</already_sent>
         <sending_too_fast>Estás enviando comentarios demasiado rápido. Por favor espera {$time}.</sending_too_fast>
         <parent_not_found>El comentario que intentas responder no se encuentra. Es posible que se haya eliminado.</parent_not_found>

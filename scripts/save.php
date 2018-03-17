@@ -25,7 +25,6 @@ use hng2_modules\posts\posts_repository;
 header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
 include "../../includes/bootstrap.inc";
-include "../../lib/recaptcha-php-1.11/recaptchalib.php";
 
 if( empty($_POST["id_comment"]) ) die($current_module->language->messages->missing_comment_id);
 if( empty($_POST["content"])    ) die($current_module->language->messages->message_cannot_be_empty);

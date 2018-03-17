@@ -43,10 +43,15 @@ function prepare_comment_reply(trigger, quote_parent)
         $form.find('input[name="id_post"]').val(id_post);
         $form.find('input[name="parent_comment"]').val(parent_id);
         
-        var recaptcha_id = $form.find('.recaptcha_target').attr('id');
-        var public_key   = $form.find('.recaptcha_target').attr('data-public-key');
-        
-        if(Recaptcha) Recaptcha.create(public_key, recaptcha_id);
+        var $rc_target = $form.find('.recaptcha_target');
+        if( $rc_target.length > 0 )
+        {
+            var recaptcha_id = $rc_target.attr('id');
+            var public_key   = $rc_target.attr('data-public-key');
+            var widget       = $rc_target.find('.g-recaptcha')[0];
+            
+            if(grecaptcha) grecaptcha.render(widget, {sitekey: public_key});
+        }
         
         tinymce.init(tinymce_defaults);
         
@@ -84,11 +89,7 @@ function discard_comment_reply(trigger)
     $source.find('.trigger').show();
     $source.attr('data-is-reply-active', 'false');
     
-    var $form        = $('#post_new_comment_form');
-    var recaptcha_id = $form.find('.recaptcha_target').attr('id');
-    var public_key   = $form.find('.recaptcha_target').attr('data-public-key');
-    if(Recaptcha) Recaptcha.create(public_key, recaptcha_id);
-    $form.show();
+    $('#post_new_comment_form').show();
 }
 
 function prepare_comment_form_serialization($form)
@@ -114,7 +115,7 @@ function process_comment_submission(response, status, xhr, $form)
         alert( response );
         $form.unblock();
     
-        if( Recaptcha ) Recaptcha.reload();
+        if(grecaptcha) grecaptcha.reset();
         return;
     }
     
