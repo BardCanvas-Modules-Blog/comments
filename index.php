@@ -15,7 +15,14 @@ use hng2_base\template;
 
 include "../config.php";
 include "../includes/bootstrap.inc";
-if( ! $account->_exists ) throw_fake_404();
+
+if( ! $account->_exists )
+{
+    $template->page_contents_include = "contents/request_login.inc";
+    $template->set_page_title($current_module->language->index->title);
+    include "{$template->abspath}/admin.php";
+    die();
+}
 
 $template->page_contents_include = "contents/index.inc";
 $template->set_page_title($current_module->language->index->title);
