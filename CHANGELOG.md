@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.1] - 2019-12-08
+
+- Added login form for unauthenticated users accessing the records browser.
+
 ## [1.12.0] - 2018-03-16
 
 - Upgraded Google ReCaptcha lib to v2.
