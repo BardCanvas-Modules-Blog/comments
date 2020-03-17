@@ -47,13 +47,13 @@ else
 
 include "{$template->abspath}/segments/comments_for_single_post.inc";
 
-
 if( $post->allow_comments == 0 || ! $allow_new_comments )
 {
-    if( ! $account->_exists
+    if( $post->allow_comments
+        && ! $account->_exists
         && $settings->get("modules:comments.avoid_anonymous") == "true"
         && $settings->get("modules:accounts.register_enabled") == "true" ) echo "
-        <div class='content_frame framed_content state_highlight aligncenter' style='padding: 20px'>
+        <div class='register_to_comment_message content_frame framed_content state_highlight aligncenter' style='padding: 20px'>
             <i class='fa fa-info-circle'></i>
             {$this_module->language->messages->register_to_comment}
         </div>
