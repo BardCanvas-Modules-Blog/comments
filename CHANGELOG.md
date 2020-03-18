@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.2] - 2020-03-17
+
+- Tuned checks for showing comments admission on posts.
+
 ## [1.12.1] - 2019-12-08
 
 - Added login form for unauthenticated users accessing the records browser.
