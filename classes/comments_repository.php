@@ -282,13 +282,23 @@ class comments_repository extends abstract_repository
      */
     public function get_for_single_post($id_post)
     {
+        global $modules, $config;
+        $module = $modules["comments"];
+        
         $browser        = new record_browser("");
         $find_params    = $this->build_find_params_for_post($id_post);
+        
+        $config->globals["@comments:repository"] = $this;
+        $config->globals["@comments:get_for_single_post_find_params"] = $find_params;
+        $module->load_extensions("comments_repository", "find_params_mod_before_getting_for_single_post");
+        $find_params = $config->globals["@comments:get_for_single_post_find_params"];
+        
         $comments_count = $this->get_record_count($find_params->where);
         $comments       = $this->find($find_params->where, $find_params->limit, $find_params->offset, $find_params->order);
         $pagination     = $browser->build_pagination($comments_count, $find_params->limit, $find_params->offset);
         
-        if( count($comments) ) $comments = array_reverse($comments);
+        if( count($comments) && ! $config->globals["@comments:no_result_reversing"] )
+            $comments = array_reverse($comments);
         
         $tree  = $this->build_tree($comments);
         $final = $this->flatten_tree($tree);
@@ -664,5 +674,15 @@ class comments_repository extends abstract_repository
         foreach($res as $comment) $return[$comment->id_comment] = $comment;
         
         return $return;
+    }
+    
+    public function get_additional_fields()
+    {
+        return $this->additional_select_fields;
+    }
+    
+    public function set_additional_field($string)
+    {
+        $this->additional_select_fields[] = $string;
     }
 }
