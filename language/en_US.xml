@@ -410,8 +410,8 @@
              
             Do you want to continue?
         ]]></confirmation>
-        <none_selected>Selecciona al menos una entrada para lleva a cabo la acción elegida.</none_selected>
-        <done>Todas las solicitudes han sido procesadas. El navegador de registos se actualizará ahora.</done>
+        <none_selected>Select at least one record to execute the selected action.</none_selected>
+        <done>All requests have been processed. The records browser will reload now.</done>
     </multi_actions>
     
     <email_templates>
