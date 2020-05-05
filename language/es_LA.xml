@@ -625,7 +625,7 @@
                     <span class="fa fa-info-circle"></span>
                     Sólo mods/admins
                 </span>
-                Recibir correos con los monetarios y el contexto.
+                Recibir correos con los comentarios y el contexto.
                 Aplica a comentarios de cualquiera excepto propios.
             ]]></description>
             <type>boolean</type>
