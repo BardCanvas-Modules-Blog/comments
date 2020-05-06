@@ -1,6 +1,12 @@
 
 # Comments Module Change Log
 
+## [1.12.3] - 2020-05-05
+
+- Added extension point and params treating possibility on the repository's comments for single post builder.
+- Fixed misplaced messages in English language file.
+- Fixed typos in Spanish language file.
+
 ## [1.12.2] - 2020-03-17
 
 - Tuned checks for showing comments admission on posts.
