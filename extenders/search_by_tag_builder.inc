@@ -20,7 +20,7 @@ use hng2_modules\search\search_by_tag_item;
 
 global $config, $template;
 
-$tag        = $template->get("current_tag");
+$tag        = addslashes($template->get("current_tag"));
 $repository = new comments_repository();
 $count      = $repository->get_record_count(array(
     "id_comment in (select id_comment from comment_tags where comment_tags.tag = '$tag')"
