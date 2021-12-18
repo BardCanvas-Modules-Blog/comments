@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.4] - 2021-12-17
+
+- Input sanitization on search by tag.
+
 ## [1.12.3] - 2020-05-05
 
 - Added extension point and params treating possibility on the repository's comments for single post builder.
