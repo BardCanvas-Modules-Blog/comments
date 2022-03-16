@@ -174,8 +174,8 @@ $comment->status = "published";
 
 $comment->set_new_id();
 $comment->creation_ip       = get_user_ip();
-$comment->creation_host     = gethostbyaddr($comment->creation_ip);
-$comment->creation_location = forge_geoip_location($comment->creation_ip);
+$comment->creation_host     = @gethostbyaddr($comment->creation_ip);
+$comment->creation_location = get_geoip_location_with_isp($comment->creation_ip);
 $comment->creation_date     = date("Y-m-d H:i:s");
 
 $tags = extract_hash_tags($comment->content);
