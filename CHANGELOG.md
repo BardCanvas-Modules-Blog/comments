@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.5] - 2022-03-16
+
+- Refactored IP Geolocation functions.
+
 ## [1.12.4] - 2021-12-17
 
 - Input sanitization on search by tag.
