@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.6] - 2022-09-24
+
+- Added input sanitization and attack checks.
+
 ## [1.12.5] - 2022-03-16
 
 - Refactored IP Geolocation functions.
