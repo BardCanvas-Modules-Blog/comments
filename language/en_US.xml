@@ -196,6 +196,7 @@
             You need to register an account if you want to leave comments on this or any other post!<br>
             <a href="/accounts/register.php">Click here to register now!</a>
         ]]></register_to_comment>
+        <invalid_contents>Invalid contents in the comment. Please review it.</invalid_contents>
     </messages>
     
     <notifications>

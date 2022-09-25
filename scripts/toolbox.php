@@ -14,7 +14,7 @@
  * $_GET params:
  * @param string "action"     change_status|preview|untrash_for_review|empty_trash
  * @param string "new_status" trashed|published|rejected|spam|hidden
- * @param string "id_comment"
+ * @param int    "id_comment"
  */
 
 use hng2_base\account;
@@ -28,6 +28,8 @@ use hng2_modules\posts\posts_repository;
 header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
 include "../../includes/bootstrap.inc";
+
+$_GET["id_comment"] = $_GET["id_comment"] + 0;
 
 if( ! in_array($_GET["action"], array("change_status", "preview", "untrash_for_review", "empty_trash")) )
     die($current_module->language->messages->toolbox->invalid_action);
@@ -117,7 +119,6 @@ if($_GET["action"] == "change_status")
             $deletions = $repository->set_media_items($media_items, $comment->id_comment);
             
             die("OK");
-            break;
         }
         case "rejected":
         {
@@ -159,7 +160,6 @@ if($_GET["action"] == "change_status")
             $repository->set_media_items(array(), $comment->id_comment);
             
             die("OK");
-            break;
         }
         case "trashed":
         {
@@ -213,7 +213,6 @@ if($_GET["action"] == "change_status")
             //    $media_repository->delete_multiple_if_unused($media_deletions);
             
             die("OK");
-            break;
         }
         case "spam":
         {
@@ -261,7 +260,6 @@ if($_GET["action"] == "change_status")
             $repository->set_media_items(array(), $comment->id_comment);
             
             die("OK");
-            break;
         }
         case "hidden":
         {
@@ -282,7 +280,6 @@ if($_GET["action"] == "change_status")
             //    $media_repository->delete_multiple_if_unused($media_deletions);
             
             die("OK");
-            break;
         }
     }
 }

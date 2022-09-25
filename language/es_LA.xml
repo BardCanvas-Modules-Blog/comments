@@ -201,6 +201,7 @@
             ¡Necesitas tener una cuenta registrada si deseas dejar tus comentarios en esta o cualquier otra entrada!<br>
             <a href="/accounts/register.php">¡Da click aquí para registrarte ahora!</a>
         ]]></register_to_comment>
+        <invalid_contents>Contenidos inválidos en el comentario. Favor de revisarlo.</invalid_contents>
     </messages>
     
     <notifications>

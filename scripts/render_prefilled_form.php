@@ -11,9 +11,9 @@
  * @var config   $config
  * 
  * $_REQUEST params:
- * @param parent_id
- * @param edit_comment
- * @param quote_parent
+ * @param int    parent_id
+ * @param int    edit_comment
+ * @param bool   quote_parent
  */
 
 use hng2_base\config;
@@ -29,6 +29,9 @@ include "../../includes/bootstrap.inc";
 $repository       = new comments_repository();
 $posts_repository = new posts_repository();
 $post             = new post_record();
+
+$_REQUEST["parent_id"]    = $_REQUEST["parent_id"] + 0;
+$_REQUEST["edit_comment"] = $_REQUEST["edit_comment"] + 0;
 
 if( ! empty( $_REQUEST["parent_id"] ) )
 {

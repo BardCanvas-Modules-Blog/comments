@@ -11,7 +11,7 @@
  * @var \SimpleXMLElement $language
  * 
  * $_POST fields:
- * @param string "id_comment"
+ * @param int    "id_comment"
  * @param string "content"
  */
 
@@ -26,8 +26,14 @@ header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
 include "../../includes/bootstrap.inc";
 
+$_POST["id_comment"] = $_POST["id_comment"] + 0;
+
 if( empty($_POST["id_comment"]) ) die($current_module->language->messages->missing_comment_id);
 if( empty($_POST["content"])    ) die($current_module->language->messages->message_cannot_be_empty);
+
+if( has_injected_scripts($_POST["content"]) ) die($current_module->language->messages->invalid_contents);
+try { check_sql_injection($_POST["content"]); }
+catch(\Exception $e) { die($current_module->language->messages->invalid_contents); }
 
 $repository = new comments_repository();
 $comment    = $repository->get($_POST["id_comment"]);
