@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.7] - 2022-10-24
+
+- Changed checks against numeric ids due to conflict on previous evaluations.
+
 ## [1.12.6] - 2022-09-24
 
 - Added input sanitization and attack checks.
