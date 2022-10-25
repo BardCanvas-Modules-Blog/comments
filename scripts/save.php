@@ -26,9 +26,8 @@ header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
 include "../../includes/bootstrap.inc";
 
-$_POST["id_comment"] = $_POST["id_comment"] + 0;
-
 if( empty($_POST["id_comment"]) ) die($current_module->language->messages->missing_comment_id);
+if( ! is_numeric($_POST["id_comment"]) ) die($current_module->language->messages->missing_comment_id);
 if( empty($_POST["content"])    ) die($current_module->language->messages->message_cannot_be_empty);
 
 if( has_injected_scripts($_POST["content"]) ) die($current_module->language->messages->invalid_contents);

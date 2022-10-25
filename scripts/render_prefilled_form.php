@@ -30,8 +30,11 @@ $repository       = new comments_repository();
 $posts_repository = new posts_repository();
 $post             = new post_record();
 
-$_REQUEST["parent_id"]    = $_REQUEST["parent_id"] + 0;
-$_REQUEST["edit_comment"] = $_REQUEST["edit_comment"] + 0;
+if( ! empty($_REQUEST["parent_id"]) && ! is_numeric($_REQUEST["parent_id"]) )
+    die($current_module->language->messages->comment_not_found);
+
+if( ! empty($_REQUEST["edit_comment"]) && ! is_numeric($_REQUEST["edit_comment"]) )
+    die($current_module->language->messages->comment_not_found);
 
 if( ! empty( $_REQUEST["parent_id"] ) )
 {

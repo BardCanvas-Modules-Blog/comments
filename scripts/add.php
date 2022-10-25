@@ -26,9 +26,8 @@ header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
 include "../../includes/bootstrap.inc";
 
-$_POST["id_post"] = $_POST["id_post"] + 0;
-
 if( empty($_POST["id_post"]) ) die($current_module->language->messages->empty_post_id);
+if( ! is_numeric($_POST["id_post"]) ) die($current_module->language->messages->empty_post_id);
 
 $posts_repository = new posts_repository();
 $post = $posts_repository->get($_POST["id_post"]);

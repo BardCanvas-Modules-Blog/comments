@@ -29,7 +29,8 @@ header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
 include "../../includes/bootstrap.inc";
 
-$_GET["id_comment"] = $_GET["id_comment"] + 0;
+if( ! is_numeric($_GET["id_comment"]) )
+    die($current_module->language->messages->comment_not_found);
 
 if( ! in_array($_GET["action"], array("change_status", "preview", "untrash_for_review", "empty_trash")) )
     die($current_module->language->messages->toolbox->invalid_action);
