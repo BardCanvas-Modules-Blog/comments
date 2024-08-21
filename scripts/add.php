@@ -41,8 +41,26 @@ if( $post->visibility == "level_based" && $account->level < $post->author_level 
     die($current_module->language->messages->unable_to_comment);
 
 if( has_injected_scripts($_POST["content"]) ) die($current_module->language->messages->invalid_contents);
-try { check_sql_injection($_POST["content"]); }
-catch(\Exception $e) { die($current_module->language->messages->invalid_contents); }
+
+try
+{
+    check_sql_injection($_POST["content"]);
+}
+catch(\Exception $e)
+{
+    die(
+        $current_module->language->messages->invalid_contents . (
+            empty($config->globals["!sql_injection.matches_list"])
+                ? ""
+                : (
+                    "\n{$current_module->language->offending_words} "
+                    . implode(", ", $config->globals["!sql_injection.matches_list"])
+                    . ".\n"
+                    . $current_module->language->replace_offending_words
+                  )
+        )
+    );
+}
 
 if( empty($_POST["content"]) && empty($_POST["embedded_attachments"]) )
     die($current_module->language->messages->empty_message);

@@ -646,4 +646,7 @@
         ]]></confirmation>
     </empty_trash>
     
+    <offending_words>Palabras ofensivas:</offending_words>
+    <replace_offending_words>Reemplázalas e intenta de nuevo.</replace_offending_words>
+    
 </language>

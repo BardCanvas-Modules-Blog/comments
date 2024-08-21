@@ -640,4 +640,7 @@
         ]]></confirmation>
     </empty_trash>
     
+    <offending_words>Offending words:</offending_words>
+    <replace_offending_words>Please replace them and try again.</replace_offending_words>
+    
 </language>

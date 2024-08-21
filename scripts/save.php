@@ -31,8 +31,26 @@ if( ! is_numeric($_POST["id_comment"]) ) die($current_module->language->messages
 if( empty($_POST["content"])    ) die($current_module->language->messages->message_cannot_be_empty);
 
 if( has_injected_scripts($_POST["content"]) ) die($current_module->language->messages->invalid_contents);
-try { check_sql_injection($_POST["content"]); }
-catch(\Exception $e) { die($current_module->language->messages->invalid_contents); }
+
+try
+{
+    check_sql_injection($_POST["content"]);
+}
+catch(\Exception $e)
+{
+    die(
+        $current_module->language->messages->invalid_contents . (
+            empty($config->globals["!sql_injection.matches_list"])
+                ? ""
+                : (
+                    "\n{$current_module->language->offending_words} "
+                    . implode(", ", $config->globals["!sql_injection.matches_list"])
+                    . ".\n"
+                    . $current_module->language->replace_offending_words
+                  )
+        )
+    );
+}
 
 $repository = new comments_repository();
 $comment    = $repository->get($_POST["id_comment"]);
