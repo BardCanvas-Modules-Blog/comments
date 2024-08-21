@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.8] - 2024-08-20
+
+- Added offending words list to the SQL injection detection notification on adding/saving.
+
 ## [1.12.7] - 2022-10-24
 
 - Changed checks against numeric ids due to conflict on previous evaluations.
