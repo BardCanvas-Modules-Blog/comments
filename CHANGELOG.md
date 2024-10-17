@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.10] - 2024-10-17
+
+- Version bump.
+
 ## [1.12.8] - 2024-08-20
 
 - Added offending words list to the SQL injection detection notification on adding/saving.
