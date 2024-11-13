@@ -27,6 +27,7 @@ if( $settings->get("modules:comments.show_in_indexes") != "true" ) return;
 /** @var comment_record[] $comments */
 $comments = $template->get("comments_for_listed_post[{$post->id_post}]");
 
+if( ! is_array($comments) ) return;
 if( count($comments) == 0 ) return;
 
 $comments = array_reverse($comments);
