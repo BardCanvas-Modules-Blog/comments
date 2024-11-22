@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.11] - 2024-11-22
+
+- Added check to avoid warnings in the comments for post in index extender.
+
 ## [1.12.10] - 2024-10-17
 
 - Version bump.
