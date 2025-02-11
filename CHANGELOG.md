@@ -1,6 +1,11 @@
 
 # Comments Module Change Log
 
+## [1.12.12] - 2025-02-11
+
+- Tuned checks on addition.
+- Implemented custom SQL injection check from Security Module if available.
+
 ## [1.12.11] - 2024-11-22
 
 - Added check to avoid warnings in the comments for post in index extender.
