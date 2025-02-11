@@ -21,6 +21,7 @@ use hng2_modules\comments\comment_record;
 use hng2_modules\comments\comments_repository;
 use hng2_modules\comments\toolbox;
 use hng2_modules\posts\posts_repository;
+use hng2_modules\security\toolbox as stoolbox;
 
 header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
@@ -47,24 +48,51 @@ if( ! empty($_POST["author_display_name"]) ) $checking_data[] = $_POST["author_d
 if( ! empty($_POST["author_email"]) )        $checking_data[] = $_POST["author_email"];
 if( ! empty($_POST["author_url"]) )          $checking_data[] = $_POST["author_url"];
 
-try
+if( $modules["security"]->enabled )
 {
-    check_sql_injection($checking_data);
+    $stoolbox = new stoolbox();
+    
+    try
+    {
+        $stoolbox->check_sql_injection($checking_data);
+    }
+    catch(\Exception $e)
+    {
+        die(
+            $current_module->language->messages->invalid_contents . (
+                empty($config->globals["!sql_injection.matches_list"])
+                    ? ""
+                    : (
+                        "\n{$current_module->language->offending_words} "
+                        . implode(", ", $config->globals["!sql_injection.matches_list"])
+                        . ".\n"
+                        . $current_module->language->replace_offending_words
+                      )
+            )
+        );
+    }
 }
-catch(\Exception $e)
+else
 {
-    die(
-        $current_module->language->messages->invalid_contents . (
-            empty($config->globals["!sql_injection.matches_list"])
-                ? ""
-                : (
-                    "\n{$current_module->language->offending_words} "
-                    . implode(", ", $config->globals["!sql_injection.matches_list"])
-                    . ".\n"
-                    . $current_module->language->replace_offending_words
-                  )
-        )
-    );
+    try
+    {
+        check_sql_injection($checking_data);
+    }
+    catch(\Exception $e)
+    {
+        die(
+            $current_module->language->messages->invalid_contents . (
+                empty($config->globals["!sql_injection.matches_list"])
+                    ? ""
+                    : (
+                        "\n{$current_module->language->offending_words} "
+                        . implode(", ", $config->globals["!sql_injection.matches_list"])
+                        . ".\n"
+                        . $current_module->language->replace_offending_words
+                      )
+            )
+        );
+    }
 }
 
 if( empty($_POST["content"]) && empty($_POST["embedded_attachments"]) )

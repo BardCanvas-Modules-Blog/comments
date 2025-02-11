@@ -21,6 +21,7 @@ use hng2_base\settings;
 use hng2_modules\comments\comments_repository;
 use hng2_modules\comments\toolbox;
 use hng2_modules\posts\posts_repository;
+use hng2_modules\security\toolbox as stoolbox;
 
 header("Content-Type: text/plain; charset=utf-8");
 include "../../config.php";
@@ -32,24 +33,51 @@ if( empty($_POST["content"])    ) die($current_module->language->messages->messa
 
 if( has_injected_scripts($_POST["content"]) ) die($current_module->language->messages->invalid_contents);
 
-try
+if( $modules["security"]->enabled )
 {
-    check_sql_injection($_POST["content"]);
+    $stoolbox = new stoolbox();
+    
+    try
+    {
+        $stoolbox->check_sql_injection($_POST["content"]);
+    }
+    catch(\Exception $e)
+    {
+        die(
+            $current_module->language->messages->invalid_contents . (
+                empty($config->globals["!sql_injection.matches_list"])
+                    ? ""
+                    : (
+                        "\n{$current_module->language->offending_words} "
+                        . implode(", ", $config->globals["!sql_injection.matches_list"])
+                        . ".\n"
+                        . $current_module->language->replace_offending_words
+                      )
+            )
+        );
+    }
 }
-catch(\Exception $e)
+else
 {
-    die(
-        $current_module->language->messages->invalid_contents . (
-            empty($config->globals["!sql_injection.matches_list"])
-                ? ""
-                : (
-                    "\n{$current_module->language->offending_words} "
-                    . implode(", ", $config->globals["!sql_injection.matches_list"])
-                    . ".\n"
-                    . $current_module->language->replace_offending_words
-                  )
-        )
-    );
+    try
+    {
+        check_sql_injection($_POST["content"]);
+    }
+    catch(\Exception $e)
+    {
+        die(
+            $current_module->language->messages->invalid_contents . (
+                empty($config->globals["!sql_injection.matches_list"])
+                    ? ""
+                    : (
+                        "\n{$current_module->language->offending_words} "
+                        . implode(", ", $config->globals["!sql_injection.matches_list"])
+                        . ".\n"
+                        . $current_module->language->replace_offending_words
+                      )
+            )
+        );
+    }
 }
 
 $repository = new comments_repository();
