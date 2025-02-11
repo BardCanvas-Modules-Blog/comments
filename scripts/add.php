@@ -42,9 +42,14 @@ if( $post->visibility == "level_based" && $account->level < $post->author_level 
 
 if( has_injected_scripts($_POST["content"]) ) die($current_module->language->messages->invalid_contents);
 
+$checking_data = array($_POST["content"]);
+if( ! empty($_POST["author_display_name"]) ) $checking_data[] = $_POST["author_display_name"];
+if( ! empty($_POST["author_email"]) )        $checking_data[] = $_POST["author_email"];
+if( ! empty($_POST["author_url"]) )          $checking_data[] = $_POST["author_url"];
+
 try
 {
-    check_sql_injection($_POST["content"]);
+    check_sql_injection($checking_data);
 }
 catch(\Exception $e)
 {
