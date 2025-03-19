@@ -163,7 +163,7 @@ if( ! empty($_GET["edit"]) ):
             ); ?>
             <script type="text/javascript">
                 $(document).ready(function() {
-                    edit_comment('<?= $row->id_comment ?>', '<?= htmlspecialchars($dialog_title) ?>');
+                    edit_comment('<?= $row->id_comment ?>', `<?= htmlspecialchars($dialog_title) ?>`);
                 });
             </script>
         <? endif; ?>
@@ -489,7 +489,7 @@ endif;
                             . "&wasuuup=" . md5(mt_rand(1, 65535))
                         ;
                         ?>
-                        <span class="action pseudo_link comment_action_preview" onclick="show_ajax_dialog('<?= htmlspecialchars($dialog_title) ?>', '<?= $url ?>', false)">
+                        <span class="action pseudo_link comment_action_preview" onclick="show_ajax_dialog(`<?= htmlspecialchars($dialog_title) ?>`, '<?= $url ?>', false)">
                             <span class="fa fa-search"></span>
                             <?= $current_module->language->record_nav->actions->preview ?>
                         </span>
@@ -522,7 +522,7 @@ endif;
                                 array('{$id}', '{$post_title}'),
                                 array($row->id_comment, $post->title)
                             ); ?>
-                            <span class="action pseudo_link comment_action_edit" onclick="edit_comment('<?= $row->id_comment ?>', '<?= htmlspecialchars($dialog_title) ?>')">
+                            <span class="action pseudo_link comment_action_edit" onclick="edit_comment('<?= $row->id_comment ?>', `<?= htmlspecialchars($dialog_title) ?>`)">
                                 <span class="fa fa-pencil"></span>
                                 <?= $current_module->language->record_nav->actions->edit ?>
                             </span>
