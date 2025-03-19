@@ -1,6 +1,10 @@
 
 # Comments Module Change Log
 
+## [1.12.13] - 2025-03-19
+
+- Changed qutoing on some links to prevent JS errors.
+
 ## [1.12.12] - 2025-02-11
 
 - Tuned checks on addition.
